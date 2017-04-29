@@ -40,7 +40,7 @@ function userObj(na, bi, ge, he) {
 }
 //main object JSON data
 function mainJSON(){
-        this.UserInfo = new userObj('My Name is..', '1991-01-01', 'Male', '177'),
+    this.UserInfo = new userObj('My Name is..', '1991-01-01', 'Male', '177'),
         this.UserTarget = new DataObj('', '', '', '', '', '', '', '', '', '', '', '', '', ''), //user target
         this.DataFields = new DataObj(
         'Measurement Date',
@@ -140,9 +140,9 @@ function displayTableData() {
     for (i = 0; i < data.length; i++) {
         table += "<tr>";
         table += "<td>" + (data.length-i) + "</td>";
-          for (var prop in data[i]) {
-              table += "<td>" + data[i][prop] + "</td>";
-          }
+        for (var prop in data[i]) {
+            table += "<td>" + data[i][prop] + "</td>";
+        }
         table += "<td>";
         table += "<button onclick=\"deleteTableData("+i+")\" class=\"btn btn-danger btn-xs\">";
         table += "<span class=\"glyphicon glyphicon-remove\">";
@@ -154,10 +154,10 @@ function displayTableData() {
 }
 //Delete data object from the array based on index
 function deleteTableData(i){
-  if(confirm("Are you sure?")){
-    data.splice(i, 1);
-    saveData();
-  }
+    if(confirm("Are you sure?")){
+        data.splice(i, 1);
+        saveData();
+    }
 }
 //add data object to db
 function createDataRecord() {
@@ -192,24 +192,24 @@ function fillNewRecordForm(){
     //GET LAST RECORD AND FILL UP FORM DATA
     var obj = data[0];
     var today = todaysDate();
-    
+
     if (obj){
-    
-    document.getElementById("newDataMeasurementDate").value = today;
-    document.getElementById("newDataWeightKgs").value = obj.WeightKgs;
-    document.getElementById("newDataWaistCm").value = obj.WaistCm;
-    document.getElementById("newDataHaunchCm").value = obj.HaunchCm - 0.5;
-    document.getElementById("newDataArmsCm").value = obj.ArmsCm;
-    document.getElementById("newDataChestCm").value = obj.ChestCm;
-    document.getElementById("newDataHipsCm").value = obj.HipsCm;
-    //below ones are calculate dinamicaly
-    //document.getElementById("newDataFatsPercent").value = obj.FatsPercent;
-    //document.getElementById("newDataFatKgs").value = obj.FatKgs;
-    //document.getElementById("newDataBodyMassKgs").value = obj.BodyMassKgs;
-    //document.getElementById("newDataBMRFormula").value = obj.BmrFormula;
-    //document.getElementById("newDataPhysicalActivity").value = obj.PhysicalActivity;
-    //document.getElementById("newDataBMAKcal").value = obj.BmdaKcal;
-    //document.getElementById("newDatacomment").value = obj.comment;
+
+        document.getElementById("newDataMeasurementDate").value = today;
+        document.getElementById("newDataWeightKgs").value = obj.WeightKgs;
+        document.getElementById("newDataWaistCm").value = obj.WaistCm;
+        document.getElementById("newDataHaunchCm").value = obj.HaunchCm - 0.5;
+        document.getElementById("newDataArmsCm").value = obj.ArmsCm;
+        document.getElementById("newDataChestCm").value = obj.ChestCm;
+        document.getElementById("newDataHipsCm").value = obj.HipsCm;
+        //below ones are calculate dinamicaly
+        //document.getElementById("newDataFatsPercent").value = obj.FatsPercent;
+        //document.getElementById("newDataFatKgs").value = obj.FatKgs;
+        //document.getElementById("newDataBodyMassKgs").value = obj.BodyMassKgs;
+        //document.getElementById("newDataBMRFormula").value = obj.BmrFormula;
+        //document.getElementById("newDataPhysicalActivity").value = obj.PhysicalActivity;
+        //document.getElementById("newDataBMAKcal").value = obj.BmdaKcal;
+        //document.getElementById("newDatacomment").value = obj.comment;
     }
     //console.log(obj);
 }
@@ -337,7 +337,7 @@ function calcBMAKcal(gender, birth, formula, activity, weight, height, bodyMass)
     var bmrAgeCorrectionCoef = 0.2 * age;
     var bma;
 
-  /*
+    /*
   FORMULAS DESCRIPTION
   BMR - Basal metabolic rate;
   BMA - Bassal metabolism with physical activity;
@@ -457,6 +457,7 @@ function constructArray(arrWithObjs, objKey) {
 //main chart
 function drawMainChart() {
     //chart data
+    Chart.defaults.global.defaultFontColor = '#fff';
     var chartData = {
         labels: constructArray(data, 'MeasurementDate'),
         datasets: [
@@ -489,6 +490,8 @@ function drawMainChart() {
     window.myMixedChart = new Chart(ctx, {
         type: 'bar',
         data: chartData,
+        responsive: true,
+        scaleFontColor: "#ff0000",
         options: {
             responsive: true,
             title: {
@@ -499,7 +502,9 @@ function drawMainChart() {
                 display: true,
                 labels: {
                     //fontColor: 'rgb(255, 99, 132)',
-                    usePointStyle: false
+                    usePointStyle: false,
+                    //fontColor:"white", 
+                    //fontSize: 18
                 }
             },
             scales: {

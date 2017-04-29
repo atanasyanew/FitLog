@@ -17,7 +17,8 @@
         <script src="Scripts/bootstrap.min.js"></script>
     </head>
 
-    <body>
+
+    <body class="bgimg-2">
         <div class="navbar navbar-inverse navbar-fixed-top">
             <div class="container">
                 <div class="navbar-header">
@@ -52,55 +53,50 @@
         </div>
 
 
-<div class="bgimg-1 ">
-                <div class="container ">
-                    <h3>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-                    </h3>   
-                </div>
-            </div>
-
         <div class="container ">
 
             <div class="row">
                 <div class="col-md-4">
-                    <h3>Personal data</h3>
-                    <dl class="well dl-horizontal">
-                        <dt>Name</dt><dd id="userName"></dd>
-                        <dt>Birth</dt><dd id="userBirth"></dd>
-                        <dt>Gender</dt><dd id="userGender"></dd>
-                        <dt>Height, cm</dt><dd id="userHeight"></dd>
-                    </dl>
+                    <div class="well transperant">
+                        <legend>Personal data</legend>
+                        <dl class="dl-horizontal ">
+                            <dt>Name</dt><dd id="userName"></dd>
+                            <dt>Birth</dt><dd id="userBirth"></dd>
+                            <dt>Gender</dt><dd id="userGender"></dd>
+                            <dt>Height, cm</dt><dd id="userHeight"></dd>
+                        </dl>
+                    </div>
                 </div>
             </div>
 
-            <div class="bgimg-1">
-                <div class="row">
+            <div class="row">
 
-                    <div class="col-md-4">
-                        <h3>Log Overview</h3>
-                        <div class="well">
-                            <table class="table table-fit table-condense">
-                                <thead>
-                                    <tr>
-                                        <th class="text-center"></th>
-                                        <th class="text-center">Me</th>
-                                        <th class="text-center">Target</th>
-                                        <th class="text-center">10d</th>
-                                        <th class="text-center">30d</th>
-                                        <th class="text-center">...</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="progressTable"></tbody>
-                            </table>
-                        </div>
+                <div class="col-md-4">
+                    <div class="well transperant">
+                        <legend>Log Overview</legend>
+                        <table class="table table-fit table-condense">
+                            <thead>
+                                <tr>
+                                    <th class="text-center"></th>
+                                    <th class="text-center">Me</th>
+                                    <th class="text-center">Target</th>
+                                    <th class="text-center">b10d</th>
+                                    <th class="text-center">b30d</th>
+                                    <th class="text-center">1R</th>
+                                </tr>
+                            </thead>
+                            <tbody id="progressTable"></tbody>
+                        </table>
                     </div>
-
-                    <div class="col-md-8">
-                        <h3>My Chart</h3>
-                        <canvas id="mainChart" class="well"></canvas>
-                    </div>
-
                 </div>
+
+                <div class="col-md-8">
+                    <div class="well transperant">
+                    <legend>Log Chart</legend>
+                    <canvas id="mainChart" ></canvas>
+                     </div>   
+                </div>
+
             </div>
 
 
@@ -111,9 +107,9 @@
                 <div class="col-md-4">
 
                     <!-- Edit User form -->
-                    <div class="well form-horizontal">
+                    <div class="well form-horizontal transperant">
                         <fieldset>
-                            <legend>User Details:</legend>
+                            <legend>User Details</legend>
 
                             <div class="form-group">
                                 <label for="example-text-input" class="control-label col-xs-4">Name</label>
@@ -174,7 +170,7 @@
                 <!-- NEW ROCORD form -->
                 <div class="col-md-4">
                     <!-- NEW ROCORD form -->
-                    <div class="well form-horizontal" onchange="fillNewRecordFormReadonlyProp()">
+                    <div class="well transperant form-horizontal" onchange="fillNewRecordFormReadonlyProp()">
                         <fieldset>
                             <legend>Add Data</legend>
 
@@ -386,7 +382,7 @@
                 <!-- TARGET form -->
                 <div class="col-md-4">
                     <!-- TARGET form -->
-                    <div class="well form-horizontal">
+                    <div class="well transperant form-horizontal">
                         <fieldset>
                             <legend>Write Target</legend>
 
@@ -475,7 +471,7 @@
             </div> <!-- ROW with FORMS END -->
 
             <h3>My Data</h3>
-            <div class="well table-responsive ">
+            <div class="well transperant table-responsive">
                 <table class="table table-sm table-hover">
                     <thead>
                         <tr>
