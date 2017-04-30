@@ -1,8 +1,8 @@
 body {
     padding-top: 70px;
     padding-bottom: 70px;
-    background-color: #F2F2F2;
-    
+    background-color: #DCDCDC;
+
     /*
     background-color: #eee;
     background-color: #333;
@@ -18,7 +18,7 @@ body {
 .body-content {
     padding-left: 15px;
     padding-right: 15px;
-    
+
 }
 footer {
     color: #999;
@@ -55,6 +55,9 @@ input,
 select,
 textarea {
     max-width: 200px;
+
+
+
 }    
 
 /* Create a Parallax Effect */
@@ -76,8 +79,16 @@ textarea {
 
 /* Second image (Portfolio) */
 .bgimg-2 {
+    /*
     background-image: url("Images/parallax2.jpg");
     min-height: 400px;
+    background-image: url("http://wallpaper-gallery.net/images/backgrounds-wallpaper/backgrounds-wallpaper-14.jpg");
+
+    */
+    background-image: url("http://www.hqwalls.com/wp-content/uploads/2014/02/Trebuchet-2880x1800.jpg");
+
+
+
 }
 
 /* Third image (Contact) */
@@ -91,9 +102,9 @@ textarea {
 
 /* Turn off parallax scrolling for tablets and phones 
 @media only screen and (max-device-width: 1024px) {
-    .bgimg-1, .bgimg-2, .bgimg-3 {
-        background-attachment: scroll;
-    }
+.bgimg-1, .bgimg-2, .bgimg-3 {
+background-attachment: scroll;
+}
 */
 
 
@@ -110,37 +121,60 @@ legend {
     */
     color: #fff;
 }
+.btn-tra, input[type="number"], 
+            input[type="date"], 
+            input[type="text"], 
+            input[type="number"]:read-only,
+            textarea, select{
+    color: #fff;
+    background: rgba(3,3,3,0.25);
+    border-radius: 5px;
+    border: none;
+    text-align: center;
+}
 
+textarea{
+
+    text-align: left;
+}
+
+
+input[type="number"]:read-only {
+    /*
+    apply this style with js, when checkbox for custom data is true
+background: rgba(0, 0, 0, 0.7);
+    */
+}
 /*
 input:focus{
-  outline: none;
-  box-shadow: 3px 3px 10px #333;
-  background: rgba(3,3,3,.18);
+outline: none;
+box-shadow: 3px 3px 10px #333;
+background: rgba(3,3,3,.18);
 }
 input{
 
-  text-decoration: none;
-  position: relative;
-  width: 80%;
-  display: block;
-  margin: 9px auto;
-  font-size: 17px;
-  color: #fff;
-  padding: 8px;
-  border-radius: 6px;
-  border: none;
-  background: rgba(3,3,3,.1);
-  -webkit-transition: all 2s ease-in-out;
-  -moz-transition: all 2s ease-in-out;
-  -o-transition: all 2s ease-in-out;
-  transition: all 0.2s ease-in-out;
+text-decoration: none;
+position: relative;
+width: 80%;
+display: block;
+margin: 9px auto;
+font-size: 17px;
+color: #fff;
+padding: 8px;
+border-radius: 6px;
+border: none;
+background: rgba(3,3,3,.1);
+-webkit-transition: all 2s ease-in-out;
+-moz-transition: all 2s ease-in-out;
+-o-transition: all 2s ease-in-out;
+transition: all 0.2s ease-in-out;
 }
 ::-webkit-input-placeholder {
-   color: #ddd;  }
+color: #ddd;  }
 :-moz-placeholder { 
-   color: red;  }
+color: red;  }
 ::-moz-placeholder {  
-   color: red;  }
+color: red;  }
 :-ms-input-placeholder {  
-   color: #333;  }
+color: #333;  }
 */

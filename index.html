@@ -19,7 +19,8 @@
 
 
     <body class="bgimg-2">
-        <div class="navbar navbar-inverse navbar-fixed-top">
+
+        <div class="navbar transperant navbar-inverse navbar-fixed-top">
             <div class="container">
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -92,9 +93,9 @@
 
                 <div class="col-md-8">
                     <div class="well transperant">
-                    <legend>Log Chart</legend>
-                    <canvas id="mainChart" ></canvas>
-                     </div>   
+                        <legend>Log Chart</legend>
+                        <canvas id="mainChart" ></canvas>
+                    </div>   
                 </div>
 
             </div>
@@ -102,6 +103,7 @@
 
 
             <div class="row">
+
 
                 <!-- EDIT USER form -->
                 <div class="col-md-4">
@@ -131,8 +133,8 @@
                             <div class="form-group">
                                 <label for="example-number-input" class="control-label col-xs-4">Birth Date</label>
                                 <div class="col-xs-8">
-                                    <div class="input-group date">
-                                        <input type="date" class="form-control" id="editUserBirth"><span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                                    <div class="input-group">
+                                        <input type="date" class="form-control input-date" id="editUserBirth">
                                     </div>
                                 </div>
                             </div>
@@ -142,13 +144,13 @@
                                 <div class="col-xs-8">
                                     <div class="input-group">
                                         <span class="input-group-btn">
-                                            <button type="button" class="btn btn-danger btn-number"  data-type="minus" data-field="quant[3]">
+                                            <button type="button" class="btn btn-tra btn-default btn-number"  data-type="minus" data-field="quant[3]">
                                                 <span class="glyphicon glyphicon-minus"></span>
                                             </button>
                                         </span>
                                         <input type="number" name="quant[3]" class="form-control input-number" value="170" min="140" max="250" id="editUserHeight">
                                         <span class="input-group-btn">
-                                            <button type="button" class="btn btn-success btn-number" data-type="plus" data-field="quant[3]">
+                                            <button type="button" class="btn btn-tra btn-default btn-number" data-type="plus" data-field="quant[3]">
                                                 <span class="glyphicon glyphicon-plus"></span>
                                             </button>
                                         </span>
@@ -158,7 +160,7 @@
 
                             <div class="form-group">
                                 <div class="col-md-8 col-md-offset-4 col-xs-12">
-                                    <input type="submit" value="Save" class="btn btn-default btn-success btn-large btn-block" onClick="editUserData()">
+                                    <input type="submit" value="Save" class="btn btn-tra btn-default btn-success btn-large btn-block" onClick="editUserData()">
                                 </div>
                             </div>
 
@@ -174,11 +176,11 @@
                         <fieldset>
                             <legend>Add Data</legend>
 
-                            <div class="form-group">
-                                <label for="example-number-input" class="control-label col-xs-4">Date</label>
+                            <div class="form-group row">
+                                <label class="control-label col-xs-4">Date</label>
                                 <div class="col-xs-8">
-                                    <div class="input-group date">
-                                        <input type="date" class="form-control" id="newDataMeasurementDate"><span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                                    <div class="input-group">
+                                        <input type="date" class="form-control" id="newDataMeasurementDate">
                                     </div>
                                 </div>
                             </div>
@@ -211,7 +213,7 @@
                                                 <span class="glyphicon glyphicon-minus"></span>
                                             </button>
                                         </span>
-                                        <input type="text" name="quant[5]" class="form-control input-number" value="85" min="30" max="200" id="newDataWaistCm">
+                                        <input type="number" name="quant[5]" class="form-control input-number" value="85" min="30" max="200" id="newDataWaistCm">
                                         <span class="input-group-btn">
                                             <button type="button" class="btn btn-success btn-number" data-type="plus" data-field="quant[5]">
                                                 <span class="glyphicon glyphicon-plus"></span>
@@ -570,31 +572,51 @@
         var activity = document.getElementById('newDataPhysicalActivity').value;
 
         var chekboxCustomData = document.getElementById('newDataCustomCheck').checked;
+        var a = document.getElementById('newDataFatsPercent');
+        var b = document.getElementById("newDataFatKgs");
+        var c = document.getElementById('newDataBodyMassKgs');
+        var d = document.getElementById('newDataBMAKcal');
+        var bgColor;
         //console.log(chekboxCustomData);
         if (chekboxCustomData == true){
-            document.getElementById('newDataFatsPercent').readOnly = false;
-            document.getElementById("newDataFatKgs").readOnly = false;
-            document.getElementById('newDataBodyMassKgs').readOnly = false;
-            document.getElementById('newDataBMAKcal').readOnly = false;
+
+            a.readOnly = false;
+            b.readOnly = false;
+            c.readOnly = false;
+            d.readOnly = false;
+
+            bgColor = "rgba(0, 0, 0, 0.65)";        
+            a.style.backgroundColor = bgColor;
+            b.style.backgroundColor = bgColor;
+            c.style.backgroundColor = bgColor;
+            d.style.backgroundColor = bgColor;
+
         } else {
-            document.getElementById('newDataFatsPercent').readOnly = true;
-            document.getElementById("newDataFatKgs").readOnly = true;
-            document.getElementById('newDataBodyMassKgs').readOnly = true;
-            document.getElementById('newDataBMAKcal').readOnly = true;
+            a.readOnly = true;
+            b.readOnly = true;
+            c.readOnly = true;
+            d.readOnly = true;
+
+            bgColor = "rgba(3,3,3,0.25)";        
+            a.style.backgroundColor = bgColor;
+            b.style.backgroundColor = bgColor;
+            c.style.backgroundColor = bgColor;
+            d.style.backgroundColor = bgColor;
+
 
             //update fields
             var fatsPercent = calcFatsPercent(gender, height, haunch, waist);
-            document.getElementById('newDataFatsPercent').value = fatsPercent;
+            a.value = fatsPercent;
 
             var fatKgs = calcFatKgs(fatsPercent, weight);
-            document.getElementById('newDataFatKgs').value = fatKgs;
+            b.value = fatKgs;
 
             var bodyMassKgs = calcBodyMassKgs(fatKgs, weight)
-            document.getElementById('newDataBodyMassKgs').value = bodyMassKgs;
+            c.value = bodyMassKgs;
 
             var formula = document.getElementById('newDataBMRFormula').value;
             var bmaKcal = calcBMAKcal(gender, birth, formula, activity, weight, height, bodyMassKgs);
-            document.getElementById('newDataBMAKcal').value = bmaKcal;
+            d.value = bmaKcal;
         }
     }
 
