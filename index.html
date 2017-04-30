@@ -20,7 +20,7 @@
 
     <body class="bgimg-2">
 
-        <div class="navbar transperant navbar-inverse navbar-fixed-top">
+        <div class="navbar navbar-inverse navbar-fixed-top">
             <div class="container">
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -81,9 +81,18 @@
                                     <th class="text-center"></th>
                                     <th class="text-center">Me</th>
                                     <th class="text-center">Target</th>
-                                    <th class="text-center">b10d</th>
-                                    <th class="text-center">b30d</th>
-                                    <th class="text-center">1R</th>
+                                    <th>
+                                        <select class="inp-tra" id="progressTableSelectList" onchange="targetDisplay()">
+                                            <option>b10d</option>
+                                            <option>b30d</option>
+                                            <option>f1r</option>
+                                        </select>
+                                    </th>
+                                    <!--
+<th class="text-center">b10d</th>
+<th class="text-center">b30d</th>
+<th class="text-center">1R</th>
+-->
                                 </tr>
                             </thead>
                             <tbody id="progressTable"></tbody>
@@ -123,7 +132,7 @@
                             <div class="form-group">
                                 <label for="example-number-input" class="control-label col-xs-4">Gender</label>
                                 <div class="col-xs-8">
-                                    <select class="form-control" id="editUserGender">
+                                    <select class="form-control inp-tra" id="editUserGender">
                                         <option>Male</option>
                                         <option>Female</option>
                                     </select>
@@ -144,13 +153,13 @@
                                 <div class="col-xs-8">
                                     <div class="input-group">
                                         <span class="input-group-btn">
-                                            <button type="button" class="btn btn-tra btn-default btn-number"  data-type="minus" data-field="quant[3]">
+                                            <button type="button" class="btn btn-danger btn-number"  data-type="minus" data-field="quant[3]">
                                                 <span class="glyphicon glyphicon-minus"></span>
                                             </button>
                                         </span>
                                         <input type="number" name="quant[3]" class="form-control input-number" value="170" min="140" max="250" id="editUserHeight">
                                         <span class="input-group-btn">
-                                            <button type="button" class="btn btn-tra btn-default btn-number" data-type="plus" data-field="quant[3]">
+                                            <button type="button" class="btn btn-success btn-number" data-type="plus" data-field="quant[3]">
                                                 <span class="glyphicon glyphicon-plus"></span>
                                             </button>
                                         </span>
@@ -160,7 +169,7 @@
 
                             <div class="form-group">
                                 <div class="col-md-8 col-md-offset-4 col-xs-12">
-                                    <input type="submit" value="Save" class="btn btn-tra btn-default btn-success btn-large btn-block" onClick="editUserData()">
+                                    <input type="submit" value="Save" class="btn btn-success btn-large btn-block" onClick="userEdit()">
                                 </div>
                             </div>
 
@@ -302,7 +311,7 @@
                             <div class="form-group">
                                 <label for="example-number-input" class="control-label col-xs-4">Equation</label>
                                 <div class="col-xs-8">
-                                    <select class="form-control" id="newDataBMRFormula">
+                                    <select class="form-control inp-tra" id="newDataBMRFormula">
                                         <option value="1">1 - H-B, Mifflin St Jeor Equation rev. in 1990 </option>
                                         <option value="2">2 - Katch-McArdle Formula </option>
                                         <option value="3">3 - H-B, Roza and Shizgal Equation rev. in 1984 </option>
@@ -314,12 +323,12 @@
                             <div class="form-group">
                                 <label for="example-number-input" class="control-label col-xs-4">Physical activity</label>
                                 <div class="col-xs-8">
-                                    <select class="form-control" id="newDataPhysicalActivity">
-                                        <option value="1.200">1.200 - Little to no exercise </option>
+                                    <select class="form-control inp-tra" id="newDataPhysicalActivity">
+                                        <option value="1.2">1.200 - Little to no exercise </option>
                                         <option value="1.375">1.375 - Light exercise (1–3 days per week) </option>
-                                        <option value="1.550">1.550 - Moderate exercise (3–5 days per week) </option>
+                                        <option value="1.55">1.550 - Moderate exercise (3–5 days per week) </option>
                                         <option value="1.725">1.725 - Heavy exercise (6–7 days per week) </option>
-                                        <option value="1.900">1.900 - very heavy (twice per day, extra heavy workouts) </option>
+                                        <option value="1.9">1.900 - very heavy (twice per day, extra heavy workouts) </option>
                                     </select>
                                 </div>
                             </div>
@@ -327,18 +336,18 @@
                             <div class="form-group">
                                 <label for="example-text-input" class="control-label col-xs-4">Comment</label>
                                 <div class="col-xs-8">
-                                    <textarea class="form-control" id="newDatacomment" rows="3" placeholder="comment"></textarea>
+                                    <textarea class="form-control inp-tra" id="newDatacomment" rows="3" placeholder="comment"></textarea>
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <label for="example-text-input" class="control-label col-xs-4"></label>
                                 <div class="col-xs-8">
-                                    <label class="custom-control custom-checkbox">
+                                    <div class="custom-control">
                                         <input type="checkbox" class="custom-control-input" id="newDataCustomCheck">
                                         <span class="custom-control-indicator"></span>
-                                        <span class="custom-control-description">Custom data</span>
-                                    </label>
+                                        <span class="custom-control-description ">Custom data</span>
+                                    </div>
                                 </div>
                             </div>
 
@@ -372,7 +381,7 @@
 
                             <div class="form-group">
                                 <div class="col-md-8 col-md-offset-4 col-xs-12">
-                                    <input type="button" value="Save" class="btn btn-default btn-success btn-large btn-block" onClick="createDataRecord()">
+                                    <input type="button" value="Save" class="btn btn-default btn-success  btn-block" onClick="createDataRecord()">
                                 </div>
                             </div>
 
@@ -453,7 +462,7 @@
 
                             <div class="form-group">
                                 <div class="col-md-8 col-md-offset-4 col-xs-12">
-                                    <input type="button" value="Save" class="btn btn-default btn-success btn-large btn-block" onClick="createUserTarget()">
+                                    <input type="button" value="Save" class="btn btn-default btn-success btn-large btn-block" onClick="targetCreate()">
                                 </div>
                             </div>
 
@@ -472,26 +481,28 @@
 
             </div> <!-- ROW with FORMS END -->
 
-            <h3>My Data</h3>
+
             <div class="well transperant table-responsive">
+                <legend>My Data</legend>
+                <br>
                 <table class="table table-sm table-hover">
                     <thead>
                         <tr>
-                            <th>#</th>
-                            <th>Date</th>
-                            <th>Weight <br> (kg)</th>
-                            <th>Waist <br> (cm)</th>
-                            <th>Haunch (cm)</th>
-                            <th>Arms (cm)</th>
-                            <th>Chest (cm)</th>
-                            <th>Hips (cm)</th>
-                            <th>Fats (%)</th>
-                            <th>Fats (kg)</th>
-                            <th>Body Mass</th>
-                            <th>Equation</th>
-                            <th>Activity</th>
-                            <th>kcal</th>
-                            <th>Comment</th>
+                            <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(1)')">#</th>
+                            <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(2)')">Date</th>
+                            <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(3)')">Weight <br> (kg)</th>
+                            <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(4)')">Waist <br> (cm)</th>
+                            <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(5)')">Haunch (cm)</th>
+                            <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(6)')">Arms (cm)</th>
+                            <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(7)')">Chest (cm)</th>
+                            <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(8)')">Hips (cm)</th>
+                            <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(9)')">Fats (%)</th>
+                            <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(10)')">Fats (kg)</th>
+                            <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(11)')">Body Mass</th>
+                            <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(1)')">Equation</th>
+                            <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(1)')">Activity</th>
+                            <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(12)')">kcal</th>
+                            <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(13)')">Comment</th>
                             <th><i class="glyphicon glyphicon-edit"></i></th>
                         </tr>
                     </thead>
@@ -522,7 +533,7 @@
 
 
 
-
+<script src="Scripts/w3.js"></script>
 <script src="Scripts/application.js"></script>
 <script src="Scripts/fakeData.js"></script>
 <script src="Scripts/formUIlogic.js"></script>

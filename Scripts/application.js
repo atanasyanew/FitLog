@@ -138,11 +138,29 @@ function userEdit(){
 function displayTableData() {
     var table = "";
     for (i = 0; i < data.length; i++) {
-        table += "<tr>";
+        table += "<tr class=\"item\">";
         table += "<td>" + (data.length-i) + "</td>";
-        for (var prop in data[i]) {
-            table += "<td>" + data[i][prop] + "</td>";
-        }
+
+        //for (var prop in data[i]) {
+        //    table += "<td>" + data[i][prop] + "</td>";
+        //}
+
+        table += "<td nowrap>" + data[i]["MeasurementDate"] + "</td>";
+        table += "<td nowrap>" + data[i]["WeightKgs"] + "</td>";
+        table += "<td nowrap>" + data[i]["WaistCm"] + "</td>";
+        table += "<td nowrap>" + data[i]["HaunchCm"] + "</td>";
+        table += "<td nowrap>" + data[i]["ArmsCm"] + "</td>";
+        table += "<td nowrap>" + data[i]["ChestCm"] + "</td>";
+        table += "<td nowrap>" + data[i]["HipsCm"] + "</td>";
+        table += "<td nowrap>" + data[i]["FatsPercent"] + "</td>";
+        table += "<td nowrap>" + data[i]["FatKgs"] + "</td>";
+        table += "<td nowrap>" + data[i]["BodyMassKgs"] + "</td>";
+        table += "<td wrap>" + data[i]["BmrFormula"] + "</td>";
+        table += "<td nowrap>" + data[i]["PhysicalActivity"] + "</td>";
+        table += "<td nowrap>" + data[i]["BmaKcal"] + "</td>";
+        table += "<td wrap>" + data[i]["comment"] + "</td>";
+
+
         table += "<td>";
         table += "<button onclick=\"deleteTableData("+i+")\" class=\"btn btn-danger btn-xs\">";
         table += "<span class=\"glyphicon glyphicon-remove\">";
@@ -242,7 +260,10 @@ function targetDisplay(){
           ['field name', 'target', 'last record'],
         ]
   */
-
+    var selectFromList = document.getElementById("progressTableSelectList").value;
+    //b10d
+    //b30d
+    //f1r
     //loop to display the data
     var table = "";
     for (var i = 0; i < tableRows.length; i++) {
@@ -252,12 +273,30 @@ function targetDisplay(){
         table += "<td nowrap class=\"text-left\">" + tableRows[i][1] + "</td>";
         table += "<td nowrap class=\"text-left\">" + tableRows[i][2] + "</td>";
 
-        table += "<td nowrap class=\"text-left\">" + "10" + "</td>";
-        table += "<td nowrap class=\"text-left\">" + "30" + "</td>";
-        table += "<td nowrap class=\"text-left\">" + "***" + "</td>";
+
+        switch(selectFromList) {
+            case "b10d":
+                table += "<td nowrap class=\"text-left\">" + "10" + "</td>";
+                break;
+            case "b30d":
+                table += "<td nowrap class=\"text-left\">" + "30" + "</td>";
+                break;
+            case "f1r":
+                table += "<td nowrap class=\"text-left\">" + "f1r" + "</td>";
+                break;
+            default:
+                table += "<td nowrap class=\"text-left\">" + "NaN" + "</td>";
+        }
+        //if (selectFromList == ""){
+        //table += "<td nowrap class=\"text-left\">" + "10" + "</td>";
+        //}
+        //else if (){}
+        //else if (){}
+
         table += "</tr>";
     }
     document.getElementById("progressTable").innerHTML = table;
+    //console.log(selectFromList);
 }
 //create user target
 function targetCreate(){

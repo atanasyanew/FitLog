@@ -55,9 +55,6 @@ input,
 select,
 textarea {
     max-width: 200px;
-
-
-
 }    
 
 /* Create a Parallax Effect */
@@ -66,15 +63,12 @@ textarea {
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
-    color: #fff;
-    width: 100%;
 }
 
 /* First image (Logo. Full height) */
 .bgimg-1 {
     background-image: url('Images/parallax1.jpg');
     min-height: 100%;
-    opacity: 0.9;
 }
 
 /* Second image (Portfolio) */
@@ -86,9 +80,7 @@ textarea {
 
     */
     background-image: url("http://www.hqwalls.com/wp-content/uploads/2014/02/Trebuchet-2880x1800.jpg");
-
-
-
+    opacity: 0.9;
 }
 
 /* Third image (Contact) */
@@ -107,7 +99,6 @@ background-attachment: scroll;
 }
 */
 
-
 legend {
     color: #fff;
 }
@@ -121,11 +112,10 @@ legend {
     */
     color: #fff;
 }
-.btn-tra, input[type="number"], 
-            input[type="date"], 
-            input[type="text"], 
-            input[type="number"]:read-only,
-            textarea, select{
+.inp-tra, input[type="number"], 
+input[type="date"], 
+input[type="text"], 
+input[type="number"]:read-only {
     color: #fff;
     background: rgba(3,3,3,0.25);
     border-radius: 5px;
@@ -133,16 +123,25 @@ legend {
     text-align: center;
 }
 
-textarea{
-
-    text-align: left;
+.navbar {
+    color: #fff;
+    border: none;
+    background: rgba(3, 3, 3,0.6); 
 }
 
+.table-hover tbody tr:hover {
+    background: rgba(3,3,3,0.5);
+}
+
+.table-hover th:hover {
+    background: rgba(3,3,3,0.5);
+    cursor:pointer;
+}
 
 input[type="number"]:read-only {
     /*
     apply this style with js, when checkbox for custom data is true
-background: rgba(0, 0, 0, 0.7);
+    background: rgba(0, 0, 0, 0.7);
     */
 }
 /*
