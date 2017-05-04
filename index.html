@@ -1,81 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
 
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="theme-color" content="#2F3BA2">
-        <title>Fit log</title>
-        <link rel="shortcut icon" href="content/Images/logo_red.svg"/>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#2F3BA2">
+    <title>Fit log</title>
+    <link rel="shortcut icon" href="content/Images/logo_red.svg" />
 
-        <link href="Content/bootstrap.min.css" rel="stylesheet">
-        <link href="Content/site.css" rel="stylesheet">
-        <script src="Scripts/Chart.bundle.js"></script>
+    <link href="Content/bootstrap.min.css" rel="stylesheet">
+    <link href="Content/site.css" rel="stylesheet">
 
-        <script src="Scripts/jquery.min.js"></script>
-        <script src="Scripts/bootstrap.min.js"></script>
-    </head>
+    <script src="Scripts/Chart.bundle.js"></script>
+    <script src="Scripts/jquery.min.js"></script>
+    <script src="Scripts/bootstrap.min.js"></script>
+</head>
 
 
-    <body class="bgimg-2">
+<body class="bgimg-2">
 
-        <div class="navbar navbar-inverse navbar-fixed-top">
-            <div class="container">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a href="" class="navbar-brand">Fit log</a>
-                </div>
-                <div class="navbar-collapse collapse">
-                    <ul class="nav navbar-nav">
-                        <li><a href="" onclick="clearLocalStorage()">clear LS</a></li>
-                        <li><a href="" onclick="injectFakeData()">inject LS</a></li>
-                        <li><a href="#Home">Home</a></li>
-                        <li><a href="#About">About</a></li>
-                        <li><a href="#Contact">Contact</a></li>
-                    </ul>
+                <a href="" class="navbar-brand">Fit log</a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
 
-                    <ul class="nav navbar-nav navbar-right">
-                        <li><a href="#Manage">Hey AY...</a></li>
-                        <li><a href="">Log off</a>
-                        </li>
-                    </ul>
+                    <li><a href="#log">Log</a></li>
+                    <li><a href="#data">Data</a></li>
+                    <li><a href="#chart">Chart</a></li>
 
-                    <ul class="nav navbar-nav navbar-right">
-                        <li><a href="#Login">Log in</a></li>
-                    </ul>
 
-                </div>
+                </ul>
+
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#profile">Hey AY...</a></li>
+                    <li><a href="">Log off</a>
+                    </li>
+                </ul>
+
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="" onclick="clearLocalStorage()">LS -</a></li>
+                    <li><a href="" onclick="injectFakeData()">LS +</a></li>
+                    <li><a href="#Login">Log in</a></li>
+                </ul>
+
             </div>
         </div>
+    </div>
 
 
-        <div class="container ">
+    <div class="container">
+
+
+
+
+        <!--       LOG + MAIN CHART GOEST HERE     -->
+        <div class="page" id="log">
 
             <div class="row">
                 <div class="col-md-4">
                     <div class="well transperant">
-                        <legend>Personal data</legend>
-                        <dl class="dl-horizontal ">
-                            <dt>Name</dt><dd id="userName"></dd>
-                            <dt>Birth</dt><dd id="userBirth"></dd>
-                            <dt>Gender</dt><dd id="userGender"></dd>
-                            <dt>Height, cm</dt><dd id="userHeight"></dd>
-                        </dl>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-
-                <div class="col-md-4">
-                    <div class="well transperant">
-                        <legend>Log Overview</legend>
-                        <table class="table table-sm">
+                        <legend>Log Overview <a href="#createTarget" class="aBtn "><i class="glyphicon glyphicon-new-window"></i></a></legend>
+                        <table class="table table-borderless">
                             <thead>
                                 <tr>
                                     <th class="text-center"></th>
@@ -98,38 +92,93 @@
                 <div class="col-md-8">
                     <div class="well transperant">
                         <legend>Log Chart</legend>
-                        <canvas id="mainChart" ></canvas>
-                    </div>   
+                        <canvas id="mainChart"></canvas>
+                    </div>
                 </div>
 
             </div>
+        </div>
 
-
-
+        <!--       DATA TABLE         -->
+        <div class="page" id="data">
             <div class="row">
+                <div class="well transperant table-responsive">
+                    <legend>My Data <a href="#createRecord" class="aBtn "><i class="glyphicon glyphicon-plus"></i></a></legend>
+                    <br>
+                    <table class="table table-sm table-hover navLinks">
+                        <thead>
+                            <tr>
+                                <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(1)')">#</th>
+                                <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(2)')">Date</th>
+                                <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(3)')">Weight <br> (kg)</th>
+                                <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(4)')">Waist <br> (cm)</th>
+                                <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(5)')">Haunch (cm)</th>
+                                <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(6)')">Arms (cm)</th>
+                                <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(7)')">Chest (cm)</th>
+                                <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(8)')">Hips (cm)</th>
+                                <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(9)')">Fats (%)</th>
+                                <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(10)')">Fats (kg)</th>
+                                <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(11)')">Body Mass</th>
+                                <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(1)')">Equation</th>
+                                <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(1)')">Activity</th>
+                                <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(12)')">kcal</th>
+                                <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(13)')">Comment</th>
+                                <th><i class="glyphicon glyphicon-edit"></i></th>
+                            </tr>
+                        </thead>
+                        <tbody id="DataTable">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
 
+        <!--     CHART MANNY Y AXIS     -->
+        <div class="page" id="chart">
+            <div class="row">
+                <h3>TO DO :)</h3>
+            </div>
+        </div>
 
-                <!-- EDIT USER form -->
+        <!--     PROFILE PAGE     -->
+        <div class="page" id="profile">
+            <div class="row">
                 <div class="col-md-4">
-<!-- Button trigger modal -->
-<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
-  Launch demo modal
-</button>
-                   <div class="modal fade col-md-4" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-                    <!-- Edit User form -->
+                    <div class="well transperant">
+                        <legend>Profile <a href="#editProfile" class="aBtn "><i class="glyphicon glyphicon-edit"></i></a>
+                        </legend>
+                        <dl class="dl-horizontal ">
+                            <dt>Name</dt>
+                            <dd id="userName"></dd>
+                            <dt>Birth</dt>
+                            <dd id="userBirth"></dd>
+                            <dt>Gender</dt>
+                            <dd id="userGender"></dd>
+                            <dt>Height, cm</dt>
+                            <dd id="userHeight"></dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--     FORM EDIT PROFILE     -->
+        <div class="page" id="editProfile">
+            <div class="row">
+                <div class=" col-md-4">
                     <div class="well form-horizontal transperant">
                         <fieldset>
-                            <legend>User Details</legend>
+                            <legend>Edit Profile</legend>
 
                             <div class="form-group">
-                                <label for="example-text-input" class="control-label col-xs-4">Name</label>
+                                <label class="control-label col-xs-4">Name</label>
                                 <div class="col-xs-8">
                                     <input class="form-control input-text" type="text" id="editUserName">
                                 </div>
                             </div>
 
                             <div class="form-group">
-                                <label for="example-number-input" class="control-label col-xs-4">Gender</label>
+                                <label class="control-label col-xs-4">Gender</label>
                                 <div class="col-xs-8">
                                     <select class="form-control inp-tra" id="editUserGender">
                                         <option>Male</option>
@@ -139,7 +188,7 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="example-number-input" class="control-label col-xs-4">Birth Date</label>
+                                <label class="control-label col-xs-4">Birth Date</label>
                                 <div class="col-xs-8">
                                     <div class="input-group">
                                         <input type="date" class="form-control input-date" id="editUserBirth">
@@ -148,19 +197,19 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="example-number-input" class="control-label col-xs-4">Height (cm)</label>
+                                <label class="control-label col-xs-4">Height (cm)</label>
                                 <div class="col-xs-8">
                                     <div class="input-group">
                                         <span class="input-group-btn">
                                             <button type="button" class="btn btn-danger btn-number"  data-type="minus" data-field="quant[3]">
                                                 <span class="glyphicon glyphicon-minus"></span>
-                                            </button>
+                                        </button>
                                         </span>
                                         <input type="number" name="quant[3]" class="form-control input-number" value="170" min="140" max="250" id="editUserHeight">
                                         <span class="input-group-btn">
                                             <button type="button" class="btn btn-success btn-number" data-type="plus" data-field="quant[3]">
                                                 <span class="glyphicon glyphicon-plus"></span>
-                                            </button>
+                                        </button>
                                         </span>
                                     </div>
                                 </div>
@@ -174,235 +223,17 @@
 
                         </fieldset>
                     </div>
-                    <!-- Edit User form END-->
-                    
-                    </div>
-                    
-                    
-                    
-                    
-                    
-                    
-                </div> <!-- COL-MD-4 END -->
+                </div>
+            </div>
+        </div>
 
-                <!-- NEW ROCORD form -->
-                <div class="col-md-4">
-                    <!-- NEW ROCORD form -->
-                    <div class="well transperant form-horizontal" onchange="fillNewRecordFormReadonlyProp()">
-                        <fieldset>
-                            <legend>Add Data</legend>
-
-                            <div class="form-group row">
-                                <label class="control-label col-xs-4">Date</label>
-                                <div class="col-xs-8">
-                                    <div class="input-group">
-                                        <input type="date" class="form-control" id="newDataMeasurementDate">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="example-number-input" class="control-label col-xs-4">Weight, kg</label>
-                                <div class="col-xs-8">
-                                    <div class="input-group">
-                                        <span class="input-group-btn">
-                                            <button type="button" class="btn btn-danger btn-number" data-type="minus" data-field="quant[4]">
-                                                <span class="glyphicon glyphicon-minus"></span>
-                                            </button>
-                                        </span>
-                                        <input type="number" name="quant[4]" class="form-control input-number" value="72" min="20" max="500" id="newDataWeightKgs">
-                                        <span class="input-group-btn">
-                                            <button type="button" class="btn btn-success btn-number" data-type="plus" data-field="quant[4]">
-                                                <span class="glyphicon glyphicon-plus"></span>
-                                            </button>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="example-number-input" class="control-label col-xs-4">Waist, cm</label>
-                                <div class="col-xs-8">
-                                    <div class="input-group">
-                                        <span class="input-group-btn">
-                                            <button type="button" class="btn btn-danger btn-number" data-type="minus" data-field="quant[5]">
-                                                <span class="glyphicon glyphicon-minus"></span>
-                                            </button>
-                                        </span>
-                                        <input type="number" name="quant[5]" class="form-control input-number" value="85" min="30" max="200" id="newDataWaistCm">
-                                        <span class="input-group-btn">
-                                            <button type="button" class="btn btn-success btn-number" data-type="plus" data-field="quant[5]">
-                                                <span class="glyphicon glyphicon-plus"></span>
-                                            </button>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="example-number-input" class="control-label col-xs-4">Haunch, cm</label>
-                                <div class="col-xs-8">
-                                    <div class="input-group">
-                                        <span class="input-group-btn">
-                                            <button type="button" class="btn btn-danger btn-number" data-type="minus" data-field="quant[6]">
-                                                <span class="glyphicon glyphicon-minus"></span>
-                                            </button>
-                                        </span>
-                                        <input type="number" name="quant[6]" class="form-control input-number" value="90" min="20" max="200" id="newDataHaunchCm">
-                                        <span class="input-group-btn">
-                                            <button type="button" class="btn btn-success btn-number" data-type="plus" data-field="quant[6]">
-                                                <span class="glyphicon glyphicon-plus"></span>
-                                            </button>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="example-number-input" class="control-label col-xs-4">Arms, cm</label>
-                                <div class="col-xs-8">
-                                    <div class="input-group">
-                                        <span class="input-group-btn">
-                                            <button type="button" class="btn btn-danger btn-number" data-type="minus" data-field="quant[7]">
-                                                <span class="glyphicon glyphicon-minus"></span>
-                                            </button>
-                                        </span>
-                                        <input type="number" name="quant[7]" class="form-control input-number" value="34"  min="20" max="100" id="newDataArmsCm">
-                                        <span class="input-group-btn">
-                                            <button type="button" class="btn btn-success btn-number" data-type="plus" data-field="quant[7]">
-                                                <span class="glyphicon glyphicon-plus"></span>
-                                            </button>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="example-number-input" class="control-label col-xs-4">Chest, cm</label>
-                                <div class="col-xs-8">
-                                    <div class="input-group">
-                                        <span class="input-group-btn">
-                                            <button type="button" class="btn btn-danger btn-number"  data-type="minus" data-field="quant[8]">
-                                                <span class="glyphicon glyphicon-minus"></span>
-                                            </button>
-                                        </span>
-                                        <input type="number" name="quant[8]" class="form-control input-number" value="98"  min="30" max="200" id="newDataChestCm">
-                                        <span class="input-group-btn">
-                                            <button type="button" class="btn btn-success btn-number" data-type="plus" data-field="quant[8]">
-                                                <span class="glyphicon glyphicon-plus"></span>
-                                            </button>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="example-number-input" class="control-label col-xs-4">Hips, cm</label>
-                                <div class="col-xs-8">
-                                    <div class="input-group">
-                                        <span class="input-group-btn">
-                                            <button type="button" class="btn btn-danger btn-number"  data-type="minus" data-field="quant[9]">
-                                                <span class="glyphicon glyphicon-minus"></span>
-                                            </button>
-                                        </span>
-                                        <input type="number" name="quant[9]" class="form-control input-number" value="45"  min="20" max="100" id="newDataHipsCm">
-                                        <span class="input-group-btn">
-                                            <button type="button" class="btn btn-success btn-number" data-type="plus" data-field="quant[9]">
-                                                <span class="glyphicon glyphicon-plus"></span>
-                                            </button>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="example-number-input" class="control-label col-xs-4">Equation</label>
-                                <div class="col-xs-8">
-                                    <select class="form-control inp-tra" id="newDataBMRFormula">
-                                        <option value="1">1 - H-B, Mifflin St Jeor Equation rev. in 1990 </option>
-                                        <option value="2">2 - Katch-McArdle Formula </option>
-                                        <option value="3">3 - H-B, Roza and Shizgal Equation rev. in 1984 </option>
-                                        <option value="4">4 - H-B, original equation published in 1918 </option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="example-number-input" class="control-label col-xs-4">Physical activity</label>
-                                <div class="col-xs-8">
-                                    <select class="form-control inp-tra" id="newDataPhysicalActivity">
-                                        <option value="1.2">1.200 - Little to no exercise </option>
-                                        <option value="1.375">1.375 - Light exercise (1–3 days per week) </option>
-                                        <option value="1.55">1.550 - Moderate exercise (3–5 days per week) </option>
-                                        <option value="1.725">1.725 - Heavy exercise (6–7 days per week) </option>
-                                        <option value="1.9">1.900 - very heavy (twice per day, extra heavy workouts) </option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="example-text-input" class="control-label col-xs-4">Comment</label>
-                                <div class="col-xs-8">
-                                    <textarea class="form-control inp-tra" id="newDatacomment" rows="3" placeholder="comment"></textarea>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="example-text-input" class="control-label col-xs-4"></label>
-                                <div class="col-xs-8">
-                                    <div class="custom-control">
-                                        <input type="checkbox" class="custom-control-input" id="newDataCustomCheck">
-                                        <span class="custom-control-indicator"></span>
-                                        <span class="custom-control-description ">Custom data</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="example-text-input" class="control-label col-xs-4">Fats %</label>
-                                <div class="col-xs-8">
-                                    <input class="form-control input-text" type="number" readonly id="newDataFatsPercent">
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="example-text-input" class="control-label col-xs-4">Fats, kg</label>
-                                <div class="col-xs-8">
-                                    <input class="form-control input-text"  type="number" readonly id="newDataFatKgs">
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="example-text-input" class="control-label col-xs-4">Body mass</label>
-                                <div class="col-xs-8">
-                                    <input class="form-control input-text"  type="number" readonly id="newDataBodyMassKgs">
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="example-text-input" class="control-label col-xs-4">Daily kcal</label>
-                                <div class="col-xs-8">
-                                    <input class="form-control input-text"  type="number" readonly id="newDataBMAKcal">
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <div class="col-md-8 col-md-offset-4 col-xs-12">
-                                    <input type="button" value="Save" class="btn btn-default btn-success  btn-block" onClick="createDataRecord()">
-                                </div>
-                            </div>
-
-                        </fieldset>
-                    </div>
-                    <!-- NEW RECORD form END-->
-                </div> <!-- COL-MD-4 END -->
-
-                <!-- TARGET form -->
-                <div class="col-md-4">
-                    <!-- TARGET form -->
+        <!--     FORM CREATE TARGET     -->
+        <div class="page" id="createTarget">
+            <div class="row">
+                <div class=" col-md-4">
                     <div class="well transperant form-horizontal">
                         <fieldset>
-                            <legend>Write Target</legend>
+                            <legend>Write a Target</legend>
 
                             <div class="form-group">
                                 <label for="example-number-input" class="control-label col-xs-4">Weight, kg</label>
@@ -475,66 +306,254 @@
 
                         </fieldset>
                     </div>
-                    <!-- TARGET form END-->
-
-
-
-
-
-
-
-
-                </div> <!-- END COL-MD-4 -->
-
-            </div> <!-- ROW with FORMS END -->
-
-
-            <div class="well transperant table-responsive">
-                <legend>My Data</legend>
-                <br>
-                <table class="table table-sm table-hover">
-                    <thead>
-                        <tr>
-                            <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(1)')">#</th>
-                            <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(2)')">Date</th>
-                            <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(3)')">Weight <br> (kg)</th>
-                            <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(4)')">Waist <br> (cm)</th>
-                            <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(5)')">Haunch (cm)</th>
-                            <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(6)')">Arms (cm)</th>
-                            <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(7)')">Chest (cm)</th>
-                            <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(8)')">Hips (cm)</th>
-                            <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(9)')">Fats (%)</th>
-                            <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(10)')">Fats (kg)</th>
-                            <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(11)')">Body Mass</th>
-                            <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(1)')">Equation</th>
-                            <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(1)')">Activity</th>
-                            <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(12)')">kcal</th>
-                            <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(13)')">Comment</th>
-                            <th><i class="glyphicon glyphicon-edit"></i></th>
-                        </tr>
-                    </thead>
-                    <tbody id="DataTable">
-                    </tbody>
-                </table>
+                </div>
             </div>
-
-
-            <hr>
-            <footer class="">
-                <p class="">
-                    Atanas Yanev Labs |
-                    <a href="https://github.com/atanasyanew"><i class="fa fa-github" aria-hidden="true"></i> GitHub</a> |
-                    <a href="http://lnked.in/ayanev"><i class="fa fa-linkedin-square" aria-hidden="true"></i> LinkedIn</a>
-                </p>
-            </footer>
-
-
-
         </div>
-        <!-- /container -->
+
+        <!--     FORM CREATE NEW RECORD     -->
+        <div class="page" id="createRecord">
+            <div class="row">
+                <div class=" col-md-8">
+                    <!-- NEW ROCORD form -->
+                    <div class="well transperant form-horizontal" onchange="fillNewRecordFormReadonlyProp()">
+                        <fieldset>
+                            <legend>Add New Data</legend>
+                            <div class="row">
+                                <div class="col-md-6">
+
+                                    <div class="form-group row">
+                                        <label class="control-label col-xs-4">Date</label>
+                                        <div class="col-xs-8">
+                                            <div class="input-group">
+                                                <input type="date" class="form-control" id="newDataMeasurementDate">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="example-number-input" class="control-label col-xs-4">Weight, kg</label>
+                                        <div class="col-xs-8">
+                                            <div class="input-group">
+                                                <span class="input-group-btn">
+                                            <button type="button" class="btn btn-danger btn-number" data-type="minus" data-field="quant[4]">
+                                                <span class="glyphicon glyphicon-minus"></span>
+                                                </button>
+                                                </span>
+                                                <input type="number" name="quant[4]" class="form-control input-number" value="72" min="20" max="500" id="newDataWeightKgs">
+                                                <span class="input-group-btn">
+                                            <button type="button" class="btn btn-success btn-number" data-type="plus" data-field="quant[4]">
+                                                <span class="glyphicon glyphicon-plus"></span>
+                                                </button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="example-number-input" class="control-label col-xs-4">Waist, cm</label>
+                                        <div class="col-xs-8">
+                                            <div class="input-group">
+                                                <span class="input-group-btn">
+                                            <button type="button" class="btn btn-danger btn-number" data-type="minus" data-field="quant[5]">
+                                                <span class="glyphicon glyphicon-minus"></span>
+                                                </button>
+                                                </span>
+                                                <input type="number" name="quant[5]" class="form-control input-number" value="85" min="30" max="200" id="newDataWaistCm">
+                                                <span class="input-group-btn">
+                                            <button type="button" class="btn btn-success btn-number" data-type="plus" data-field="quant[5]">
+                                                <span class="glyphicon glyphicon-plus"></span>
+                                                </button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="example-number-input" class="control-label col-xs-4">Haunch, cm</label>
+                                        <div class="col-xs-8">
+                                            <div class="input-group">
+                                                <span class="input-group-btn">
+                                            <button type="button" class="btn btn-danger btn-number" data-type="minus" data-field="quant[6]">
+                                                <span class="glyphicon glyphicon-minus"></span>
+                                                </button>
+                                                </span>
+                                                <input type="number" name="quant[6]" class="form-control input-number" value="90" min="20" max="200" id="newDataHaunchCm">
+                                                <span class="input-group-btn">
+                                            <button type="button" class="btn btn-success btn-number" data-type="plus" data-field="quant[6]">
+                                                <span class="glyphicon glyphicon-plus"></span>
+                                                </button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="example-number-input" class="control-label col-xs-4">Arms, cm</label>
+                                        <div class="col-xs-8">
+                                            <div class="input-group">
+                                                <span class="input-group-btn">
+                                            <button type="button" class="btn btn-danger btn-number" data-type="minus" data-field="quant[7]">
+                                                <span class="glyphicon glyphicon-minus"></span>
+                                                </button>
+                                                </span>
+                                                <input type="number" name="quant[7]" class="form-control input-number" value="34" min="20" max="100" id="newDataArmsCm">
+                                                <span class="input-group-btn">
+                                            <button type="button" class="btn btn-success btn-number" data-type="plus" data-field="quant[7]">
+                                                <span class="glyphicon glyphicon-plus"></span>
+                                                </button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="example-number-input" class="control-label col-xs-4">Chest, cm</label>
+                                        <div class="col-xs-8">
+                                            <div class="input-group">
+                                                <span class="input-group-btn">
+                                            <button type="button" class="btn btn-danger btn-number"  data-type="minus" data-field="quant[8]">
+                                                <span class="glyphicon glyphicon-minus"></span>
+                                                </button>
+                                                </span>
+                                                <input type="number" name="quant[8]" class="form-control input-number" value="98" min="30" max="200" id="newDataChestCm">
+                                                <span class="input-group-btn">
+                                            <button type="button" class="btn btn-success btn-number" data-type="plus" data-field="quant[8]">
+                                                <span class="glyphicon glyphicon-plus"></span>
+                                                </button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="example-number-input" class="control-label col-xs-4">Hips, cm</label>
+                                        <div class="col-xs-8">
+                                            <div class="input-group">
+                                                <span class="input-group-btn">
+                                            <button type="button" class="btn btn-danger btn-number"  data-type="minus" data-field="quant[9]">
+                                                <span class="glyphicon glyphicon-minus"></span>
+                                                </button>
+                                                </span>
+                                                <input type="number" name="quant[9]" class="form-control input-number" value="45" min="20" max="100" id="newDataHipsCm">
+                                                <span class="input-group-btn">
+                                            <button type="button" class="btn btn-success btn-number" data-type="plus" data-field="quant[9]">
+                                                <span class="glyphicon glyphicon-plus"></span>
+                                                </button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
 
 
-    </body>
+
+
+                                    <div class="form-group">
+                                        <label for="example-number-input" class="control-label col-xs-4">Equation</label>
+                                        <div class="col-xs-8">
+                                            <select class="form-control inp-tra" id="newDataBMRFormula">
+                                        <option value="1">1 - H-B, Mifflin St Jeor Equation rev. in 1990 </option>
+                                        <option value="2">2 - Katch-McArdle Formula </option>
+                                        <option value="3">3 - H-B, Roza and Shizgal Equation rev. in 1984 </option>
+                                        <option value="4">4 - H-B, original equation published in 1918 </option>
+                                    </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="example-number-input" class="control-label col-xs-4">Physical activity</label>
+                                        <div class="col-xs-8">
+                                            <select class="form-control inp-tra" id="newDataPhysicalActivity">
+                                        <option value="1.2">1.200 - Little to no exercise </option>
+                                        <option value="1.375">1.375 - Light exercise (1–3 days per week) </option>
+                                        <option value="1.55">1.550 - Moderate exercise (3–5 days per week) </option>
+                                        <option value="1.725">1.725 - Heavy exercise (6–7 days per week) </option>
+                                        <option value="1.9">1.900 - very heavy (twice per day, extra heavy workouts) </option>
+                                    </select>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <!--     end of half part                      -->
+                                <div class="col-md-6">
+
+                                    <div class="form-group">
+                                        <label for="example-text-input" class="control-label col-xs-4">Comment</label>
+                                        <div class="col-xs-8">
+                                            <textarea class="form-control inp-tra" id="newDatacomment" rows="3" placeholder="comment"></textarea>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="example-text-input" class="control-label col-xs-4"></label>
+                                        <div class="col-xs-8">
+                                            <div class="custom-control">
+                                                <input type="checkbox" class="custom-control-input" id="newDataCustomCheck">
+                                                <span class="custom-control-indicator"></span>
+                                                <span class="custom-control-description ">Custom data</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="example-text-input" class="control-label col-xs-4">Fats %</label>
+                                        <div class="col-xs-8">
+                                            <input class="form-control input-text" type="number" readonly id="newDataFatsPercent">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="example-text-input" class="control-label col-xs-4">Fats, kg</label>
+                                        <div class="col-xs-8">
+                                            <input class="form-control input-text" type="number" readonly id="newDataFatKgs">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="example-text-input" class="control-label col-xs-4">Body mass</label>
+                                        <div class="col-xs-8">
+                                            <input class="form-control input-text" type="number" readonly id="newDataBodyMassKgs">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="example-text-input" class="control-label col-xs-4">Daily kcal</label>
+                                        <div class="col-xs-8">
+                                            <input class="form-control input-text" type="number" readonly id="newDataBMAKcal">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="col-md-8 col-md-offset-4 col-xs-12">
+                                            <input type="button" value="Save" class="btn btn-default btn-success  btn-block" onClick="createDataRecord()">
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <!-- NEW RECORD form END-->
+                </div>
+            </div>
+        </div>
+
+        <!--     FOOTER     -->
+        <hr>
+        <footer class="">
+            <p class="">
+                Atanas Yanev Labs |
+                <a href="https://github.com/atanasyanew"><i class="fa fa-github" aria-hidden="true"></i> GitHub</a> |
+                <a href="http://lnked.in/ayanev"><i class="fa fa-linkedin-square" aria-hidden="true"></i> LinkedIn</a>
+            </p>
+        </footer>
+
+
+
+    </div>
+    <!-- /container -->
+
+
+</body>
 
 </html>
 
@@ -546,8 +565,7 @@
 <script src="Scripts/formUIlogic.js"></script>
 
 <script>
-
-    window.onload = function () {
+    window.onload = function() {
         drawMainChart();
         displayTableData();
         targetDisplay();
@@ -555,8 +573,32 @@
         userFormFill();
         fillNewRecordForm(); //fill up form with last record data
         fillNewRecordFormReadonlyProp(); //fill up READONLY form fields
+        hashNav(); //init on load
     };
 
+
+    window.onhashchange = hashNav;
+
+
+    function hashNav() {
+
+        var pages = document.querySelectorAll(".page"); // get all pages
+        var hash = location.hash.substring(1); //get hash
+        var showPage = document.getElementById(hash); //get page to show
+
+        //be sure all are not displayed
+        for (var i = 0; i < pages.length; i++) {
+            pages[i].style.display = "none";
+        }
+
+        if (showPage) {
+            showPage.style.display = "block";
+
+        } else {
+            document.getElementById("log").style.display = "block";
+        }
+        return false; // cancel the click
+    }
 
     /*
   newDataMeasurementDate
@@ -596,14 +638,14 @@
         var d = document.getElementById('newDataBMAKcal');
         var bgColor;
         //console.log(chekboxCustomData);
-        if (chekboxCustomData == true){
+        if (chekboxCustomData == true) {
 
             a.readOnly = false;
             b.readOnly = false;
             c.readOnly = false;
             d.readOnly = false;
 
-            bgColor = "rgba(0, 0, 0, 0.65)";        
+            bgColor = "rgba(0, 0, 0, 0.65)";
             a.style.backgroundColor = bgColor;
             b.style.backgroundColor = bgColor;
             c.style.backgroundColor = bgColor;
@@ -615,7 +657,7 @@
             c.readOnly = true;
             d.readOnly = true;
 
-            bgColor = "rgba(3,3,3,0.25)";        
+            bgColor = "rgba(3,3,3,0.25)";
             a.style.backgroundColor = bgColor;
             b.style.backgroundColor = bgColor;
             c.style.backgroundColor = bgColor;
@@ -638,9 +680,6 @@
         }
     }
 
-//date dif for target
-    
-    
-
+    //date dif for target
 
 </script>

@@ -2,7 +2,6 @@ body {
     padding-top: 70px;
     padding-bottom: 70px;
     background-color: #DCDCDC;
-
     /*
     background-color: #eee;
     background-color: #333;
@@ -14,29 +13,42 @@ body {
     text-shadow: 0 1px 3px rgba(0,0,0,.5);
     */
 }
+
+
 /* Set padding to keep content from hitting the edges */
+
 .body-content {
     padding-left: 15px;
     padding-right: 15px;
-
 }
+
 footer {
     color: #999;
 }
+
 .table-fit {
     width: 1px;
 }
-.well {
+
+.well,
+{
     color: #333;
     /*
     background-color: rgba(255,255,255,0.6); 
     */
 }
 
+.aBtn {
+    color: #fff;
+    text-align: right;
+    float: right;
+}
+
 
 /* Override the default bootstrap behavior where horizontal description lists 
 will truncate terms that are too long to fit in the left column 
 */
+
 .dl-horizontal dt {
     float: left;
     width: 100px;
@@ -46,26 +58,35 @@ will truncate terms that are too long to fit in the left column
     text-overflow: ellipsis;
     white-space: nowrap;
 }
+
 .dl-horizontal dd {
     margin-left: 120px;
 }
 
+
 /* Set width on the form input elements since they're 100% wide by default */
+
 input,
 select,
 textarea {
     max-width: 200px;
-}    
+}
+
 
 /* Create a Parallax Effect */
-.bgimg-1, .bgimg-2, .bgimg-3 {
+
+.bgimg-1,
+.bgimg-2,
+.bgimg-3 {
     background-attachment: fixed;
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
 }
 
+
 /* First image (Logo. Full height) */
+
 .bgimg-1 {
     background-image: url('Images/1.2.jpg');
     /*
@@ -73,7 +94,9 @@ textarea {
     */
 }
 
+
 /* Second image (Portfolio) */
+
 .bgimg-2 {
     /*
     background-image: url("Images/parallax2.jpg");
@@ -85,14 +108,22 @@ textarea {
     opacity: 0.9;
 }
 
+
 /* Third image (Contact) */
+
 .bgimg-3 {
     background-image: url("Images/parallax3.jpg");
     min-height: 400px;
 }
 
-.w3-wide {letter-spacing: 10px;}
-.w3-hover-opacity {cursor: pointer;}
+.w3-wide {
+    letter-spacing: 10px;
+}
+
+.w3-hover-opacity {
+    cursor: pointer;
+}
+
 
 /* Turn off parallax scrolling for tablets and phones 
 @media only screen and (max-device-width: 1024px) {
@@ -104,22 +135,25 @@ background-attachment: scroll;
 legend {
     color: #fff;
 }
+
 .transperant {
     border-radius: 5px;
     border: none;
-    background: rgba(3,3,3,0.25);
+    background: rgba(3, 3, 3, 0.25);
     box-shadow: 1px 1px 50px #000;
     /*
     background-color: rgba(255,255,255,0.6); 
     */
     color: #fff;
 }
-.inp-tra, input[type="number"], 
-input[type="date"], 
-input[type="text"], 
+
+.inp-tra,
+input[type="number"],
+input[type="date"],
+input[type="text"],
 input[type="number"]:read-only {
     color: #fff;
-    background: rgba(3,3,3,0.25);
+    background: rgba(3, 3, 3, 0.25);
     border-radius: 5px;
     border: none;
     text-align: center;
@@ -128,16 +162,16 @@ input[type="number"]:read-only {
 .navbar {
     color: #fff;
     border: none;
-    background: rgba(3, 3, 3,0.6); 
+    background: rgba(3, 3, 3, 0.7);
 }
 
 .table-hover tbody tr:hover {
-    background: rgba(3,3,3,0.5);
+    background: rgba(3, 3, 3, 0.5);
 }
 
 .table-hover th:hover {
-    background: rgba(3,3,3,0.5);
-    cursor:pointer;
+    background: rgba(3, 3, 3, 0.5);
+    cursor: pointer;
 }
 
 input[type="number"]:read-only {
@@ -146,6 +180,17 @@ input[type="number"]:read-only {
     background: rgba(0, 0, 0, 0.7);
     */
 }
+
+.table.table-borderless td,
+.table.table-borderless th {
+    border: 0 !important;
+}
+
+.page {
+    display: none;
+}
+
+
 /*
 input:focus{
 outline: none;
