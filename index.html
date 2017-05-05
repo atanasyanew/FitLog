@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#2F3BA2">
     <title>Fit log</title>
-    <link rel="shortcut icon" href="content/Images/logo_red.svg" />
+    <link rel="shortcut icon" href="Content/Images/logo_red.svg" />
 
     <link href="Content/bootstrap.min.css" rel="stylesheet">
     <link href="Content/site.css" rel="stylesheet">
@@ -32,12 +32,9 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-
                     <li><a href="#log">Log</a></li>
                     <li><a href="#data">Data</a></li>
                     <li><a href="#chart">Chart</a></li>
-
-
                 </ul>
 
                 <ul class="nav navbar-nav navbar-right">
@@ -565,6 +562,7 @@
 <script src="Scripts/formUIlogic.js"></script>
 
 <script>
+    
     window.onload = function() {
         drawMainChart();
         displayTableData();
@@ -579,27 +577,18 @@
 
     window.onhashchange = hashNav;
 
-
-    function hashNav() {
-
-        var pages = document.querySelectorAll(".page"); // get all pages
-        var hash = location.hash.substring(1); //get hash
-        var showPage = document.getElementById(hash); //get page to show
-
-        //be sure all are not displayed
-        for (var i = 0; i < pages.length; i++) {
-            pages[i].style.display = "none";
-        }
-
-        if (showPage) {
-            showPage.style.display = "block";
-
-        } else {
-            document.getElementById("log").style.display = "block";
-        }
-        return false; // cancel the click
-    }
-
+/*
+    db root/
+    
+    utilities{},
+    //one main objext that contains all users
+	data {
+		user1{}, //user id
+		user1{},
+        user1{},
+        user1{},
+	     }
+    */
     /*
   newDataMeasurementDate
   newDataWeightKgs
@@ -617,68 +606,7 @@
   newDataBMAKcal
 */
 
-    //Fill new data readonly fields
-    function fillNewRecordFormReadonlyProp() {
-
-        //CONSTANTS from JSON obj
-        var gender = userInfo.gender;
-        var height = userInfo.height;
-        var birth = userInfo.birthDay;
-        var height = userInfo.height;
-        //GET FORM INPUTS
-        var haunch = document.getElementById('newDataHaunchCm').value;
-        var waist = document.getElementById('newDataWaistCm').value;
-        var weight = document.getElementById('newDataWeightKgs').value;
-        var activity = document.getElementById('newDataPhysicalActivity').value;
-
-        var chekboxCustomData = document.getElementById('newDataCustomCheck').checked;
-        var a = document.getElementById('newDataFatsPercent');
-        var b = document.getElementById("newDataFatKgs");
-        var c = document.getElementById('newDataBodyMassKgs');
-        var d = document.getElementById('newDataBMAKcal');
-        var bgColor;
-        //console.log(chekboxCustomData);
-        if (chekboxCustomData == true) {
-
-            a.readOnly = false;
-            b.readOnly = false;
-            c.readOnly = false;
-            d.readOnly = false;
-
-            bgColor = "rgba(0, 0, 0, 0.65)";
-            a.style.backgroundColor = bgColor;
-            b.style.backgroundColor = bgColor;
-            c.style.backgroundColor = bgColor;
-            d.style.backgroundColor = bgColor;
-
-        } else {
-            a.readOnly = true;
-            b.readOnly = true;
-            c.readOnly = true;
-            d.readOnly = true;
-
-            bgColor = "rgba(3,3,3,0.25)";
-            a.style.backgroundColor = bgColor;
-            b.style.backgroundColor = bgColor;
-            c.style.backgroundColor = bgColor;
-            d.style.backgroundColor = bgColor;
-
-
-            //update fields
-            var fatsPercent = calcFatsPercent(gender, height, haunch, waist);
-            a.value = fatsPercent;
-
-            var fatKgs = calcFatKgs(fatsPercent, weight);
-            b.value = fatKgs;
-
-            var bodyMassKgs = calcBodyMassKgs(fatKgs, weight)
-            c.value = bodyMassKgs;
-
-            var formula = document.getElementById('newDataBMRFormula').value;
-            var bmaKcal = calcBMAKcal(gender, birth, formula, activity, weight, height, bodyMassKgs);
-            d.value = bmaKcal;
-        }
-    }
+    
 
     //date dif for target
 

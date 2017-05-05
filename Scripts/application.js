@@ -39,25 +39,25 @@ function userObj(na, bi, ge, he) {
     this.height = he;
 }
 //main object JSON data
-function mainJSON(){
+function mainJSON() {
     this.UserInfo = new userObj('My Name is..', '1991-01-01', 'Male', '177'),
         this.UserTarget = new DataObj('', '', '', '', '', '', '', '', '', '', '', '', '', ''), //user target
         this.DataFields = new DataObj(
-        'Measurement Date',
-        'Weight, kg',
-        'Waist, cm',
-        'Haunch, cm',
-        'Arms, cm',
-        'Chest, cm',
-        'Hips, cm',
-        'Fats %',
-        'Fat, kg',
-        'Body Mass, kg',
-        'Calc Formula',
-        'Physical Activity',
-        'Kcal',
-        'comment'
-    ),
+            'Measurement Date',
+            'Weight, kg',
+            'Waist, cm',
+            'Haunch, cm',
+            'Arms, cm',
+            'Chest, cm',
+            'Hips, cm',
+            'Fats %',
+            'Fat, kg',
+            'Body Mass, kg',
+            'Calc Formula',
+            'Physical Activity',
+            'Kcal',
+            'comment'
+        ),
         this.Data = [] //array with DataObj objects
     //"UserInfo": '', //object
     //"UserTarget": '', //user target
@@ -73,7 +73,7 @@ function initStorage() {
     if (localStorage.bp == undefined) {
         //for now fake data
         //empty init object
-        localStorage.setItem('bp', JSON.stringify( new mainJSON() ));
+        localStorage.setItem('bp', JSON.stringify(new mainJSON()));
         document.location.reload();
     } else {
         mainObject = JSON.parse(localStorage.bp); //get localstorage data
@@ -81,21 +81,21 @@ function initStorage() {
 
 }
 //save changes
-function saveData(){
+function saveData() {
     localStorage.setItem(ls, JSON.stringify(mainObject));
     document.location.reload();
 }
 //clear local storage
-function clearLocalStorage(){
+function clearLocalStorage() {
     localStorage.removeItem(ls);
 }
 //Insert Fake data to LS
-function injectFakeData(){
+function injectFakeData() {
     localStorage.setItem(ls, JSON.stringify(mainObjectFake));
     document.location.reload();
 }
 //get today "yyyy-mm-dd"
-function todaysDate(){
+function todaysDate() {
     var now = new Date();
     var day = ("0" + now.getDate()).slice(-2);
     var month = ("0" + (now.getMonth() + 1)).slice(-2);
@@ -103,11 +103,105 @@ function todaysDate(){
     //"2017-04-28"
     return today;
 }
+//hash nav bar
+function hashNav() {
 
+    var pages = document.querySelectorAll(".page"); // get all pages
+    var hash = location.hash.substring(1); //get hash
+    var showPage = document.getElementById(hash); //get page to show
+
+    //be sure all are not displayed
+    for (var i = 0; i < pages.length; i++) {
+        pages[i].style.display = "none";
+    }
+
+    if (showPage) {
+        showPage.style.display = "block";
+
+    } else {
+        document.getElementById("log").style.display = "block";
+    }
+    return false; // cancel the click
+}
+//FORM plus and minus buttons
+$('.btn-number').click(function(e){
+    e.preventDefault();
+
+    fieldName = $(this).attr('data-field');
+    type      = $(this).attr('data-type');
+    var input = $("input[name='"+fieldName+"']");
+    var currentVal = parseInt(input.val());
+    if (!isNaN(currentVal)) {
+        if(type == 'minus') {
+
+            if(currentVal > input.attr('min')) {
+                input.val(currentVal - 1).change();
+            }
+            if(parseInt(input.val()) == input.attr('min')) {
+                $(this).attr('disabled', true);
+            }
+
+        } else if(type == 'plus') {
+
+            if(currentVal < input.attr('max')) {
+                input.val(currentVal + 1).change();
+            }
+            if(parseInt(input.val()) == input.attr('max')) {
+                $(this).attr('disabled', true);
+            }
+
+        }
+    } else {
+        input.val(0);
+    }
+});
+// OTHER FORMS STUFF
+/*
+$('.input-number').focusin(function(){
+   $(this).data('oldValue', $(this).val());
+});
+$('.input-number').change(function() {
+
+    minValue =  parseInt($(this).attr('min'));
+    maxValue =  parseInt($(this).attr('max'));
+    valueCurrent = parseInt($(this).val());
+
+    name = $(this).attr('name');
+    if(valueCurrent >= minValue) {
+        $(".btn-number[data-type='minus'][data-field='"+name+"']").removeAttr('disabled')
+    } else {
+        alert('Sorry, the minimum value was reached');
+        $(this).val($(this).data('oldValue'));
+    }
+    if(valueCurrent <= maxValue) {
+        $(".btn-number[data-type='plus'][data-field='"+name+"']").removeAttr('disabled')
+    } else {
+        alert('Sorry, the maximum value was reached');
+        $(this).val($(this).data('oldValue'));
+    }
+
+
+});
+$(".input-number").keydown(function (e) {
+        // Allow: backspace, delete, tab, escape, enter and .
+        if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 190]) !== -1 ||
+             // Allow: Ctrl+A
+            (e.keyCode == 65 && e.ctrlKey === true) ||
+             // Allow: home, end, left, right
+            (e.keyCode >= 35 && e.keyCode <= 39)) {
+                 // let it happen, don't do anything
+                 return;
+        }
+        // Ensure that it is a number and stop the keypress
+        if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+            e.preventDefault();
+        }
+    });
+*/
 
 /* * USER functions */
 //display current user information
-function userDisplay(){
+function userDisplay() {
     document.getElementById("userName").innerHTML = userInfo.name;
     document.getElementById("userBirth").innerHTML = userInfo.birthDay;
     document.getElementById("userGender").innerHTML = userInfo.gender;
@@ -115,7 +209,7 @@ function userDisplay(){
     return true;
 }
 //fill up edit user form based on last data
-function userFormFill(){
+function userFormFill() {
     document.getElementById("editUserName").value = userInfo.name;
     document.getElementById("editUserBirth").value = userInfo.birthDay;
     document.getElementById("editUserGender").value = userInfo.gender;
@@ -123,7 +217,7 @@ function userFormFill(){
     return true;
 }
 //get form data and call save function
-function userEdit(){
+function userEdit() {
     userInfo.name = document.getElementById("editUserName").value;
     userInfo.birthDay = document.getElementById("editUserBirth").value;
     userInfo.gender = document.getElementById("editUserGender").value;
@@ -139,7 +233,7 @@ function displayTableData() {
     var table = "";
     for (i = 0; i < data.length; i++) {
         table += "<tr class=\"item\">";
-        table += "<td>" + (data.length-i) + "</td>";
+        table += "<td>" + (data.length - i) + "</td>";
 
         //for (var prop in data[i]) {
         //    table += "<td>" + data[i][prop] + "</td>";
@@ -162,7 +256,7 @@ function displayTableData() {
 
 
         table += "<td>";
-        table += "<button onclick=\"deleteTableData("+i+")\" class=\"btn btn-danger btn-xs\">";
+        table += "<button onclick=\"deleteTableData(" + i + ")\" class=\"btn btn-danger btn-xs\">";
         table += "<span class=\"glyphicon glyphicon-remove\">";
         table += "</span></button>";
         table += "</td>";
@@ -171,8 +265,8 @@ function displayTableData() {
     document.getElementById("DataTable").innerHTML = table;
 }
 //Delete data object from the array based on index
-function deleteTableData(i){
-    if(confirm("Are you sure?")){
+function deleteTableData(i) {
+    if (confirm("Are you sure?")) {
         data.splice(i, 1);
         saveData();
     }
@@ -206,12 +300,12 @@ function createDataRecord() {
     saveData();
 }
 //fill form data for the new record
-function fillNewRecordForm(){
+function fillNewRecordForm() {
     //GET LAST RECORD AND FILL UP FORM DATA
     var obj = data[0];
     var today = todaysDate();
 
-    if (obj){
+    if (obj) {
 
         document.getElementById("newDataMeasurementDate").value = today;
         document.getElementById("newDataWeightKgs").value = obj.WeightKgs;
@@ -231,11 +325,72 @@ function fillNewRecordForm(){
     }
     //console.log(obj);
 }
+//Fill new data readonly fields
+function fillNewRecordFormReadonlyProp() {
 
+    //CONSTANTS from JSON obj
+    var gender = userInfo.gender;
+    var height = userInfo.height;
+    var birth = userInfo.birthDay;
+    var height = userInfo.height;
+    //GET FORM INPUTS
+    var haunch = document.getElementById('newDataHaunchCm').value;
+    var waist = document.getElementById('newDataWaistCm').value;
+    var weight = document.getElementById('newDataWeightKgs').value;
+    var activity = document.getElementById('newDataPhysicalActivity').value;
+
+    var chekboxCustomData = document.getElementById('newDataCustomCheck').checked;
+    var a = document.getElementById('newDataFatsPercent');
+    var b = document.getElementById("newDataFatKgs");
+    var c = document.getElementById('newDataBodyMassKgs');
+    var d = document.getElementById('newDataBMAKcal');
+    var bgColor;
+    //console.log(chekboxCustomData);
+    if (chekboxCustomData == true) {
+
+        a.readOnly = false;
+        b.readOnly = false;
+        c.readOnly = false;
+        d.readOnly = false;
+
+        bgColor = "rgba(0, 0, 0, 0.65)";
+        a.style.backgroundColor = bgColor;
+        b.style.backgroundColor = bgColor;
+        c.style.backgroundColor = bgColor;
+        d.style.backgroundColor = bgColor;
+
+    } else {
+        a.readOnly = true;
+        b.readOnly = true;
+        c.readOnly = true;
+        d.readOnly = true;
+
+        bgColor = "rgba(3,3,3,0.25)";
+        a.style.backgroundColor = bgColor;
+        b.style.backgroundColor = bgColor;
+        c.style.backgroundColor = bgColor;
+        d.style.backgroundColor = bgColor;
+
+
+        //update fields
+        var fatsPercent = calcFatsPercent(gender, height, haunch, waist);
+        a.value = fatsPercent;
+
+        var fatKgs = calcFatKgs(fatsPercent, weight);
+        b.value = fatKgs;
+
+        var bodyMassKgs = calcBodyMassKgs(fatKgs, weight)
+        c.value = bodyMassKgs;
+
+        var formula = document.getElementById('newDataBMRFormula').value;
+        var bmaKcal = calcBMAKcal(gender, birth, formula, activity, weight, height, bodyMassKgs);
+        d.value = bmaKcal;
+    }
+}
 
 /* * Targets */
 //display user progress and user target
-function targetDisplay(){
+function targetDisplay() {
 
     var target = userTarget;
     var progress = data[0];
@@ -246,7 +401,7 @@ function targetDisplay(){
 
     //construct multidimensioanl array
     for (var prop in target) {
-        if (target[prop] != ''){
+        if (target[prop] != '') {
             //console.log(fields[prop] + " - " + progress[prop] + " - " + target[prop]);
             tableCells = [fields[prop], progress[prop], target[prop]];
             tableRows.push(tableCells);
@@ -274,7 +429,7 @@ function targetDisplay(){
         table += "<td nowrap class=\"text-left\">" + tableRows[i][2] + "</td>";
 
 
-        switch(selectFromList) {
+        switch (selectFromList) {
             case "b10d":
                 table += "<td nowrap class=\"text-left\">" + "10" + "</td>";
                 break;
@@ -299,7 +454,7 @@ function targetDisplay(){
     //console.log(selectFromList);
 }
 //create user target
-function targetCreate(){
+function targetCreate() {
     //prefix all to empty
     userTarget.MeasurementDate = '';
     userTarget.WeightKgs = '';
@@ -332,44 +487,42 @@ function targetCreate(){
 
 /* * APPLICATION CALCULATIONS */
 //calc fats %
-function calcFatsPercent(gender, height, haunch, waist){
+function calcFatsPercent(gender, height, haunch, waist) {
     var fatsPercent;
     var validNumber;
 
-    if(gender == "Male"){
+    if (gender == "Male") {
         fatsPercent = (Number(haunch) * 0.55 - 2 + Number(waist) * 0.29 - 4 - Number(height) * 0.24 - 10);
         fatsPercent = fatsPercent.toFixed(2);
-    }
-    else if (gender == "Female"){
+    } else if (gender == "Female") {
         fatsPercent = (((((haunch * 0.55) - 1) + ((waist * 0.29) - 2))) - (height * 0.24)) - 10;
         fatsPercent = fatsPercent.toFixed(2);
     }
 
     validNumber = Number(fatsPercent);
 
-    if(!isNaN(validNumber) && validNumber > 3){
+    if (!isNaN(validNumber) && validNumber > 3) {
         return validNumber;
-    }
-    else{
+    } else {
         return "NaN";
     }
 }
 //calc fat kgs
-function calcFatKgs(fatsPercent, weight){
+function calcFatKgs(fatsPercent, weight) {
     //([@[Fats, %]]/100)*[@[Weight, kgs]]
     var fatKgs;
-    fatKgs = (fatsPercent/100)*weight
+    fatKgs = (fatsPercent / 100) * weight
     return fatKgs.toFixed(2);
 }
 //calc body mass kgs
-function calcBodyMassKgs(fatKgs, weight){
+function calcBodyMassKgs(fatKgs, weight) {
     //=[@[Weight, kgs]]-[@[Fat, kgs]]
     var bodyMassKgs;
     bodyMassKgs = (weight - fatKgs);
     return bodyMassKgs.toFixed(2);
 }
 //calc Basal metabolic with physical activity
-function calcBMAKcal(gender, birth, formula, activity, weight, height, bodyMass){
+function calcBMAKcal(gender, birth, formula, activity, weight, height, bodyMass) {
 
     var age = (todaysDate().substring(0, 4)) - (birth.substring(0, 4));
     var bmr;
@@ -427,7 +580,7 @@ function calcBMAKcal(gender, birth, formula, activity, weight, height, bodyMass)
   </select>
   */
 
-    switch ( Number(formula) ) {
+    switch (Number(formula)) {
         case 1:
             // 1 - H-B, Mifflin St Jeor Equation rev. in 1990
             if (gender == "Female") {
@@ -571,8 +724,12 @@ function drawMainChart() {
                         display: true,
                         position: "right",
                         id: "y-axis-2",
-                        gridLines: { display: false },
-                        ticks: { beginAtZero: true }
+                        gridLines: {
+                            display: false
+                        },
+                        ticks: {
+                            beginAtZero: true
+                        }
                     },
                 ],
             },
