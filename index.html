@@ -11,7 +11,8 @@
 
     <link href="Content/bootstrap.min.css" rel="stylesheet">
     <link href="Content/site.css" rel="stylesheet">
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    
     <script src="Scripts/Chart.bundle.js"></script>
     <script src="Scripts/jquery.min.js"></script>
     <script src="Scripts/bootstrap.min.js"></script>
@@ -32,21 +33,16 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a href="#log">Log</a></li>
-                    <li><a href="#data">Data</a></li>
-                    <li><a href="#chart">Chart</a></li>
+                    <li><a href="#log"><i class="glyphicon glyphicon-home"></i> Log</a></li>
+                    <li><a href="#data"><i class="fa fa-database"></i> Data</a></li>
+                    <li><a href="#chart"><i class="fa fa-bar-chart"></i> Charts</a></li>
                 </ul>
 
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="#profile">Hey AY...</a></li>
-                    <li><a href="">Log off</a>
+                    <li><a href="" onclick="injectFakeData(fakeObj())">LS +</a></li>
+                    <li><a href="#profile"><i class="glyphicon glyphicon-user"></i> Me</a></li>
+                    <li><a href=""><i class="glyphicon glyphicon-log-out"></i> Log Out</a>
                     </li>
-                </ul>
-
-                <ul class="nav navbar-nav navbar-right">
-                    <li><a href="" onclick="clearLocalStorage()">LS -</a></li>
-                    <li><a href="" onclick="injectFakeData()">LS +</a></li>
-                    <li><a href="#Login">Log in</a></li>
                 </ul>
 
             </div>
@@ -65,7 +61,7 @@
             <div class="row">
                 <div class="col-md-4">
                     <div class="well transperant">
-                        <legend>Log Overview <a href="#createTarget" class="aBtn "><i class="glyphicon glyphicon-new-window"></i></a></legend>
+                        <legend>Log Overview <a href="#createTarget" class="aBtn "><i class="glyphicon glyphicon-edit"></i></a></legend>
                         <table class="table table-borderless">
                             <thead>
                                 <tr>
@@ -73,7 +69,7 @@
                                     <th class="text-center">Me</th>
                                     <th class="text-center">Target</th>
                                     <th>
-                                        <select class="inp-tra" id="progressTableSelectList" onchange="targetDisplay()">
+                                        <select class="inp-tra" id="progressTableSelectList">
                                             <option>b10d</option>
                                             <option>b30d</option>
                                             <option>f1r</option>
@@ -216,7 +212,7 @@
 
                             <div class="form-group">
                                 <div class="col-md-8 col-md-offset-4 col-xs-12">
-                                    <input type="submit" value="Save" class="btn btn-success btn-large btn-block" onClick="userEdit()">
+                                    <input type="submit" value="Save" class="btn btn-success btn-large btn-block" id="saveUser">
                                 </div>
                             </div>
 
@@ -299,7 +295,7 @@
 
                             <div class="form-group">
                                 <div class="col-md-8 col-md-offset-4 col-xs-12">
-                                    <input type="button" value="Save" class="btn btn-default btn-success btn-large btn-block" onClick="targetCreate()">
+                                    <input type="button" id="saveTarget" value="Save" class="btn btn-default btn-success btn-large btn-block">
                                 </div>
                             </div>
 
@@ -314,7 +310,7 @@
             <div class="row">
                 <div class=" col-md-8">
                     <!-- NEW ROCORD form -->
-                    <div class="well transperant form-horizontal" onchange="fillNewRecordFormReadonlyProp()">
+                    <div class="well transperant form-horizontal" id="newDataForm">
                         <fieldset>
                             <legend>Add New Data</legend>
                             <div class="row">
@@ -478,7 +474,7 @@
                                     <div class="form-group">
                                         <label for="example-text-input" class="control-label col-xs-4">Comment</label>
                                         <div class="col-xs-8">
-                                            <textarea class="form-control inp-tra" id="newDatacomment" rows="3" placeholder="comment"></textarea>
+                                            <textarea class="form-control inp-tra" id="newDataComment" rows="3" placeholder="comment"></textarea>
                                         </div>
                                     </div>
 
@@ -523,7 +519,7 @@
 
                                     <div class="form-group">
                                         <div class="col-md-8 col-md-offset-4 col-xs-12">
-                                            <input type="button" value="Save" class="btn btn-default btn-success  btn-block" onClick="createDataRecord()">
+                                            <input type="button" value="Save" class="btn btn-default btn-success  btn-block" id="createNewRecord">
                                         </div>
                                     </div>
 
@@ -560,55 +556,16 @@
 
 <script src="Scripts/w3.js"></script>
 <script src="Scripts/application.js"></script>
-<script src="Scripts/fakeData.js"></script>
-
 
 <script>
     window.onload = function() {
-        drawMainChart();
-        displayTableData();
-        targetDisplay();
-        userDisplay();
-        userFormFill();
-        fillNewRecordForm(); //fill up form with last record data
-        fillNewRecordFormReadonlyProp(); //fill up READONLY form fields
-        hashNav(); //init on load
+        //load app like demo
+        FitLogAppDemo();
+        //removeHashNav();
+        hashNav(); //need to init
     };
 
 
     window.onhashchange = hashNav;
-
-    /*
-        db root/
-        
-        utilities{},
-        //one main objext that contains all users
-    	data {
-    		user1{}, //user id
-    		user1{},
-            user1{},
-            user1{},
-    	     }
-        */
-    /*
-  newDataMeasurementDate
-  newDataWeightKgs
-  newDataWaistCm
-  newDataHaunchCm
-  newDataArmsCm
-  newDataChestCm
-  newDataHipsCm
-  newDataPhysicalActivity
-  newDataBMRFormula
-  newDatacomment
-  newDataFatsPercent
-  newDataFatKgs
-  newDataBodyMassKgs
-  newDataBMAKcal
-*/
-
-
-
-    //date dif for target
 
 </script>

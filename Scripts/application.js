@@ -1,489 +1,607 @@
 /*
+ *
  * application core scripts
  *
  */
 
 
-/* * init */
-var mainObject;
-initStorage();
-var userInfo = mainObject.UserInfo;
-var userTarget = mainObject.UserTarget;
-var data = mainObject.Data;
-var dataFields = mainObject.DataFields;
-var ls = "bp";
+//local storage
+function FitLogAppDemo() {
+
+    var storage;
+    var data;
+    var target;
+    var user;
+
+    //init storage
+    if (localStorage.fitLogApp == undefined) {
+        //init empty storage   
+        localStorage.setItem('fitLogApp', JSON.stringify(new storageObj()));
+        document.location.reload();
+    } else {
+        storage = JSON.parse(localStorage.fitLogApp); //get localstorage data
+        data = storage.data;
+        target = storage.target;
+        user = storage.profile;
+    }
+
+    if(data && target && user){
+    //init app     
+    a = new appData(data, target, user);
+    a.displayTableData();
+    a.drawMainChart();
+    a.fillNewDataForm();
+    a.fillNewDataFormReadonly();
+    a.displayTarget();
+
+    //delete Record
+    var tablBtns = document.getElementById("DataTable").querySelectorAll("button");
+    //addEventListener for all btns 
+    for (var i = 0; i < tablBtns.length; i++) {
+        tablBtns[i].addEventListener('click', function () {
+
+            if (confirm("Are you sure?")) {
+                //alert(this.value);
+                //console.log("value for del: " + this.value);
+                storage['data'] = a.deleteRecord(this.value); //return obj
+                //console.log(storage);
+                localStorage.setItem('fitLogApp', JSON.stringify(storage));
+                document.location.reload();
+            }
+
+        }, false);
+    }
+
+    //update readonly props new record form
+    var newDataForm = document.getElementById("newDataForm");
+    newDataForm.addEventListener("change", function () {
+        a.fillNewDataFormReadonly();
+    });
+    newDataForm.addEventListener("click", function () {
+        a.fillNewDataFormReadonly();
+    });
+
+    //update progres table
+    var progTableSelectList = document.getElementById("progressTableSelectList");
+    progTableSelectList.addEventListener("change", function () {
+        a.displayTarget();
+    });
+
+    //save new data
+    var createNewRecord = document.getElementById("createNewRecord");
+    createNewRecord.addEventListener("click", function () {
+        storage['data'] = a.createNewRecord(); //return obj
+        //console.log(storage.data);
+        localStorage.setItem('fitLogApp', JSON.stringify(storage));
+        document.location.reload();
+    });
+
+    //save target
+    var saveTarget = document.getElementById("saveTarget");
+    saveTarget.addEventListener("click", function () {
+        storage['target'] = a.createTarget(); //return obj
+        //console.log(storage);
+        localStorage.setItem('fitLogApp', JSON.stringify(storage));
+        document.location.reload();
+    });
+
+
+
+    u = new appUser(user);
+
+    //save new user data
+    var saveUser = document.getElementById("saveUser");
+    saveUser.addEventListener("click", function () {
+        user = u.editUser();
+        //console.log(storage);
+        localStorage.setItem('fitLogApp', JSON.stringify(storage));
+        document.location.reload();
+    });
+
+
+    } else {
+        console.log("An error has accure, can't load objects");
+        console.log(storage);
+    }
+
+
+
+
+}
 
 /* * MAIN JSON OBJECTS */
 //Construct Data Object
-function DataObj(dt, weig, wais, hau, ar, che, hip, fpr, fkg, bmass, form, activ, kcal, com) {
-    this.MeasurementDate = dt;
-    this.WeightKgs = weig;
-    this.WaistCm = wais;
-    this.HaunchCm = hau;
-    this.ArmsCm = ar;
-    this.ChestCm = che;
-    this.HipsCm = hip;
-    this.FatsPercent = fpr;
-    this.FatKgs = fkg;
-    this.BodyMassKgs = bmass;
-    this.BmrFormula = form;
-    this.PhysicalActivity = activ;
-    this.BmaKcal = kcal;
+function dataObj(dt, weig, wais, hau, ar, che, hip, fpr, fkg, bmass, form, activ, kcal, com) {
+    this.measurementDate = dt;
+    this.weightKgs = weig;
+    this.waistCm = wais;
+    this.haunchCm = hau;
+    this.armsCm = ar;
+    this.chestCm = che;
+    this.hipsCm = hip;
+    this.fatsPercent = fpr;
+    this.fatKgs = fkg;
+    this.bodyMassKgs = bmass;
+    this.bmrFormula = form;
+    this.physicalActivity = activ;
+    this.bmaKcal = kcal;
     this.comment = com;
 }
 //User object
 function userObj(na, bi, ge, he) {
     this.name = na;
-    this.birthDay = bi;
+    this.birth = bi;
     this.gender = ge;
     this.height = he;
 }
 //main object JSON data
-function mainJSON() {
-    this.UserInfo = new userObj('My Name is..', '1991-01-01', 'Male', '177'),
-        this.UserTarget = new DataObj('', '', '', '', '', '', '', '', '', '', '', '', '', ''), //user target
-        this.DataFields = new DataObj(
-            'Measurement Date',
-            'Weight, kg',
-            'Waist, cm',
-            'Haunch, cm',
-            'Arms, cm',
-            'Chest, cm',
-            'Hips, cm',
-            'Fats %',
-            'Fat, kg',
-            'Body Mass, kg',
-            'Calc Formula',
-            'Physical Activity',
-            'Kcal',
-            'comment'
-        ),
-        this.Data = [] //array with DataObj objects
-    //"UserInfo": '', //object
-    //"UserTarget": '', //user target
-    //"DataFields": '',
-    //"Data": [], //array with DataObj objects
+function storageObj() {
+    this.profile = new userObj('Me', '1991-01-01', 'Male', '172'),
+        this.target = new dataObj('', '', '', '', '', '', '', '', '', '', '', '', '', '')
+    this.data = []
 };
 
+/* * MAIN FUNCTIONS */
+function appData(dt, tar, ur) {
 
-/* * UTILITIES */
-//init storage
-function initStorage() {
-    //if there is no set localStorage
-    if (localStorage.bp == undefined) {
-        //for now fake data
-        //empty init object
-        localStorage.setItem('bp', JSON.stringify(new mainJSON()));
-        document.location.reload();
-    } else {
-        mainObject = JSON.parse(localStorage.bp); //get localstorage data
+    /* 
+    object	{
+            profile: {},
+            target: {},
+            data: [ {}, {}, {} ]
+    }
+    */
+
+
+    //globals
+    this.data = dt; //dataObj
+    this.target = tar; //dataObj
+    this.user = ur; //userObj
+
+    var birth = this.user.birth;
+    var gender = this.user.gender;
+    var height = this.user.height;
+    var bgColor; //color for readonly fields
+
+    //dom elements
+    var dataTable = document.getElementById("DataTable");
+    var form = document.getElementById('newDataForm');
+    var formDate = document.getElementById("newDataMeasurementDate");
+    var formWeight = document.getElementById("newDataWeightKgs");
+    var formWaist = document.getElementById("newDataWaistCm");
+    var formHaunch = document.getElementById("newDataHaunchCm");
+    var formArms = document.getElementById("newDataArmsCm");
+    var formChest = document.getElementById("newDataChestCm");
+    var formHips = document.getElementById("newDataHipsCm");
+    var formComment = document.getElementById("newDataComment");
+
+    var formChekbox = document.getElementById('newDataCustomCheck');
+    var formFatsPercent = document.getElementById("newDataFatsPercent");
+    var formFatKgs = document.getElementById("newDataFatKgs");
+    var formBodyMass = document.getElementById("newDataBodyMassKgs");
+    var formBMRFormula = document.getElementById("newDataBMRFormula");
+    var formBMRFormulaTxt = formBMRFormula.options[formBMRFormula.selectedIndex].text;
+    var formActivity = document.getElementById("newDataPhysicalActivity");
+    var formActivityTxt = formActivity.options[formActivity.selectedIndex].text;
+    var formBMAKcal = document.getElementById("newDataBMAKcal");
+
+    //target dom
+    var progressTable = document.getElementById("progressTable");
+    var compareList = document.getElementById("progressTableSelectList");
+    var targetWeight = document.getElementById("targetDataWeightKgs");
+    var targetWaist = document.getElementById("targetDataWaistCm");
+    var targetHaunch = document.getElementById("targetDataHaunchCm");
+    var targetArms = document.getElementById("targetDataArmsCm");
+    var targetChest = document.getElementById("targetDataChestCm");
+    var targetHips = document.getElementById("targetDataHipsCm");
+    var targetFatsPr = document.getElementById("targetDataFatsPercent");
+    var targetFatKgs = document.getElementById("targetDataFatKgs");
+    var targetBodyMass = document.getElementById("targetDataBodyMassKgs");
+    //used for target table rendering
+
+    this.headerFields = new dataObj(
+        "Measurement Date",
+        "Weight, kg",
+        "Waist, cm",
+        "Haunch, cm",
+        "Arms, cm",
+        "Chest, cm",
+        "Hips, cm",
+        "Fats %",
+        "Fat, kg",
+        "Body Mass, kg",
+        "Calc Formula",
+        "Physical Activity",
+        "Kcal",
+        "Comment"
+    );
+
+
+
+    //return data array with added new obj
+    this.createNewRecord = function () {
+
+        //construct object
+        var newData = new dataObj(
+            formDate.value,
+            formWeight.value,
+            formWaist.value,
+            formHaunch.value,
+            formArms.value,
+            formChest.value,
+            formHips.value,
+            formFatsPercent.value,
+            formFatKgs.value,
+            formBodyMass.value,
+            formBMRFormulaTxt,
+            formActivity.value,
+            formBMAKcal.value,
+            formComment.value
+        );
+
+        //add obj to data array
+        this.data.unshift(newData);
+
+        //sort objects by date
+        this.data.sort((b, a) => new Date(a.measurementDate).getTime() - new Date(b.measurementDate).getTime());
+        //return data object
+        return this.data;
+
     }
 
-}
-//save changes
-function saveData() {
-    localStorage.setItem(ls, JSON.stringify(mainObject));
-    document.location.reload();
-}
-//clear local storage
-function clearLocalStorage() {
-    localStorage.removeItem(ls);
-}
-//Insert Fake data to LS
-function injectFakeData() {
-    localStorage.setItem(ls, JSON.stringify(mainObjectFake));
-    document.location.reload();
-}
-//get today "yyyy-mm-dd"
-function todaysDate() {
-    var now = new Date();
-    var day = ("0" + now.getDate()).slice(-2);
-    var month = ("0" + (now.getMonth() + 1)).slice(-2);
-    var today = now.getFullYear() + "-" + (month) + "-" + (day);
-    //"2017-04-28"
-    return today;
-}
-//hash nav bar
-function hashNav() {
+    //fill up form based on last record
+    this.fillNewDataForm = function () {
 
-    var pages = document.querySelectorAll(".page"); // get all pages
-    var hash = location.hash.substring(1); //get hash
-    var showPage = document.getElementById(hash); //get page to show
+        var obj = this.data[0];
 
-    //be sure all are not displayed
-    for (var i = 0; i < pages.length; i++) {
-        pages[i].style.display = "none";
+        if (obj) { //if there is records
+            var today = todaysDate();
+
+            formDate.value = today;
+            formWeight.value = obj.weightKgs;
+            formWaist.value = obj.waistCm;
+            formHaunch.value = obj.haunchCm - 0.5;
+            formArms.value = obj.armsCm;
+            formChest.value = obj.chestCm;
+            formHips.value = obj.hipsCm;
+
+            //others are calculate dinamicaly
+        }
+
     }
 
-    if (showPage) {
-        showPage.style.display = "block";
+    //fill new record readonly prop
+    this.fillNewDataFormReadonly = function () {
 
-    } else {
-        document.getElementById("log").style.display = "block";
+        if (formChekbox.checked == true) { //unlock fields
+
+            formFatsPercent.readOnly = false;
+            formFatKgs.readOnly = false;
+            formBodyMass.readOnly = false;
+            formBMAKcal.readOnly = false;
+            bgColor = "rgba(0, 0, 0, 0.65)";
+            formFatsPercent.style.backgroundColor = bgColor;
+            formFatKgs.style.backgroundColor = bgColor;
+            formBodyMass.style.backgroundColor = bgColor;
+            formBMAKcal.style.backgroundColor = bgColor;
+
+        } else {
+
+            formFatsPercent.readOnly = true;
+            formFatKgs.readOnly = true;
+            formBodyMass.readOnly = true;
+            formBMAKcal.readOnly = true;
+            bgColor = "rgba(3,3,3,0.25)";
+            formFatsPercent.style.backgroundColor = bgColor;
+            formFatKgs.style.backgroundColor = bgColor;
+            formBodyMass.style.backgroundColor = bgColor;
+            formBMAKcal.style.backgroundColor = bgColor;
+
+            //update fields
+            var fatPr = calcFatsPercent(
+                gender,
+                height,
+                formHaunch.value,
+                formWaist.value);
+            formFatsPercent.value = fatPr;
+
+            var fatKgs = calcFatKgs(fatPr, formWeight.value);
+            formFatKgs.value = fatKgs;
+
+            var bodyMassKgs = calcBodyMassKgs(fatKgs, formWeight.value)
+            formBodyMass.value = bodyMassKgs;
+
+            var bmaKcal = calcBMAKcal(
+                gender,
+                birth,
+                formBMRFormula.value,
+                formActivity.value,
+                formWeight.value,
+                height,
+                bodyMassKgs);
+            formBMAKcal.value = bmaKcal;
+        }
+
+        //debug
+        //console.log("formFatsPercent " + formFatsPercent.value);
+        //console.log("formFatKgs " + formFatKgs.value);
+        //console.log("formBodyMass " + formBodyMass.value);
+        //console.log("formBMAKcal " + formBMAKcal.value);
     }
-    return false; // cancel the click
-}
-//FORM plus and minus buttons
-$('.btn-number').click(function(e){
-    e.preventDefault();
 
-    fieldName = $(this).attr('data-field');
-    type      = $(this).attr('data-type');
-    var input = $("input[name='"+fieldName+"']");
-    var currentVal = parseInt(input.val());
-    if (!isNaN(currentVal)) {
-        if(type == 'minus') {
+    //generate table with data
+    this.displayTableData = function () {
+        var table = "";
+        for (i = 0; i < this.data.length; i++) {
+            table += "<tr class=\"item\">";
+            table += "<td>" + (this.data.length - i) + "</td>";
+            //for (var prop in data[i]) {
+            //    table += "<td>" + data[i][prop] + "</td>";
+            //}
+            table += "<td nowrap>" + this.data[i]["measurementDate"] + "</td>";
+            table += "<td nowrap>" + this.data[i]["weightKgs"] + "</td>";
+            table += "<td nowrap>" + this.data[i]["waistCm"] + "</td>";
+            table += "<td nowrap>" + this.data[i]["haunchCm"] + "</td>";
+            table += "<td nowrap>" + this.data[i]["armsCm"] + "</td>";
+            table += "<td nowrap>" + this.data[i]["chestCm"] + "</td>";
+            table += "<td nowrap>" + this.data[i]["hipsCm"] + "</td>";
+            table += "<td nowrap>" + this.data[i]["fatsPercent"] + "</td>";
+            table += "<td nowrap>" + this.data[i]["fatKgs"] + "</td>";
+            table += "<td nowrap>" + this.data[i]["bodyMassKgs"] + "</td>";
+            table += "<td wrap>" + this.data[i]["bmrFormula"] + "</td>";
+            table += "<td nowrap>" + this.data[i]["physicalActivity"] + "</td>";
+            table += "<td nowrap>" + this.data[i]["bmaKcal"] + "</td>";
+            table += "<td wrap>" + this.data[i]["comment"] + "</td>";
 
-            if(currentVal > input.attr('min')) {
-                input.val(currentVal - 1).change();
+            table += "<td>";
+            table += "<button value=\"" + i + "\" class=\"btn btn-danger btn-xs\">";
+            table += "<span class=\"glyphicon glyphicon-remove\">";
+            table += "</span></button>";
+            table += "</td>";
+            table += "</tr>";
+        }
+        dataTable.innerHTML = table;
+    }
+
+    //delete record from data array, return array
+    this.deleteRecord = function (i) {
+        //if (confirm("Are you sure?")) {
+        this.data.splice(i, 1);
+        return this.data;
+        // }
+    }
+
+    //display user target
+    this.displayTarget = function () {
+
+        var progress = this.data[0];
+
+        var tableRows = [];
+        var tableCells = [];
+
+        //construct multidimensioanl array
+        for (var prop in this.target) {
+            if (this.target[prop] != '') {
+                //console.log(this.headerFields[prop] + " - " + progress[prop] + " - " + this.target[prop]);
+                tableCells = [this.headerFields[prop], progress[prop], this.target[prop]];
+                tableRows.push(tableCells);
             }
-            if(parseInt(input.val()) == input.attr('min')) {
-                $(this).attr('disabled', true);
+            //  arr = [
+            //          ['field name', 'target', 'last record'],
+            //          ['field name', 'target', 'last record'],
+            //          ['field name', 'target', 'last record'],
+            //        ]
+        }
+
+        //loop to display the data
+        var table = "";
+        for (var i = 0; i < tableRows.length; i++) {
+            //console.log(tableRows[i]);
+            table += "<tr>";
+            table += "<td nowrap class=\"text-right\"><b>" + tableRows[i][0] + "</b></td>";
+            table += "<td nowrap class=\"text-left\">" + tableRows[i][1] + "</td>";
+            table += "<td nowrap class=\"text-left\">" + tableRows[i][2] + "</td>";
+
+            switch (compareList.value) {
+                case "b10d":
+                    table += "<td nowrap class=\"text-left\">" + "10" + "</td>";
+                    break;
+                case "b30d":
+                    table += "<td nowrap class=\"text-left\">" + "30" + "</td>";
+                    break;
+                case "f1r":
+                    table += "<td nowrap class=\"text-left\">" + "f1r" + "</td>";
+                    break;
+                default:
+                    table += "<td nowrap class=\"text-left\">" + "NaN" + "</td>";
             }
+            table += "</tr>";
+        }
+        progressTable.innerHTML = table;
+    }
 
-        } else if(type == 'plus') {
+    //create target, return obj
+    this.createTarget = function () {
 
-            if(currentVal < input.attr('max')) {
-                input.val(currentVal + 1).change();
-            }
-            if(parseInt(input.val()) == input.attr('max')) {
-                $(this).attr('disabled', true);
-            }
+        var obj = new dataObj(
+            '', //dt, 
+            targetWeight.value, //weig, 
+            targetWaist.value, //wais, 
+            targetHaunch.value, //hau, 
+            targetArms.value, //ar, 
+            targetChest.value, //che, 
+            targetHips.value, //hip, 
+            targetFatsPr.value, //fpr, 
+            targetFatKgs.value, //fkg, 
+            targetBodyMass.value, //bmass, 
+            '', //form, 
+            '', //activ, 
+            '', //kcal, 
+            '' //com
+        )
+
+        return obj;
+
+        //this.target = obj;
+        //return this.target;
+    }
+
+    //draw Simplified chart
+    this.drawMainChart = function () {
+
+        //chart global config
+        Chart.defaults.global.defaultFontColor = '#fff';
+
+        //datasets
+        var xFatsPercent = {
+            type: "line",
+            yAxisID: "y-axis-2",
+            label: "FatsPercent",
+            data: constructArray(this.data, "fatsPercent"),
+            borderColor: window.chartColors.red,
+            backgroundColor: window.chartColors.red,
+            //borderWidth: 2,
+            //pointRadius: 1,
+            //pointHoverRadius: 5,
+            fill: false
+        };
+        var xWeightKgs = {
+            type: "bar",
+            yAxisID: "y-axis-1",
+            label: "kgs",
+            data: constructArray(this.data, "weightKgs"),
+            //borderSkipped: "top",
+            //borderWidth: 10,
+            borderColor: window.chartColors.indigo,
+            backgroundColor: window.chartColors.indigo
+        };
+
+        var chartData = {
+            labels: constructArray(this.data, 'measurementDate'),
+            datasets: [xFatsPercent, xWeightKgs]
+        };
+
+        var chartOptions = {
+            responsive: true,
+
+            tooltips: {
+                enabled: true,
+                mode: "index",
+                intersect: true,
+                position: "nearest",
+            },
+            /* other options
+                title: {
+                    display: true,
+                    text: 'my combo chart'
+                },
+              
+                legend: {
+                    display: true,
+                    labels: {usePointStyle: true }
+                },
+                
+           */
+            scales: {
+                xAxes: [
+                    {
+                        barPercentage: 1,
+                        categoryPercentage: 1,
+                        gridLines: {
+                            display: false
+                        }
+                    }
+                ],
+
+                yAxes: [
+                    //one obj for each y axes
+                    {
+                        id: "y-axis-1",
+                        type: "linear", //"linear", "logarithmic", "time",...
+                        position: "left",
+                        gridLines: {
+                            display: false
+                        },
+                    },
+                    {
+                        id: "y-axis-2",
+                        type: "linear",
+                        position: "right",
+                        gridLines: {
+                            display: false
+                        },
+                        ticks: {
+                            //beginAtZero: true
+                            min: 3
+                        }
+                    }
+                ] //end yAxes
+            } //end scales
+
 
         }
-    } else {
-        input.val(0);
-    }
-});
-// OTHER FORMS STUFF
-/*
-$('.input-number').focusin(function(){
-   $(this).data('oldValue', $(this).val());
-});
-$('.input-number').change(function() {
 
-    minValue =  parseInt($(this).attr('min'));
-    maxValue =  parseInt($(this).attr('max'));
-    valueCurrent = parseInt($(this).val());
+        //draw chart
+        var ctx = document.getElementById("mainChart").getContext("2d");
 
-    name = $(this).attr('name');
-    if(valueCurrent >= minValue) {
-        $(".btn-number[data-type='minus'][data-field='"+name+"']").removeAttr('disabled')
-    } else {
-        alert('Sorry, the minimum value was reached');
-        $(this).val($(this).data('oldValue'));
-    }
-    if(valueCurrent <= maxValue) {
-        $(".btn-number[data-type='plus'][data-field='"+name+"']").removeAttr('disabled')
-    } else {
-        alert('Sorry, the maximum value was reached');
-        $(this).val($(this).data('oldValue'));
+        window.myMixedChart = new Chart(ctx, {
+            type: 'bar',
+            data: chartData,
+            options: chartOptions
+        }); //ctx end
+
+        //debug
+        //console.log(constructArray(this.data, "measurementDate"))
+        //console.log(constructArray(this.data, "fatsPercent"))
+        //console.log(constructArray(this.data, "weightKgs"))
     }
 
 
-});
-$(".input-number").keydown(function (e) {
-        // Allow: backspace, delete, tab, escape, enter and .
-        if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 190]) !== -1 ||
-             // Allow: Ctrl+A
-            (e.keyCode == 65 && e.ctrlKey === true) ||
-             // Allow: home, end, left, right
-            (e.keyCode >= 35 && e.keyCode <= 39)) {
-                 // let it happen, don't do anything
-                 return;
-        }
-        // Ensure that it is a number and stop the keypress
-        if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
-            e.preventDefault();
-        }
-    });
-*/
 
-/* * USER functions */
-//display current user information
-function userDisplay() {
-    document.getElementById("userName").innerHTML = userInfo.name;
-    document.getElementById("userBirth").innerHTML = userInfo.birthDay;
-    document.getElementById("userGender").innerHTML = userInfo.gender;
-    document.getElementById("userHeight").innerHTML = userInfo.height;
-    return true;
-}
-//fill up edit user form based on last data
-function userFormFill() {
-    document.getElementById("editUserName").value = userInfo.name;
-    document.getElementById("editUserBirth").value = userInfo.birthDay;
-    document.getElementById("editUserGender").value = userInfo.gender;
-    document.getElementById("editUserHeight").value = userInfo.height;
-    return true;
-}
-//get form data and call save function
-function userEdit() {
-    userInfo.name = document.getElementById("editUserName").value;
-    userInfo.birthDay = document.getElementById("editUserBirth").value;
-    userInfo.gender = document.getElementById("editUserGender").value;
-    userInfo.height = document.getElementById("editUserHeight").value;
-    saveData();
-    return true;
 }
 
+function appUser(userObj) {
 
-/* * MAIN TABLE */
-//generate main table
-function displayTableData() {
-    var table = "";
-    for (i = 0; i < data.length; i++) {
-        table += "<tr class=\"item\">";
-        table += "<td>" + (data.length - i) + "</td>";
+    /* * USER functions 
 
-        //for (var prop in data[i]) {
-        //    table += "<td>" + data[i][prop] + "</td>";
-        //}
+  "UserProfile": {
+                "name": "AY",
+                "birth": "1991-01-01",
+                "gender": "Male",
+                "height": 171
+                 },
 
-        table += "<td nowrap>" + data[i]["MeasurementDate"] + "</td>";
-        table += "<td nowrap>" + data[i]["WeightKgs"] + "</td>";
-        table += "<td nowrap>" + data[i]["WaistCm"] + "</td>";
-        table += "<td nowrap>" + data[i]["HaunchCm"] + "</td>";
-        table += "<td nowrap>" + data[i]["ArmsCm"] + "</td>";
-        table += "<td nowrap>" + data[i]["ChestCm"] + "</td>";
-        table += "<td nowrap>" + data[i]["HipsCm"] + "</td>";
-        table += "<td nowrap>" + data[i]["FatsPercent"] + "</td>";
-        table += "<td nowrap>" + data[i]["FatKgs"] + "</td>";
-        table += "<td nowrap>" + data[i]["BodyMassKgs"] + "</td>";
-        table += "<td wrap>" + data[i]["BmrFormula"] + "</td>";
-        table += "<td nowrap>" + data[i]["PhysicalActivity"] + "</td>";
-        table += "<td nowrap>" + data[i]["BmaKcal"] + "</td>";
-        table += "<td wrap>" + data[i]["comment"] + "</td>";
+    */
 
+    this.user = userObj;
 
-        table += "<td>";
-        table += "<button onclick=\"deleteTableData(" + i + ")\" class=\"btn btn-danger btn-xs\">";
-        table += "<span class=\"glyphicon glyphicon-remove\">";
-        table += "</span></button>";
-        table += "</td>";
-        table += "</tr>";
-    }
-    document.getElementById("DataTable").innerHTML = table;
-}
-//Delete data object from the array based on index
-function deleteTableData(i) {
-    if (confirm("Are you sure?")) {
-        data.splice(i, 1);
-        saveData();
+    //dom elements, display user
+    document.getElementById("userName").innerHTML = this.user.name;
+    document.getElementById("userBirth").innerHTML = this.user.birth;
+    document.getElementById("userGender").innerHTML = this.user.gender;
+    document.getElementById("userHeight").innerHTML = this.user.height;
+
+    //dom edit user form
+    var editName = document.getElementById("editUserName");
+    var editBirth = document.getElementById("editUserBirth");
+    var editGender = document.getElementById("editUserGender");
+    var editHeight = document.getElementById("editUserHeight");
+
+    //fill up edit user form based on existing data data
+    editName.value = this.user.name;
+    editBirth.value = this.user.birth;
+    editGender.value = this.user.gender;
+    editHeight.value = this.user.height;
+
+    //return modifyed user
+    this.editUser = function () {
+        this.user.name = editName.value;
+        this.user.birth = editBirth.value;
+        this.user.gender = editGender.value;
+        this.user.height = editHeight.value;
+        return this.user;
     }
 }
-//add data object to db
-function createDataRecord() {
-    //get input date
-    var dt = document.getElementById("newDataMeasurementDate").value;
-    var weig = document.getElementById("newDataWeightKgs").value;
-    var wais = document.getElementById("newDataWaistCm").value;
-    var hau = document.getElementById("newDataHaunchCm").value;
-    var ar = document.getElementById("newDataArmsCm").value;
-    var che = document.getElementById("newDataChestCm").value;
-    var hip = document.getElementById("newDataHipsCm").value;
-    var fpr = document.getElementById("newDataFatsPercent").value;
-    var fkg = document.getElementById("newDataFatKgs").value;
-    var bmass = document.getElementById("newDataBodyMassKgs").value;
-    //var form = document.getElementById("newDataBMRFormula").value;
-    var formPre = document.getElementById("newDataBMRFormula");
-    var form = formPre.options[formPre.selectedIndex].text;
-    var activ = document.getElementById("newDataPhysicalActivity").value;
-    //var activPre = document.getElementById("newDataPhysicalActivity");
-    //var activ = activPre.options[activPre.selectedIndex].text;
-    var kcal = document.getElementById("newDataBMAKcal").value;
-    var com = document.getElementById("newDatacomment").value;
-
-    //construct object
-    newData = new DataObj(dt, weig, wais, hau, ar, che, hip, fpr, fkg, bmass, form, activ, kcal, com);
-    //add to json obj
-    data.unshift(newData);
-    saveData();
-}
-//fill form data for the new record
-function fillNewRecordForm() {
-    //GET LAST RECORD AND FILL UP FORM DATA
-    var obj = data[0];
-    var today = todaysDate();
-
-    if (obj) {
-
-        document.getElementById("newDataMeasurementDate").value = today;
-        document.getElementById("newDataWeightKgs").value = obj.WeightKgs;
-        document.getElementById("newDataWaistCm").value = obj.WaistCm;
-        document.getElementById("newDataHaunchCm").value = obj.HaunchCm - 0.5;
-        document.getElementById("newDataArmsCm").value = obj.ArmsCm;
-        document.getElementById("newDataChestCm").value = obj.ChestCm;
-        document.getElementById("newDataHipsCm").value = obj.HipsCm;
-        //below ones are calculate dinamicaly
-        //document.getElementById("newDataFatsPercent").value = obj.FatsPercent;
-        //document.getElementById("newDataFatKgs").value = obj.FatKgs;
-        //document.getElementById("newDataBodyMassKgs").value = obj.BodyMassKgs;
-        //document.getElementById("newDataBMRFormula").value = obj.BmrFormula;
-        //document.getElementById("newDataPhysicalActivity").value = obj.PhysicalActivity;
-        //document.getElementById("newDataBMAKcal").value = obj.BmdaKcal;
-        //document.getElementById("newDatacomment").value = obj.comment;
-    }
-    //console.log(obj);
-}
-//Fill new data readonly fields
-function fillNewRecordFormReadonlyProp() {
-
-    //CONSTANTS from JSON obj
-    var gender = userInfo.gender;
-    var height = userInfo.height;
-    var birth = userInfo.birthDay;
-    var height = userInfo.height;
-    //GET FORM INPUTS
-    var haunch = document.getElementById('newDataHaunchCm').value;
-    var waist = document.getElementById('newDataWaistCm').value;
-    var weight = document.getElementById('newDataWeightKgs').value;
-    var activity = document.getElementById('newDataPhysicalActivity').value;
-
-    var chekboxCustomData = document.getElementById('newDataCustomCheck').checked;
-    var a = document.getElementById('newDataFatsPercent');
-    var b = document.getElementById("newDataFatKgs");
-    var c = document.getElementById('newDataBodyMassKgs');
-    var d = document.getElementById('newDataBMAKcal');
-    var bgColor;
-    //console.log(chekboxCustomData);
-    if (chekboxCustomData == true) {
-
-        a.readOnly = false;
-        b.readOnly = false;
-        c.readOnly = false;
-        d.readOnly = false;
-
-        bgColor = "rgba(0, 0, 0, 0.65)";
-        a.style.backgroundColor = bgColor;
-        b.style.backgroundColor = bgColor;
-        c.style.backgroundColor = bgColor;
-        d.style.backgroundColor = bgColor;
-
-    } else {
-        a.readOnly = true;
-        b.readOnly = true;
-        c.readOnly = true;
-        d.readOnly = true;
-
-        bgColor = "rgba(3,3,3,0.25)";
-        a.style.backgroundColor = bgColor;
-        b.style.backgroundColor = bgColor;
-        c.style.backgroundColor = bgColor;
-        d.style.backgroundColor = bgColor;
-
-
-        //update fields
-        var fatsPercent = calcFatsPercent(gender, height, haunch, waist);
-        a.value = fatsPercent;
-
-        var fatKgs = calcFatKgs(fatsPercent, weight);
-        b.value = fatKgs;
-
-        var bodyMassKgs = calcBodyMassKgs(fatKgs, weight)
-        c.value = bodyMassKgs;
-
-        var formula = document.getElementById('newDataBMRFormula').value;
-        var bmaKcal = calcBMAKcal(gender, birth, formula, activity, weight, height, bodyMassKgs);
-        d.value = bmaKcal;
-    }
-}
-
-/* * Targets */
-//display user progress and user target
-function targetDisplay() {
-
-    var target = userTarget;
-    var progress = data[0];
-    var fields = dataFields;
-
-    var tableRows = [];
-    var tableCells = [];
-
-    //construct multidimensioanl array
-    for (var prop in target) {
-        if (target[prop] != '') {
-            //console.log(fields[prop] + " - " + progress[prop] + " - " + target[prop]);
-            tableCells = [fields[prop], progress[prop], target[prop]];
-            tableRows.push(tableCells);
-        }
-    }
-
-    /*
-  arr = [
-          ['field name', 'target', 'last record'],
-          ['field name', 'target', 'last record'],
-          ['field name', 'target', 'last record'],
-        ]
-  */
-    var selectFromList = document.getElementById("progressTableSelectList").value;
-    //b10d
-    //b30d
-    //f1r
-    //loop to display the data
-    var table = "";
-    for (var i = 0; i < tableRows.length; i++) {
-        //console.log(tableRows[i]);
-        table += "<tr>";
-        table += "<td nowrap class=\"text-right\"><b>" + tableRows[i][0] + "</b></td>";
-        table += "<td nowrap class=\"text-left\">" + tableRows[i][1] + "</td>";
-        table += "<td nowrap class=\"text-left\">" + tableRows[i][2] + "</td>";
-
-
-        switch (selectFromList) {
-            case "b10d":
-                table += "<td nowrap class=\"text-left\">" + "10" + "</td>";
-                break;
-            case "b30d":
-                table += "<td nowrap class=\"text-left\">" + "30" + "</td>";
-                break;
-            case "f1r":
-                table += "<td nowrap class=\"text-left\">" + "f1r" + "</td>";
-                break;
-            default:
-                table += "<td nowrap class=\"text-left\">" + "NaN" + "</td>";
-        }
-        //if (selectFromList == ""){
-        //table += "<td nowrap class=\"text-left\">" + "10" + "</td>";
-        //}
-        //else if (){}
-        //else if (){}
-
-        table += "</tr>";
-    }
-    document.getElementById("progressTable").innerHTML = table;
-    //console.log(selectFromList);
-}
-//create user target
-function targetCreate() {
-    //prefix all to empty
-    userTarget.MeasurementDate = '';
-    userTarget.WeightKgs = '';
-    userTarget.WaistCm = '';
-    userTarget.HaunchCm = '';
-    userTarget.ArmsCm = '';
-    userTarget.ChestCm = '';
-    userTarget.HipsCm = '';
-    userTarget.FatsPercent = '';
-    userTarget.FatKgs = '';
-    userTarget.BodyMassKgs = '';
-    userTarget.BmrFormula = '';
-    userTarget.PhysicalActivity = '';
-    userTarget.BmdaKcal = '';
-    userTarget.comment = '';
-
-    userTarget.WeightKgs = document.getElementById("targetDataWeightKgs").value;
-    userTarget.WaistCm = document.getElementById("targetDataWaistCm").value;
-    userTarget.HaunchCm = document.getElementById("targetDataHaunchCm").value;
-    userTarget.ArmsCm = document.getElementById("targetDataArmsCm").value;
-    userTarget.ChestCm = document.getElementById("targetDataChestCm").value;
-    userTarget.HipsCm = document.getElementById("targetDataHipsCm").value;
-    userTarget.FatsPercent = document.getElementById("targetDataFatsPercent").value;
-    userTarget.FatKgs = document.getElementById("targetDataFatKgs").value;
-    userTarget.BodyMassKgs = document.getElementById("targetDataBodyMassKgs").value;
-
-    saveData();
-}
-
 
 /* * APPLICATION CALCULATIONS */
 //calc fats %
@@ -632,114 +750,48 @@ function calcBMAKcal(gender, birth, formula, activity, weight, height, bodyMass)
     return bma.toFixed();
 }
 
-
-/* * CHARTS and chart utilities */
-//chart data. Construct array from obj props, for chart data
-function constructArray(arrWithObjs, objKey) {
-    myArray = [];
-    for (i = 0; i < arrWithObjs.length; i++) {
-        if (arrWithObjs[i][objKey] == '') {
-            myArray.unshift('NaN');
-        } else {
-            myArray.unshift(arrWithObjs[i][objKey]);
-        }
-    }
-    return myArray;
+/* * UTILITIES */
+//Insert Fake data to LS
+function injectFakeData(obj) {
+    localStorage.setItem('fitLogApp', JSON.stringify(obj));
+    document.location.reload();
 }
-//main chart
-function drawMainChart() {
-    //chart data
-    Chart.defaults.global.defaultFontColor = '#fff';
-    var chartData = {
-        labels: constructArray(data, 'MeasurementDate'),
-        datasets: [
-            {
-                type: 'line',
-                yAxisID: "y-axis-2",
-                label: 'FatsPercent',
-                borderColor: 'rgb(255, 99, 132)',
-                backgroundColor: 'rgb(255, 99, 132)',
-                borderWidth: 2,
-                fill: false,
-                pointRadius: 1,
-                pointHoverRadius: 5,
-                //borderDash: [5, 5],
-                data: constructArray(data, 'FatsPercent')
-            },
-            {
-                type: 'bar',
-                yAxisID: "y-axis-1",
-                label: 'kgs',
-                backgroundColor: window.chartColors.indigo,
-                data: constructArray(data, 'WeightKgs'),
-                borderColor: window.chartColors.indigo,
-                //borderWidth: 2
-            },
-        ]
-    };
-    //draw chart
-    var ctx = document.getElementById("mainChart").getContext("2d");
-    window.myMixedChart = new Chart(ctx, {
-        type: 'bar',
-        data: chartData,
-        responsive: true,
-        scaleFontColor: "#ff0000",
-        options: {
-            responsive: true,
-            title: {
-                display: false,
-                text: 'Chart.js Combo Bar Line Chart'
-            },
-            legend: {
-                display: true,
-                labels: {
-                    //fontColor: 'rgb(255, 99, 132)',
-                    usePointStyle: false,
-                    //fontColor:"white", 
-                    //fontSize: 18
-                }
-            },
-            scales: {
-                xAxes: [
-                    {
-                        barPercentage: 1.0,
-                        categoryPercentage: 1.0,
-                        gridLines: {
-                            display: false
-                        }
-                    }
-                ],
-                yAxes: [
-                    {
-                        type: "linear", // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
-                        display: true,
-                        position: "left",
-                        id: "y-axis-1",
-                        gridLines: {
-                            display: false
-                        },
-                    },
-                    {
-                        type: "linear", // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
-                        display: true,
-                        position: "right",
-                        id: "y-axis-2",
-                        gridLines: {
-                            display: false
-                        },
-                        ticks: {
-                            beginAtZero: true
-                        }
-                    },
-                ],
-            },
-            tooltips: {
-                mode: 'index',
-                intersect: true
-            }
-        }
-    }); //ctx end
-} //function end
+//get today "yyyy-mm-dd"
+function todaysDate() {
+    var now = new Date();
+    var day = ("0" + now.getDate()).slice(-2);
+    var month = ("0" + (now.getMonth() + 1)).slice(-2);
+    var today = now.getFullYear() + "-" + (month) + "-" + (day);
+    //"2017-04-28"
+    return today;
+}
+//hash nav bar
+function hashNav() {
+
+    var pages = document.querySelectorAll(".page"); // get all pages
+    var hash = location.hash.substring(1); //get hash
+    var showPage = document.getElementById(hash); //get page to show
+
+    //be sure all are not displayed
+    for (var i = 0; i < pages.length; i++) {
+        pages[i].style.display = "none";
+    }
+
+    if (showPage) {
+        showPage.style.display = "block";
+
+    } else {
+        document.getElementById("log").style.display = "block";
+    }
+    return false; // cancel the click
+}
+//remove hash nav 
+function removeHashNav() {
+    var pages = document.querySelectorAll(".page"); // get all pages
+    for (var i = 0; i < pages.length; i++) {
+        pages[i].style.display = "block";
+    }
+}
 //chart colors
 window.chartColors = {
     red: 'rgb(255, 99, 132)',
@@ -752,3 +804,148 @@ window.chartColors = {
     greyy: 'rgb(220, 220, 220)',
     indigo: 'rgb(63, 81, 181)'
 };
+//chart data. Construct array from obj props, for chart data
+function constructArray(arrWithObjs, objKey) {
+    myArray = [];
+    for (i = 0; i < arrWithObjs.length; i++) {
+        if (arrWithObjs[i][objKey] == '') {
+            myArray.unshift('NaN');
+        } else {
+            myArray.unshift(arrWithObjs[i][objKey]);
+        }
+    }
+    return myArray;
+}
+//FORM plus and minus buttons
+$('.btn-number').click(function (e) {
+    e.preventDefault();
+
+    fieldName = $(this).attr('data-field');
+    type = $(this).attr('data-type');
+    var input = $("input[name='" + fieldName + "']");
+    var currentVal = parseInt(input.val());
+    if (!isNaN(currentVal)) {
+        if (type == 'minus') {
+
+            if (currentVal > input.attr('min')) {
+                input.val(currentVal - 1).change();
+            }
+            if (parseInt(input.val()) == input.attr('min')) {
+                $(this).attr('disabled', true);
+            }
+
+        } else if (type == 'plus') {
+
+            if (currentVal < input.attr('max')) {
+                input.val(currentVal + 1).change();
+            }
+            if (parseInt(input.val()) == input.attr('max')) {
+                $(this).attr('disabled', true);
+            }
+
+        }
+    } else {
+        input.val(0);
+    }
+});
+// OTHER FORMS STUFF
+/*
+$('.input-number').focusin(function(){
+   $(this).data('oldValue', $(this).val());
+});
+$('.input-number').change(function() {
+
+    minValue =  parseInt($(this).attr('min'));
+    maxValue =  parseInt($(this).attr('max'));
+    valueCurrent = parseInt($(this).val());
+
+    name = $(this).attr('name');
+    if(valueCurrent >= minValue) {
+        $(".btn-number[data-type='minus'][data-field='"+name+"']").removeAttr('disabled')
+    } else {
+        alert('Sorry, the minimum value was reached');
+        $(this).val($(this).data('oldValue'));
+    }
+    if(valueCurrent <= maxValue) {
+        $(".btn-number[data-type='plus'][data-field='"+name+"']").removeAttr('disabled')
+    } else {
+        alert('Sorry, the maximum value was reached');
+        $(this).val($(this).data('oldValue'));
+    }
+
+
+});
+$(".input-number").keydown(function (e) {
+        // Allow: backspace, delete, tab, escape, enter and .
+        if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 190]) !== -1 ||
+             // Allow: Ctrl+A
+            (e.keyCode == 65 && e.ctrlKey === true) ||
+             // Allow: home, end, left, right
+            (e.keyCode >= 35 && e.keyCode <= 39)) {
+                 // let it happen, don't do anything
+                 return;
+        }
+        // Ensure that it is a number and stop the keypress
+        if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+            e.preventDefault();
+        }
+    });
+*/
+function fakeObj(){
+    
+/*
+ * Mock data
+ * generates new objects with fake data
+ *
+ * object {3}
+ *	     profile	{4}
+ *	     target		{14}
+ *	     data		[30]
+ *
+ */    
+    
+//object
+this.object = new storageObj();
+//user 
+object.profile = new userObj("AY", "1991-01-01", "Male", 171);
+//target
+object.target = new dataObj('', 68, 81, '', '40', '105', '', 12, '', '', '', '', '', '');
+
+//data array
+var arr = [];
+arr.unshift(new dataObj('2015-07-27', 75.5, 87, 99, 35.0, 104, 51.0, 22.64, 17.1, 58.4, 'H-Ben rev', 1.725, 2955, 'comment1'));
+arr.unshift(new dataObj('2015-08-12', 74.5, 87, 99, 35.5, 107, 50.0, 22.64, 16.9, 57.6, 'H-Ben rev', 1.725, 2932, 'comment2'));
+arr.unshift(new dataObj('2015-08-17', 73.5, 84, 96, 35.0, 106, 52.0, 20.12, 14.8, 58.7, 'H-Ben rev', 1.725, 2910, 'comment3'));
+arr.unshift(new dataObj('2015-09-01', 73.0, 84, 96, 34.0, 102, 51.0, 20.12, 14.7, 58.3, 'H-Ben rev', 1.725, 2899, 'comment4'));
+arr.unshift(new dataObj('2015-09-08', 71.5, 84, 95, 35.0, 104, 52.0, 19.57, 14.0, 57.5, 'H-Ben rev', 1.725, 2866, 'comment5'));
+arr.unshift(new dataObj('2015-09-19', 70.6, 83, 94, 35.0, 104, 52.0, 18.73, 13.2, 57.4, 'H-Ben rev', 1.725, 2846, 'comme6nt'));
+arr.unshift(new dataObj('2015-10-04', 68.0, 81, 94, 34.0, 104, 50.0, 18.15, 12.5, 56.5, 'H-Ben rev', 1.725, 2810, 'commen7t'));
+arr.unshift(new dataObj('2016-01-02', 71.0, 84, 96, 33.0, 100, 52.0, 20.12, 14.3, 56.7, 'H-Ben rev', 1.725, 2845, 'comment8'));
+arr.unshift(new dataObj('2016-01-16', 73.0, 84, 96, 34.0, 103, 52.0, 20.12, 14.7, 58.3, 'H-Ben rev', 1.725, 2890, 'comment'));
+arr.unshift(new dataObj('2016-01-21', 72.0, 84, 96, 34.5, 103, 52.0, 20.12, 14.5, 57.5, 'H-Ben rev', 1.725, 2868, 'comment'));
+arr.unshift(new dataObj('2016-01-29', 72.0, 84, 97, 35.0, 103, 52.0, '', 14.9, 57.1, 'H-Ben rev',    1.725, 2868, 'cormment'));
+arr.unshift(new dataObj('2016-02-06', 72.5, 83, 97, 35.0, 102, 53.0, 20.38, 14.8, 57.7, 'H-Ben rev', 1.725, 2879, 'commdent'));
+arr.unshift(new dataObj('2016-02-13', 73.0, 83, 97, 35.5, 103, 53.0, 20.38, 14.9, 58.1, 'H-Ben rev', 1.725, 2890, 'comdment'));
+arr.unshift(new dataObj('2016-02-22', 73.0, 82, 97, 36.0, 104, 52.0, 20.09, 14.7, 58.3, 'H-Ben rev', 1.725, 2890, 'comment'));
+arr.unshift(new dataObj('2016-02-26', 73.0, 83, 96, 36.0, 105, 53.0, 19.83, 14.5, 58.5, 'H-Ben rev', 1.725, 2890, 'commedsnt'));
+arr.unshift(new dataObj('2016-03-13', 73.5, 82, 96, 35.0, 105, 52.0, 19.54, 14.4, 59.1, 'H-Ben rev', 1.725, 2901, 'comments'));
+arr.unshift(new dataObj('2016-03-19', 73.6, 85, 95, 34.0, 104, 52.0, 19.86, 14.6, 59.0, 'H-Ben rev', 1.725, 2903, 'comments'));
+arr.unshift(new dataObj('2016-04-02', 74.0, 85, 96, 36.0, 105, 52.0, 20.41, 15.1, 58.9, 'H-Ben rev', 1.725, 2912, 'commentr'));
+arr.unshift(new dataObj('2016-04-08', 75.0, 84, 96, 35.0, 105, 52.0, 20.12, 15.1, 59.9, 'H-Ben rev', 1.725, 2934, 'comment5'));
+arr.unshift(new dataObj('2016-04-16', 75.0, 85, 97, 35.5, 105, 51.0, 20.96, 15.7, 59.3, 'H-Ben rev', 1.725, 2934, 'comment3'));
+arr.unshift(new dataObj('2016-04-23', 75.0, 85, 97, 36.0, 105, 51.0, 20.96, 15.7, 59.3, 'H-Ben rev', 1.600, 2722, 'comment5'));
+arr.unshift(new dataObj('2016-05-06', 75.5, 86, 98, 36.0, 105, 52.0, 21.80, 16.5, 59.0, 'H-Ben rev', 1.600, 2732, 'comment4'));
+arr.unshift(new dataObj('2016-05-13', 74.0, 86, 97, 36.0, 103, 52.0, 21.25, 15.7, 58.3, 'H-Ben rev', 1.600, 2701, 'comment6'));
+arr.unshift(new dataObj('2016-05-22', 75.0, 85, 97, 36.5, 103, 52.0, 20.96, 15.7, 59.3, 'H-Ben rev', 1.600, 2722, 'comment5'));
+arr.unshift(new dataObj('2016-06-14', 75.0, 85, 96, 36.0, 105, 52.0, 20.41, 15.3, 59.7, 'H-Ben rev', 1.600, 2722, 'comment3'));
+arr.unshift(new dataObj('2016-06-26', 75.0, 86, 98, 35.0, 104, 53.0, 21.80, 16.4, 58.7, 'H-Benedict', 1.600, 2741, 'comment6'));
+arr.unshift(new dataObj('2016-07-19', 75.0, 88, 97, 35.5, 104, 53.0, 21.83, 16.4, 58.6, 'H-Benedict', 1.600, 2741, 'comment7'));
+arr.unshift(new dataObj('2016-08-04', 75.0, 88, 97, 36.0, 101, 54.0, 21.83, 16.4, 58.6, 'H-Benedict', 1.600, 2741, 'comment9'));
+arr.unshift(new dataObj('2016-10-09', 78.0, 95, 99, 34.0, 104, 53.0, 24.96, 19.5, 58.5, 'H-Benedict', 1.600, 2804, 'comment0'));
+arr.unshift(new dataObj('2017-03-27', 75.5, 87, 99, 35.0, 104, 51.0, 22.64, 17.1, 58.4, 'H-Ben rev', 1.725, 2955, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'));
+
+//ADD DATA TO THE OBJECT
+object.data = arr;
+    
+return this.object;   
+}
