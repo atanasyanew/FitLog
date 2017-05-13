@@ -190,6 +190,17 @@ input[type="number"]:read-only {
 .page {
     display: none;
 }
+.user-pic {
+
+  position: relative;
+  display: inline-block;
+  background-image: url('/images/profile_placeholder.png');
+  background-repeat: no-repeat;
+  width: 30px;
+  height: 30px;
+  background-size: 30px;
+  border-radius: 20px;
+}
 
 
 /*

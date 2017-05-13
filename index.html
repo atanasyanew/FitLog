@@ -6,16 +6,40 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#2F3BA2">
+    <!--    to do add metas from frendly chart-->
     <title>Fit log</title>
-    <link rel="shortcut icon" href="Content/Images/logo_red.svg" />
 
-    <link href="Content/bootstrap.min.css" rel="stylesheet">
-    <link href="Content/site.css" rel="stylesheet">
+
+    <!--     STYLESHEETS     -->
+    <link rel="stylesheet" href="Content/bootstrap.min.css">
+    <link rel="stylesheet" href="Content/site.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    
+
+    <!--    FIREBASE  -->
+    <script src="https://www.gstatic.com/firebasejs/3.9.0/firebase.js"></script>
+    <script src="config.js"></script>
+    <!--   REDIRECT IF NO USER      -->
+    <script>
+        firebase.auth().onAuthStateChanged(function(user) {
+            if (!user) {
+                window.location.href = "signIn.html";
+            }
+        });
+
+    </script>
+
     <script src="Scripts/Chart.bundle.js"></script>
     <script src="Scripts/jquery.min.js"></script>
     <script src="Scripts/bootstrap.min.js"></script>
+
+
+    <style>
+        body {
+            padding-top: 70px;
+            padding-bottom: 70px;
+        }
+
+    </style>
 </head>
 
 
@@ -41,8 +65,7 @@
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="" onclick="injectFakeData(fakeObj())">LS +</a></li>
                     <li><a href="#profile"><i class="glyphicon glyphicon-user"></i> Me</a></li>
-                    <li><a href=""><i class="glyphicon glyphicon-log-out"></i> Log Out</a>
-                    </li>
+                    <li><a href="#" id="signOut"><i class="glyphicon glyphicon-log-out"></i> Log Out</a></li>
                 </ul>
 
             </div>
@@ -560,12 +583,190 @@
 <script>
     window.onload = function() {
         //load app like demo
-        FitLogAppDemo();
-        //removeHashNav();
-        hashNav(); //need to init
+        // FitLogAppDemo();
+       // removeHashNav();
+     hashNav(); //need to init
+
+
+
+        initApp();
+
+
+
+        var user = firebase.auth().currentUser;
+        var name, email, photoUrl, uid, emailVerified;
+
+        if (user != null) {
+            name = user.displayName;
+            email = user.email;
+            photoUrl = user.photoURL;
+            emailVerified = user.emailVerified;
+            uid = user.uid;
+            // The user's ID, unique to the Firebase project. Do NOT use
+            // this value to authenticate with your backend server, if
+            // you have one. Use User.getToken() instead.
+        }
+
+        //        console.log("currentUser user")
+        //        console.log(uid);
+
+
     };
 
 
+
+
     window.onhashchange = hashNav;
+
+</script>
+
+
+
+<script type="text/javascript">
+    initApp = function() {
+        firebase.auth().onAuthStateChanged(function(user) {
+                if (user) {
+                    // User is signed in.
+                    var displayName = user.displayName;
+                    var email = user.email;
+                    var emailVerified = user.emailVerified;
+                    var photoURL = user.photoURL;
+                    var uid = user.uid;
+                    var providerData = user.providerData;
+
+                    //                console.log(displayName);
+                    //                console.log(email);
+                    //                console.log(emailVerified);
+                    //                console.log(photoURL);
+                    console.log(uid);
+                    //                console.log(providerData);
+
+                    var signOut = document.getElementById('signOut');
+                    signOut.addEventListener('click', function(event) {
+                        firebase.auth().signOut();
+                        window.location.href = "login.html";
+                    });
+
+
+
+
+
+                    var myid = "testID";
+                    var userDataBase = firebase.database().ref('dataBase').child(myid);
+
+
+                    //if data exist do the code
+                    //if no data set init object, include current user to user profile
+                    // alert you have to fill gender height blablabla
+
+                    //init clear obj to prevent bugs
+                    var fireStorage = new storageObj();
+                    var data = fireStorage.data;
+                    var target = fireStorage.target;
+                    var user = fireStorage.profile;
+
+                    a = new appData(data, target, user);
+
+                    userDataBase.on('value', snap => {
+                        //init storage
+                        fireStorage = snap.val(); //get localstorage data
+                        // storage = JSON.parse(localStorage.fitLogApp); //get localstorage data
+                        a.data = fireStorage.data;
+                        a.target = fireStorage.target;
+                        a.user = fireStorage.profile;
+
+                        if (a.data && a.target && a.user) {
+                            //init app     
+                            a.displayTableData();
+                            a.drawMainChart();
+                            a.fillNewDataForm();
+                            a.fillNewDataFormReadonly();
+                            a.displayTarget();
+
+                            //delete Record
+                            var tablBtns = document.getElementById("DataTable").querySelectorAll("button");
+                            //addEventListener for all btns 
+                            for (var i = 0; i < tablBtns.length; i++) {
+                                tablBtns[i].addEventListener('click', function(event) {
+                                    event.preventDefault();
+                                    if (confirm("Are you sure?")) {
+                                        //alert(this.value);
+                                        //console.log("value for del: " + this.value);
+                                        fireStorage['data'] = a.deleteRecord(this.value); //return obj
+                                        //console.log(storage);
+                                        userDataBase.child('data').set(fireStorage['data']);
+                                    }
+
+                                }, false);
+                            }
+
+                            //update readonly props new record form
+                            var newDataForm = document.getElementById("newDataForm");
+                            newDataForm.addEventListener("change", function() {
+                                a.fillNewDataFormReadonly();
+                            });
+                            newDataForm.addEventListener("click", function() {
+                                a.fillNewDataFormReadonly();
+                            });
+
+                            //update progres table
+                            var progTableSelectList = document.getElementById("progressTableSelectList");
+                            progTableSelectList.addEventListener("change", function() {
+                                a.displayTarget();
+                            });
+
+                            //save new data
+                            var createNewRecord = document.getElementById("createNewRecord");
+                            createNewRecord.addEventListener("click", function(event) {
+                                event.preventDefault();
+                                fireStorage['data'] = a.createNewRecord(); //return obj
+                                //console.log(storage.data);
+                                userDataBase.child('data').set(fireStorage['data']);
+                            }, false);
+
+                            //save target
+                            var saveTarget = document.getElementById("saveTarget");
+                            saveTarget.addEventListener("click", function() {
+                                fireStorage['target'] = a.createTarget(); //return obj
+                                //console.log(fireStorage.target);
+                                userDataBase.child('target').set(fireStorage['target']);
+                            });
+
+                            u = new appUser(user);
+
+                            //save new user data
+                            var saveUser = document.getElementById("saveUser");
+                            saveUser.addEventListener("click", function() {
+                                user = u.editUser();
+                                userDataBase.child('profile').update(user);
+                            });
+                            
+                            //window.location.reload();
+
+                        } else {
+                            console.log("An error has accure, can't load objects");
+                            //console.log(fireStorage);
+                        }
+
+
+
+
+
+
+
+
+
+                    });
+
+
+                } else {
+                    // User is signed out.
+                    location.href = "signIn.html";
+                }
+            },
+            function(error) {
+                console.log(error);
+            });
+    };
 
 </script>

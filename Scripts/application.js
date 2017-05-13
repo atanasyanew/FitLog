@@ -25,78 +25,78 @@ function FitLogAppDemo() {
         user = storage.profile;
     }
 
-    if(data && target && user){
-    //init app     
-    a = new appData(data, target, user);
-    a.displayTableData();
-    a.drawMainChart();
-    a.fillNewDataForm();
-    a.fillNewDataFormReadonly();
-    a.displayTarget();
-
-    //delete Record
-    var tablBtns = document.getElementById("DataTable").querySelectorAll("button");
-    //addEventListener for all btns 
-    for (var i = 0; i < tablBtns.length; i++) {
-        tablBtns[i].addEventListener('click', function () {
-
-            if (confirm("Are you sure?")) {
-                //alert(this.value);
-                //console.log("value for del: " + this.value);
-                storage['data'] = a.deleteRecord(this.value); //return obj
-                //console.log(storage);
-                localStorage.setItem('fitLogApp', JSON.stringify(storage));
-                document.location.reload();
-            }
-
-        }, false);
-    }
-
-    //update readonly props new record form
-    var newDataForm = document.getElementById("newDataForm");
-    newDataForm.addEventListener("change", function () {
+    if (data && target && user) {
+        //init app     
+        a = new appData(data, target, user);
+        a.displayTableData();
+        a.drawMainChart();
+        a.fillNewDataForm();
         a.fillNewDataFormReadonly();
-    });
-    newDataForm.addEventListener("click", function () {
-        a.fillNewDataFormReadonly();
-    });
-
-    //update progres table
-    var progTableSelectList = document.getElementById("progressTableSelectList");
-    progTableSelectList.addEventListener("change", function () {
         a.displayTarget();
-    });
 
-    //save new data
-    var createNewRecord = document.getElementById("createNewRecord");
-    createNewRecord.addEventListener("click", function () {
-        storage['data'] = a.createNewRecord(); //return obj
-        //console.log(storage.data);
-        localStorage.setItem('fitLogApp', JSON.stringify(storage));
-        document.location.reload();
-    });
+        //delete Record
+        var tablBtns = document.getElementById("DataTable").querySelectorAll("button");
+        //addEventListener for all btns 
+        for (var i = 0; i < tablBtns.length; i++) {
+            tablBtns[i].addEventListener('click', function () {
 
-    //save target
-    var saveTarget = document.getElementById("saveTarget");
-    saveTarget.addEventListener("click", function () {
-        storage['target'] = a.createTarget(); //return obj
-        //console.log(storage);
-        localStorage.setItem('fitLogApp', JSON.stringify(storage));
-        document.location.reload();
-    });
+                if (confirm("Are you sure?")) {
+                    //alert(this.value);
+                    //console.log("value for del: " + this.value);
+                    storage['data'] = a.deleteRecord(this.value); //return obj
+                    //console.log(storage);
+                    localStorage.setItem('fitLogApp', JSON.stringify(storage));
+                    document.location.reload();
+                }
+
+            }, false);
+        }
+
+        //update readonly props new record form
+        var newDataForm = document.getElementById("newDataForm");
+        newDataForm.addEventListener("change", function () {
+            a.fillNewDataFormReadonly();
+        });
+        newDataForm.addEventListener("click", function () {
+            a.fillNewDataFormReadonly();
+        });
+
+        //update progres table
+        var progTableSelectList = document.getElementById("progressTableSelectList");
+        progTableSelectList.addEventListener("change", function () {
+            a.displayTarget();
+        });
+
+        //save new data
+        var createNewRecord = document.getElementById("createNewRecord");
+        createNewRecord.addEventListener("click", function () {
+            storage['data'] = a.createNewRecord(); //return obj
+            //console.log(storage.data);
+            localStorage.setItem('fitLogApp', JSON.stringify(storage));
+            document.location.reload();
+        });
+
+        //save target
+        var saveTarget = document.getElementById("saveTarget");
+        saveTarget.addEventListener("click", function () {
+            storage['target'] = a.createTarget(); //return obj
+            //console.log(storage);
+            localStorage.setItem('fitLogApp', JSON.stringify(storage));
+            document.location.reload();
+        });
 
 
 
-    u = new appUser(user);
+        u = new appUser(user);
 
-    //save new user data
-    var saveUser = document.getElementById("saveUser");
-    saveUser.addEventListener("click", function () {
-        user = u.editUser();
-        //console.log(storage);
-        localStorage.setItem('fitLogApp', JSON.stringify(storage));
-        document.location.reload();
-    });
+        //save new user data
+        var saveUser = document.getElementById("saveUser");
+        saveUser.addEventListener("click", function () {
+            user = u.editUser();
+            //console.log(storage);
+            localStorage.setItem('fitLogApp', JSON.stringify(storage));
+            document.location.reload();
+        });
 
 
     } else {
@@ -539,12 +539,12 @@ function appData(dt, tar, ur) {
             } //end scales
 
 
-        }
+        };
 
         //draw chart
         var ctx = document.getElementById("mainChart").getContext("2d");
-
-        window.myMixedChart = new Chart(ctx, {
+        
+        var mainChart = new Chart(ctx, {
             type: 'bar',
             data: chartData,
             options: chartOptions
@@ -891,61 +891,61 @@ $(".input-number").keydown(function (e) {
         }
     });
 */
-function fakeObj(){
-    
-/*
- * Mock data
- * generates new objects with fake data
- *
- * object {3}
- *	     profile	{4}
- *	     target		{14}
- *	     data		[30]
- *
- */    
-    
-//object
-this.object = new storageObj();
-//user 
-object.profile = new userObj("AY", "1991-01-01", "Male", 171);
-//target
-object.target = new dataObj('', 68, 81, '', '40', '105', '', 12, '', '', '', '', '', '');
+function fakeObj() {
 
-//data array
-var arr = [];
-arr.unshift(new dataObj('2015-07-27', 75.5, 87, 99, 35.0, 104, 51.0, 22.64, 17.1, 58.4, 'H-Ben rev', 1.725, 2955, 'comment1'));
-arr.unshift(new dataObj('2015-08-12', 74.5, 87, 99, 35.5, 107, 50.0, 22.64, 16.9, 57.6, 'H-Ben rev', 1.725, 2932, 'comment2'));
-arr.unshift(new dataObj('2015-08-17', 73.5, 84, 96, 35.0, 106, 52.0, 20.12, 14.8, 58.7, 'H-Ben rev', 1.725, 2910, 'comment3'));
-arr.unshift(new dataObj('2015-09-01', 73.0, 84, 96, 34.0, 102, 51.0, 20.12, 14.7, 58.3, 'H-Ben rev', 1.725, 2899, 'comment4'));
-arr.unshift(new dataObj('2015-09-08', 71.5, 84, 95, 35.0, 104, 52.0, 19.57, 14.0, 57.5, 'H-Ben rev', 1.725, 2866, 'comment5'));
-arr.unshift(new dataObj('2015-09-19', 70.6, 83, 94, 35.0, 104, 52.0, 18.73, 13.2, 57.4, 'H-Ben rev', 1.725, 2846, 'comme6nt'));
-arr.unshift(new dataObj('2015-10-04', 68.0, 81, 94, 34.0, 104, 50.0, 18.15, 12.5, 56.5, 'H-Ben rev', 1.725, 2810, 'commen7t'));
-arr.unshift(new dataObj('2016-01-02', 71.0, 84, 96, 33.0, 100, 52.0, 20.12, 14.3, 56.7, 'H-Ben rev', 1.725, 2845, 'comment8'));
-arr.unshift(new dataObj('2016-01-16', 73.0, 84, 96, 34.0, 103, 52.0, 20.12, 14.7, 58.3, 'H-Ben rev', 1.725, 2890, 'comment'));
-arr.unshift(new dataObj('2016-01-21', 72.0, 84, 96, 34.5, 103, 52.0, 20.12, 14.5, 57.5, 'H-Ben rev', 1.725, 2868, 'comment'));
-arr.unshift(new dataObj('2016-01-29', 72.0, 84, 97, 35.0, 103, 52.0, '', 14.9, 57.1, 'H-Ben rev',    1.725, 2868, 'cormment'));
-arr.unshift(new dataObj('2016-02-06', 72.5, 83, 97, 35.0, 102, 53.0, 20.38, 14.8, 57.7, 'H-Ben rev', 1.725, 2879, 'commdent'));
-arr.unshift(new dataObj('2016-02-13', 73.0, 83, 97, 35.5, 103, 53.0, 20.38, 14.9, 58.1, 'H-Ben rev', 1.725, 2890, 'comdment'));
-arr.unshift(new dataObj('2016-02-22', 73.0, 82, 97, 36.0, 104, 52.0, 20.09, 14.7, 58.3, 'H-Ben rev', 1.725, 2890, 'comment'));
-arr.unshift(new dataObj('2016-02-26', 73.0, 83, 96, 36.0, 105, 53.0, 19.83, 14.5, 58.5, 'H-Ben rev', 1.725, 2890, 'commedsnt'));
-arr.unshift(new dataObj('2016-03-13', 73.5, 82, 96, 35.0, 105, 52.0, 19.54, 14.4, 59.1, 'H-Ben rev', 1.725, 2901, 'comments'));
-arr.unshift(new dataObj('2016-03-19', 73.6, 85, 95, 34.0, 104, 52.0, 19.86, 14.6, 59.0, 'H-Ben rev', 1.725, 2903, 'comments'));
-arr.unshift(new dataObj('2016-04-02', 74.0, 85, 96, 36.0, 105, 52.0, 20.41, 15.1, 58.9, 'H-Ben rev', 1.725, 2912, 'commentr'));
-arr.unshift(new dataObj('2016-04-08', 75.0, 84, 96, 35.0, 105, 52.0, 20.12, 15.1, 59.9, 'H-Ben rev', 1.725, 2934, 'comment5'));
-arr.unshift(new dataObj('2016-04-16', 75.0, 85, 97, 35.5, 105, 51.0, 20.96, 15.7, 59.3, 'H-Ben rev', 1.725, 2934, 'comment3'));
-arr.unshift(new dataObj('2016-04-23', 75.0, 85, 97, 36.0, 105, 51.0, 20.96, 15.7, 59.3, 'H-Ben rev', 1.600, 2722, 'comment5'));
-arr.unshift(new dataObj('2016-05-06', 75.5, 86, 98, 36.0, 105, 52.0, 21.80, 16.5, 59.0, 'H-Ben rev', 1.600, 2732, 'comment4'));
-arr.unshift(new dataObj('2016-05-13', 74.0, 86, 97, 36.0, 103, 52.0, 21.25, 15.7, 58.3, 'H-Ben rev', 1.600, 2701, 'comment6'));
-arr.unshift(new dataObj('2016-05-22', 75.0, 85, 97, 36.5, 103, 52.0, 20.96, 15.7, 59.3, 'H-Ben rev', 1.600, 2722, 'comment5'));
-arr.unshift(new dataObj('2016-06-14', 75.0, 85, 96, 36.0, 105, 52.0, 20.41, 15.3, 59.7, 'H-Ben rev', 1.600, 2722, 'comment3'));
-arr.unshift(new dataObj('2016-06-26', 75.0, 86, 98, 35.0, 104, 53.0, 21.80, 16.4, 58.7, 'H-Benedict', 1.600, 2741, 'comment6'));
-arr.unshift(new dataObj('2016-07-19', 75.0, 88, 97, 35.5, 104, 53.0, 21.83, 16.4, 58.6, 'H-Benedict', 1.600, 2741, 'comment7'));
-arr.unshift(new dataObj('2016-08-04', 75.0, 88, 97, 36.0, 101, 54.0, 21.83, 16.4, 58.6, 'H-Benedict', 1.600, 2741, 'comment9'));
-arr.unshift(new dataObj('2016-10-09', 78.0, 95, 99, 34.0, 104, 53.0, 24.96, 19.5, 58.5, 'H-Benedict', 1.600, 2804, 'comment0'));
-arr.unshift(new dataObj('2017-03-27', 75.5, 87, 99, 35.0, 104, 51.0, 22.64, 17.1, 58.4, 'H-Ben rev', 1.725, 2955, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'));
+    /*
+     * Mock data
+     * generates new objects with fake data
+     *
+     * object {3}
+     *	     profile	{4}
+     *	     target		{14}
+     *	     data		[30]
+     *
+     */
 
-//ADD DATA TO THE OBJECT
-object.data = arr;
-    
-return this.object;   
+    //object
+    this.object = new storageObj();
+    //user 
+    object.profile = new userObj("AY", "1991-01-01", "Male", 171);
+    //target
+    object.target = new dataObj('', 68, 81, '', '40', '105', '', 12, '', '', '', '', '', '');
+
+    //data array
+    var arr = [];
+    arr.unshift(new dataObj('2015-07-27', 75.5, 87, 99, 35.0, 104, 51.0, 22.64, 17.1, 58.4, 'H-Ben rev', 1.725, 2955, 'comment1'));
+    arr.unshift(new dataObj('2015-08-12', 74.5, 87, 99, 35.5, 107, 50.0, 22.64, 16.9, 57.6, 'H-Ben rev', 1.725, 2932, 'comment2'));
+    arr.unshift(new dataObj('2015-08-17', 73.5, 84, 96, 35.0, 106, 52.0, 20.12, 14.8, 58.7, 'H-Ben rev', 1.725, 2910, 'comment3'));
+    arr.unshift(new dataObj('2015-09-01', 73.0, 84, 96, 34.0, 102, 51.0, 20.12, 14.7, 58.3, 'H-Ben rev', 1.725, 2899, 'comment4'));
+    arr.unshift(new dataObj('2015-09-08', 71.5, 84, 95, 35.0, 104, 52.0, 19.57, 14.0, 57.5, 'H-Ben rev', 1.725, 2866, 'comment5'));
+    arr.unshift(new dataObj('2015-09-19', 70.6, 83, 94, 35.0, 104, 52.0, 18.73, 13.2, 57.4, 'H-Ben rev', 1.725, 2846, 'comme6nt'));
+    arr.unshift(new dataObj('2015-10-04', 68.0, 81, 94, 34.0, 104, 50.0, 18.15, 12.5, 56.5, 'H-Ben rev', 1.725, 2810, 'commen7t'));
+    arr.unshift(new dataObj('2016-01-02', 71.0, 84, 96, 33.0, 100, 52.0, 20.12, 14.3, 56.7, 'H-Ben rev', 1.725, 2845, 'comment8'));
+    arr.unshift(new dataObj('2016-01-16', 73.0, 84, 96, 34.0, 103, 52.0, 20.12, 14.7, 58.3, 'H-Ben rev', 1.725, 2890, 'comment'));
+    arr.unshift(new dataObj('2016-01-21', 72.0, 84, 96, 34.5, 103, 52.0, 20.12, 14.5, 57.5, 'H-Ben rev', 1.725, 2868, 'comment'));
+    arr.unshift(new dataObj('2016-01-29', 72.0, 84, 97, 35.0, 103, 52.0, '', 14.9, 57.1, 'H-Ben rev', 1.725, 2868, 'cormment'));
+    arr.unshift(new dataObj('2016-02-06', 72.5, 83, 97, 35.0, 102, 53.0, 20.38, 14.8, 57.7, 'H-Ben rev', 1.725, 2879, 'commdent'));
+    arr.unshift(new dataObj('2016-02-13', 73.0, 83, 97, 35.5, 103, 53.0, 20.38, 14.9, 58.1, 'H-Ben rev', 1.725, 2890, 'comdment'));
+    arr.unshift(new dataObj('2016-02-22', 73.0, 82, 97, 36.0, 104, 52.0, 20.09, 14.7, 58.3, 'H-Ben rev', 1.725, 2890, 'comment'));
+    arr.unshift(new dataObj('2016-02-26', 73.0, 83, 96, 36.0, 105, 53.0, 19.83, 14.5, 58.5, 'H-Ben rev', 1.725, 2890, 'commedsnt'));
+    arr.unshift(new dataObj('2016-03-13', 73.5, 82, 96, 35.0, 105, 52.0, 19.54, 14.4, 59.1, 'H-Ben rev', 1.725, 2901, 'comments'));
+    arr.unshift(new dataObj('2016-03-19', 73.6, 85, 95, 34.0, 104, 52.0, 19.86, 14.6, 59.0, 'H-Ben rev', 1.725, 2903, 'comments'));
+    arr.unshift(new dataObj('2016-04-02', 74.0, 85, 96, 36.0, 105, 52.0, 20.41, 15.1, 58.9, 'H-Ben rev', 1.725, 2912, 'commentr'));
+    arr.unshift(new dataObj('2016-04-08', 75.0, 84, 96, 35.0, 105, 52.0, 20.12, 15.1, 59.9, 'H-Ben rev', 1.725, 2934, 'comment5'));
+    arr.unshift(new dataObj('2016-04-16', 75.0, 85, 97, 35.5, 105, 51.0, 20.96, 15.7, 59.3, 'H-Ben rev', 1.725, 2934, 'comment3'));
+    arr.unshift(new dataObj('2016-04-23', 75.0, 85, 97, 36.0, 105, 51.0, 20.96, 15.7, 59.3, 'H-Ben rev', 1.600, 2722, 'comment5'));
+    arr.unshift(new dataObj('2016-05-06', 75.5, 86, 98, 36.0, 105, 52.0, 21.80, 16.5, 59.0, 'H-Ben rev', 1.600, 2732, 'comment4'));
+    arr.unshift(new dataObj('2016-05-13', 74.0, 86, 97, 36.0, 103, 52.0, 21.25, 15.7, 58.3, 'H-Ben rev', 1.600, 2701, 'comment6'));
+    arr.unshift(new dataObj('2016-05-22', 75.0, 85, 97, 36.5, 103, 52.0, 20.96, 15.7, 59.3, 'H-Ben rev', 1.600, 2722, 'comment5'));
+    arr.unshift(new dataObj('2016-06-14', 75.0, 85, 96, 36.0, 105, 52.0, 20.41, 15.3, 59.7, 'H-Ben rev', 1.600, 2722, 'comment3'));
+    arr.unshift(new dataObj('2016-06-26', 75.0, 86, 98, 35.0, 104, 53.0, 21.80, 16.4, 58.7, 'H-Benedict', 1.600, 2741, 'comment6'));
+    arr.unshift(new dataObj('2016-07-19', 75.0, 88, 97, 35.5, 104, 53.0, 21.83, 16.4, 58.6, 'H-Benedict', 1.600, 2741, 'comment7'));
+    arr.unshift(new dataObj('2016-08-04', 75.0, 88, 97, 36.0, 101, 54.0, 21.83, 16.4, 58.6, 'H-Benedict', 1.600, 2741, 'comment9'));
+    arr.unshift(new dataObj('2016-10-09', 78.0, 95, 99, 34.0, 104, 53.0, 24.96, 19.5, 58.5, 'H-Benedict', 1.600, 2804, 'comment0'));
+    arr.unshift(new dataObj('2017-03-27', 75.5, 87, 99, 35.0, 104, 51.0, 22.64, 17.1, 58.4, 'H-Ben rev', 1.725, 2955, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'));
+
+    //ADD DATA TO THE OBJECT
+    object.data = arr;
+
+    return this.object;
 }
