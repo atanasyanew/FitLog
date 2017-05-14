@@ -106,9 +106,10 @@
                 </div>
 
                 <div class="col-md-8">
-                    <div class="well transperant">
+                    <div class="well transperant" id="divMainChart">
                         <legend>Log Chart</legend>
-                        <canvas id="mainChart"></canvas>
+                        <div> <canvas id="mainChart"></canvas></div>
+
                     </div>
                 </div>
 
@@ -512,6 +513,16 @@
                                         </div>
                                     </div>
 
+                                    <div id="newDataValidationMsg">
+<!--
+                                    <div class="form-group">
+                                        <label for="example-text-input" class="control-label col-xs-4"></label>
+                                        <div class="col-xs-8">
+                                        </div>
+                                    </div>
+-->
+                                     </div>
+
                                     <div class="form-group">
                                         <label for="example-text-input" class="control-label col-xs-4">Fats %</label>
                                         <div class="col-xs-8">
@@ -584,8 +595,8 @@
     window.onload = function() {
         //load app like demo
         // FitLogAppDemo();
-       // removeHashNav();
-     hashNav(); //need to init
+        //removeHashNav();
+         hashNav(); //need to init
 
 
 
@@ -616,31 +627,32 @@
 
 
 
-    window.onhashchange = hashNav;
+    // window.onhashchange = hashNav;
 
 </script>
 
 
 
 <script type="text/javascript">
+    
     initApp = function() {
         firebase.auth().onAuthStateChanged(function(user) {
                 if (user) {
                     // User is signed in.
-                    var displayName = user.displayName;
-                    var email = user.email;
-                    var emailVerified = user.emailVerified;
-                    var photoURL = user.photoURL;
-                    var uid = user.uid;
-                    var providerData = user.providerData;
+                    // var displayName = user.displayName;
+                    // var email = user.email;
+                    // var emailVerified = user.emailVerified;
+                    // var photoURL = user.photoURL;
+                    // var uid = user.uid;
+                    // var providerData = user.providerData;
 
-                    //                console.log(displayName);
-                    //                console.log(email);
-                    //                console.log(emailVerified);
-                    //                console.log(photoURL);
-                    console.log(uid);
-                    //                console.log(providerData);
-
+                    // console.log(displayName);
+                    // console.log(email);
+                    // console.log(emailVerified);
+                    // console.log(photoURL);
+                    // console.log(uid);
+                    
+                    //signou event
                     var signOut = document.getElementById('signOut');
                     signOut.addEventListener('click', function(event) {
                         firebase.auth().signOut();
@@ -649,39 +661,43 @@
 
 
 
-
-
                     var myid = "testID";
                     var userDataBase = firebase.database().ref('dataBase').child(myid);
 
-
-                    //if data exist do the code
-                    //if no data set init object, include current user to user profile
-                    // alert you have to fill gender height blablabla
 
                     //init clear obj to prevent bugs
                     var fireStorage = new storageObj();
                     var data = fireStorage.data;
                     var target = fireStorage.target;
                     var user = fireStorage.profile;
-
+                    //start app class
                     a = new appData(data, target, user);
-
+                    u = new appUser(user);
+                    
+                    //sync firestorage
                     userDataBase.on('value', snap => {
                         //init storage
                         fireStorage = snap.val(); //get localstorage data
-                        // storage = JSON.parse(localStorage.fitLogApp); //get localstorage data
                         a.data = fireStorage.data;
                         a.target = fireStorage.target;
                         a.user = fireStorage.profile;
+                        u.user = fireStorage.profile;
+                        
+                        if (a.data && a.target && a.user && u.user) {
+                            
+                            //save new user data
+                            var saveUser = document.getElementById("saveUser");
+                            saveUser.addEventListener("click", function() {
+                                user = u.editUser();
+                                userDataBase.child('profile').update(user);
+                            });
 
-                        if (a.data && a.target && a.user) {
                             //init app     
                             a.displayTableData();
+                            a.displayTarget();
                             a.drawMainChart();
                             a.fillNewDataForm();
                             a.fillNewDataFormReadonly();
-                            a.displayTarget();
 
                             //delete Record
                             var tablBtns = document.getElementById("DataTable").querySelectorAll("button");
@@ -720,8 +736,10 @@
                             createNewRecord.addEventListener("click", function(event) {
                                 event.preventDefault();
                                 fireStorage['data'] = a.createNewRecord(); //return obj
-                                //console.log(storage.data);
+                                //console.log(fireStorage['data']);
                                 userDataBase.child('data').set(fireStorage['data']);
+                                window.location.hash = "log";
+                                window.location.reload();
                             }, false);
 
                             //save target
@@ -731,34 +749,16 @@
                                 //console.log(fireStorage.target);
                                 userDataBase.child('target').set(fireStorage['target']);
                             });
-
-                            u = new appUser(user);
-
-                            //save new user data
-                            var saveUser = document.getElementById("saveUser");
-                            saveUser.addEventListener("click", function() {
-                                user = u.editUser();
-                                userDataBase.child('profile').update(user);
-                            });
-                            
-                            //window.location.reload();
-
+                           
                         } else {
                             console.log("An error has accure, can't load objects");
                             //console.log(fireStorage);
                         }
 
+                    }); //end data fire sync func
 
-
-
-
-
-
-
-
-                    });
-
-
+                    
+                    
                 } else {
                     // User is signed out.
                     location.href = "signIn.html";

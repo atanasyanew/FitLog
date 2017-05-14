@@ -110,21 +110,33 @@ function FitLogAppDemo() {
 }
 
 /* * MAIN JSON OBJECTS */
+//clean data for obj
+function cleanData(val, fix) {
+
+    var cleanVal = parseFloat(Number(val).toFixed(fix));
+    if (cleanVal == NaN || cleanVal == 0 || cleanVal < 0) {
+        cleanVal = "";
+    }
+    return cleanVal;
+}
 //Construct Data Object
 function dataObj(dt, weig, wais, hau, ar, che, hip, fpr, fkg, bmass, form, activ, kcal, com) {
+
+
+
     this.measurementDate = dt;
-    this.weightKgs = weig;
-    this.waistCm = wais;
-    this.haunchCm = hau;
-    this.armsCm = ar;
-    this.chestCm = che;
-    this.hipsCm = hip;
-    this.fatsPercent = fpr;
-    this.fatKgs = fkg;
-    this.bodyMassKgs = bmass;
+    this.weightKgs = cleanData(weig, 2);
+    this.waistCm = cleanData(wais, 2);
+    this.haunchCm = cleanData(hau, 2);
+    this.armsCm = cleanData(ar, 2);
+    this.chestCm = cleanData(che, 2);
+    this.hipsCm = cleanData(hip, 2);
+    this.fatsPercent = cleanData(fpr, 2);
+    this.fatKgs = cleanData(fkg, 2);
+    this.bodyMassKgs = cleanData(bmass, 2);
     this.bmrFormula = form;
-    this.physicalActivity = activ;
-    this.bmaKcal = kcal;
+    this.physicalActivity = cleanData(activ, 3);
+    this.bmaKcal = cleanData(kcal, 0);
     this.comment = com;
 }
 //User object
@@ -132,7 +144,7 @@ function userObj(na, bi, ge, he) {
     this.name = na;
     this.birth = bi;
     this.gender = ge;
-    this.height = he;
+    this.height = parseFloat(Number(he).toFixed(2));
 }
 //main object JSON data
 function storageObj() {
@@ -166,6 +178,7 @@ function appData(dt, tar, ur) {
     //dom elements
     var dataTable = document.getElementById("DataTable");
     var form = document.getElementById('newDataForm');
+    var formValidationMsg = document.getElementById("newDataValidationMsg");
     var formDate = document.getElementById("newDataMeasurementDate");
     var formWeight = document.getElementById("newDataWeightKgs");
     var formWaist = document.getElementById("newDataWaistCm");
@@ -221,21 +234,23 @@ function appData(dt, tar, ur) {
     //return data array with added new obj
     this.createNewRecord = function () {
 
+
         //construct object
         var newData = new dataObj(
             formDate.value,
-            formWeight.value,
-            formWaist.value,
-            formHaunch.value,
-            formArms.value,
-            formChest.value,
-            formHips.value,
-            formFatsPercent.value,
-            formFatKgs.value,
-            formBodyMass.value,
+            parseFloat(Number(formWeight.value).toFixed(2)),
+            parseFloat(Number(formWaist.value).toFixed(2)),
+            parseFloat(Number(formHaunch.value).toFixed(2)),
+            parseFloat(Number(formArms.value).toFixed(2)),
+            parseFloat(Number(formChest.value).toFixed(2)),
+            parseFloat(Number(formHips.value).toFixed(2)),
+            parseFloat(Number(formFatsPercent.value).toFixed(2)),
+            parseFloat(Number(formFatKgs.value).toFixed(2)),
+            parseFloat(Number(formBodyMass.value).toFixed(2)),
+
             formBMRFormulaTxt,
-            formActivity.value,
-            formBMAKcal.value,
+            parseFloat(Number(formActivity.value).toFixed(3)),
+            parseInt(Number(formBMAKcal.value).toFixed(0)),
             formComment.value
         );
 
@@ -243,7 +258,7 @@ function appData(dt, tar, ur) {
         this.data.unshift(newData);
 
         //sort objects by date
-        this.data.sort((b, a) => new Date(a.measurementDate).getTime() - new Date(b.measurementDate).getTime());
+        //this.data.sort((b, a) => new Date(a.measurementDate).getTime() - new Date(b.measurementDate).getTime());
         //return data object
         return this.data;
 
@@ -272,6 +287,35 @@ function appData(dt, tar, ur) {
 
     //fill new record readonly prop
     this.fillNewDataFormReadonly = function () {
+        //set all data to empty string
+        formFatsPercent.value = "";
+        formFatKgs.value = "";
+        formBodyMass.value = "";
+        formBMAKcal.value = "";
+        formValidationMsg.innerHTML = ""
+        //TO DO DA SE DOBAVI V TOP NA FUNC
+        //            IF INVALID DATA
+        //              gender
+        //              height
+        //              formHaunch
+        //              formWaist
+        //             formWeight
+        // Please fix some of the fallowing issues to enable calculations.
+
+
+        //            formFatsPercent.placeholder = "invalid data";
+
+        var weight = cleanData(formWeight.value, 2);
+        var haunch = cleanData(formHaunch.value, 2);
+        var waist = cleanData(formWaist.value, 2);
+
+
+
+        //var bla = formWeight.value;
+
+
+
+        //SET ALL VALUES TO ""
 
         if (formChekbox.checked == true) { //unlock fields
 
@@ -287,6 +331,7 @@ function appData(dt, tar, ur) {
 
         } else {
 
+
             formFatsPercent.readOnly = true;
             formFatKgs.readOnly = true;
             formBodyMass.readOnly = true;
@@ -297,29 +342,57 @@ function appData(dt, tar, ur) {
             formBodyMass.style.backgroundColor = bgColor;
             formBMAKcal.style.backgroundColor = bgColor;
 
-            //update fields
-            var fatPr = calcFatsPercent(
-                gender,
-                height,
-                formHaunch.value,
-                formWaist.value);
-            formFatsPercent.value = fatPr;
 
-            var fatKgs = calcFatKgs(fatPr, formWeight.value);
-            formFatKgs.value = fatKgs;
+            //check if all data for calculations
+            if ((gender == "Male" || gender == "Female") &&
+                (birth.length == 10) &&
+                weight != "" && haunch != "" && waist != ""
+            ) {
+                //do calcs
+                //console.log("true");
+                //update fields
+                            
+                var fatPr = calcFatsPercent(
+                    gender,
+                    height,
+                    haunch,
+                    waist);
+                formFatsPercent.value = fatPr;
 
-            var bodyMassKgs = calcBodyMassKgs(fatKgs, formWeight.value)
-            formBodyMass.value = bodyMassKgs;
+                var fatKgs = calcFatKgs(fatPr, weight);
+                formFatKgs.value = fatKgs;
 
-            var bmaKcal = calcBMAKcal(
-                gender,
-                birth,
-                formBMRFormula.value,
-                formActivity.value,
-                formWeight.value,
-                height,
-                bodyMassKgs);
-            formBMAKcal.value = bmaKcal;
+                var bodyMassKgs = calcBodyMassKgs(fatKgs, weight)
+                formBodyMass.value = bodyMassKgs;
+
+                var bmaKcal = calcBMAKcal(
+                    gender,
+                    birth,
+                    formBMRFormula.value,
+                    formActivity.value,
+                    weight,
+                    height,
+                    bodyMassKgs);
+                formBMAKcal.value = bmaKcal;
+
+            } else {
+                //give user feedback
+                //console.log("false");
+                var feedbackMsg = "<div class=\"form-group text-danger\">";
+                feedbackMsg += "<label for=\"example-text-input\" class=\"control-label col-xs-4\"></label>";
+                feedbackMsg += "<div class=\"col-xs-8\">";
+                feedbackMsg += "<p><b>Please fix some of the following issues to enable calculations.</b></p>"
+                feedbackMsg += "<ul class=\"list-group\">";
+                feedbackMsg += "<li><b>Gender</b></li>";
+                feedbackMsg += "<li><b>Data of Birth</b></li>";
+                feedbackMsg += "<li><b>Weight, kg</b></li>";
+                feedbackMsg += "<li><b>Waist, cm</b></li>";
+                feedbackMsg += "<li><b>Haunch, cm</b></li>";
+                feedbackMsg += "</ul></div></div>";
+                formValidationMsg.innerHTML = feedbackMsg;
+            }
+
+
         }
 
         //debug
@@ -425,15 +498,15 @@ function appData(dt, tar, ur) {
 
         var obj = new dataObj(
             '', //dt, 
-            targetWeight.value, //weig, 
-            targetWaist.value, //wais, 
-            targetHaunch.value, //hau, 
-            targetArms.value, //ar, 
-            targetChest.value, //che, 
-            targetHips.value, //hip, 
-            targetFatsPr.value, //fpr, 
-            targetFatKgs.value, //fkg, 
-            targetBodyMass.value, //bmass, 
+            parseFloat(Number(targetWeight.value).toFixed(2)), //weig, 
+            parseFloat(Number(targetWaist.value).toFixed(2)), //wais, 
+            parseFloat(Number(targetHaunch.value).toFixed(2)), //hau, 
+            parseFloat(Number(targetArms.value).toFixed(2)), //ar, 
+            parseFloat(Number(targetChest.value).toFixed(2)), //che, 
+            parseFloat(Number(targetHips.value).toFixed(2)), //hip, 
+            parseFloat(Number(targetFatsPr.value).toFixed(2)), //fpr, 
+            parseFloat(Number(targetFatKgs.value).toFixed(2)), //fkg, 
+            parseFloat(Number(targetBodyMass.value).toFixed(2)), //bmass, 
             '', //form, 
             '', //activ, 
             '', //kcal, 
@@ -453,11 +526,12 @@ function appData(dt, tar, ur) {
         Chart.defaults.global.defaultFontColor = '#fff';
 
         //datasets
+        var xFatsPercentData = constructArray(this.data, "fatsPercent");
         var xFatsPercent = {
             type: "line",
             yAxisID: "y-axis-2",
             label: "FatsPercent",
-            data: constructArray(this.data, "fatsPercent"),
+            data: xFatsPercentData,
             borderColor: window.chartColors.red,
             backgroundColor: window.chartColors.red,
             //borderWidth: 2,
@@ -465,43 +539,32 @@ function appData(dt, tar, ur) {
             //pointHoverRadius: 5,
             fill: false
         };
+        var xWeightKgsData = constructArray(this.data, "weightKgs");
         var xWeightKgs = {
             type: "bar",
             yAxisID: "y-axis-1",
             label: "kgs",
-            data: constructArray(this.data, "weightKgs"),
+            data: xWeightKgsData,
             //borderSkipped: "top",
             //borderWidth: 10,
             borderColor: window.chartColors.indigo,
             backgroundColor: window.chartColors.indigo
         };
 
+        var chartDataLabels = constructChartLabels(this.data, 'measurementDate');
         var chartData = {
-            labels: constructArray(this.data, 'measurementDate'),
+            labels: chartDataLabels,
             datasets: [xFatsPercent, xWeightKgs]
         };
 
         var chartOptions = {
             responsive: true,
-
             tooltips: {
                 enabled: true,
                 mode: "index",
                 intersect: true,
                 position: "nearest",
             },
-            /* other options
-                title: {
-                    display: true,
-                    text: 'my combo chart'
-                },
-              
-                legend: {
-                    display: true,
-                    labels: {usePointStyle: true }
-                },
-                
-           */
             scales: {
                 xAxes: [
                     {
@@ -537,25 +600,22 @@ function appData(dt, tar, ur) {
                     }
                 ] //end yAxes
             } //end scales
-
-
         };
 
-        //draw chart
         var ctx = document.getElementById("mainChart").getContext("2d");
-        
-        var mainChart = new Chart(ctx, {
+
+        if (this.mainChart != null || this.mainChart != undefined) {
+            this.mainChart.destroy();
+            // console.log("chart destroyed");
+        }
+
+        this.mainChart = new Chart(ctx, {
             type: 'bar',
             data: chartData,
             options: chartOptions
-        }); //ctx end
+        }); //ctx end  
 
-        //debug
-        //console.log(constructArray(this.data, "measurementDate"))
-        //console.log(constructArray(this.data, "fatsPercent"))
-        //console.log(constructArray(this.data, "weightKgs"))
     }
-
 
 
 }
@@ -617,27 +677,24 @@ function calcFatsPercent(gender, height, haunch, waist) {
         fatsPercent = fatsPercent.toFixed(2);
     }
 
-    validNumber = Number(fatsPercent);
-
-    if (!isNaN(validNumber) && validNumber > 3) {
-        return validNumber;
-    } else {
-        return "NaN";
-    }
+    return cleanData(fatsPercent, 2);
 }
 //calc fat kgs
 function calcFatKgs(fatsPercent, weight) {
     //([@[Fats, %]]/100)*[@[Weight, kgs]]
     var fatKgs;
     fatKgs = (fatsPercent / 100) * weight
-    return fatKgs.toFixed(2);
+    //  return fatKgs.toFixed(2);
+    return cleanData(fatKgs, 2);
 }
 //calc body mass kgs
 function calcBodyMassKgs(fatKgs, weight) {
     //=[@[Weight, kgs]]-[@[Fat, kgs]]
     var bodyMassKgs;
     bodyMassKgs = (weight - fatKgs);
-    return bodyMassKgs.toFixed(2);
+    // return bodyMassKgs.toFixed(2);
+    return cleanData(bodyMassKgs, 2);
+
 }
 //calc Basal metabolic with physical activity
 function calcBMAKcal(gender, birth, formula, activity, weight, height, bodyMass) {
@@ -747,7 +804,9 @@ function calcBMAKcal(gender, birth, formula, activity, weight, height, bodyMass)
             break;
     }
     //console.log("formula number:" + formula);
-    return bma.toFixed();
+    //return bma.toFixed();
+    return cleanData(bma, 0);
+
 }
 
 /* * UTILITIES */
@@ -809,7 +868,20 @@ function constructArray(arrWithObjs, objKey) {
     myArray = [];
     for (i = 0; i < arrWithObjs.length; i++) {
         if (arrWithObjs[i][objKey] == '') {
-            myArray.unshift('NaN');
+            myArray.unshift(NaN);
+        } else {
+            num = Number(arrWithObjs[i][objKey]);
+            myArray.unshift(num);
+        }
+    }
+    return myArray;
+}
+
+function constructChartLabels(arrWithObjs, objKey) {
+    myArray = [];
+    for (i = 0; i < arrWithObjs.length; i++) {
+        if (arrWithObjs[i][objKey] == '') {
+            myArray.unshift(NaN);
         } else {
             myArray.unshift(arrWithObjs[i][objKey]);
         }
