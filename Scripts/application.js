@@ -148,7 +148,7 @@ function userObj(na, bi, ge, he) {
 }
 //main object JSON data
 function storageObj() {
-    this.profile = new userObj('Me', '1991-01-01', 'Male', '172'),
+    this.profile = new userObj('Me', '', '', ''),
         this.target = new dataObj('', '', '', '', '', '', '', '', '', '', '', '', '', '')
     this.data = []
 };
@@ -351,7 +351,7 @@ function appData(dt, tar, ur) {
                 //do calcs
                 //console.log("true");
                 //update fields
-                            
+
                 var fatPr = calcFatsPercent(
                     gender,
                     height,
@@ -636,11 +636,12 @@ function appUser(userObj) {
     this.user = userObj;
 
     //dom elements, display user
+    this.displayUser = function () {
     document.getElementById("userName").innerHTML = this.user.name;
     document.getElementById("userBirth").innerHTML = this.user.birth;
     document.getElementById("userGender").innerHTML = this.user.gender;
     document.getElementById("userHeight").innerHTML = this.user.height;
-
+    }
     //dom edit user form
     var editName = document.getElementById("editUserName");
     var editBirth = document.getElementById("editUserBirth");
@@ -648,11 +649,12 @@ function appUser(userObj) {
     var editHeight = document.getElementById("editUserHeight");
 
     //fill up edit user form based on existing data data
+    this.fillUserForm = function () {
     editName.value = this.user.name;
     editBirth.value = this.user.birth;
     editGender.value = this.user.gender;
     editHeight.value = this.user.height;
-
+    }
     //return modifyed user
     this.editUser = function () {
         this.user.name = editName.value;

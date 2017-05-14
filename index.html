@@ -514,14 +514,14 @@
                                     </div>
 
                                     <div id="newDataValidationMsg">
-<!--
+                                        <!--
                                     <div class="form-group">
                                         <label for="example-text-input" class="control-label col-xs-4"></label>
                                         <div class="col-xs-8">
                                         </div>
                                     </div>
 -->
-                                     </div>
+                                    </div>
 
                                     <div class="form-group">
                                         <label for="example-text-input" class="control-label col-xs-4">Fats %</label>
@@ -593,48 +593,20 @@
 
 <script>
     window.onload = function() {
-        //load app like demo
+        // load app like demo
         // FitLogAppDemo();
-        //removeHashNav();
-         hashNav(); //need to init
-
-
-
+        // removeHashNav();
+        hashNav(); //need to init
         initApp();
-
-
-
-        var user = firebase.auth().currentUser;
-        var name, email, photoUrl, uid, emailVerified;
-
-        if (user != null) {
-            name = user.displayName;
-            email = user.email;
-            photoUrl = user.photoURL;
-            emailVerified = user.emailVerified;
-            uid = user.uid;
-            // The user's ID, unique to the Firebase project. Do NOT use
-            // this value to authenticate with your backend server, if
-            // you have one. Use User.getToken() instead.
-        }
-
-        //        console.log("currentUser user")
-        //        console.log(uid);
-
-
     };
 
-
-
-
-    // window.onhashchange = hashNav;
+    window.onhashchange = hashNav;
 
 </script>
 
 
 
 <script type="text/javascript">
-    
     initApp = function() {
         firebase.auth().onAuthStateChanged(function(user) {
                 if (user) {
@@ -651,7 +623,7 @@
                     // console.log(emailVerified);
                     // console.log(photoURL);
                     // console.log(uid);
-                    
+
                     //signou event
                     var signOut = document.getElementById('signOut');
                     signOut.addEventListener('click', function(event) {
@@ -667,29 +639,37 @@
 
                     //init clear obj to prevent bugs
                     var fireStorage = new storageObj();
-                    var data = fireStorage.data;
-                    var target = fireStorage.target;
-                    var user = fireStorage.profile;
+                    var initData = fireStorage.data;
+                    var initTarget = fireStorage.target;
+                    var initUser = fireStorage.profile;
                     //start app class
-                    a = new appData(data, target, user);
-                    u = new appUser(user);
-                    
+                    a = new appData(initData, initTarget, initUser);
+                    u = new appUser(initUser);
+
                     //sync firestorage
                     userDataBase.on('value', snap => {
                         //init storage
                         fireStorage = snap.val(); //get localstorage data
+                     
                         a.data = fireStorage.data;
                         a.target = fireStorage.target;
                         a.user = fireStorage.profile;
+                        
                         u.user = fireStorage.profile;
+
+                        
                         
                         if (a.data && a.target && a.user && u.user) {
+
                             
+                            u.displayUser();
+                            u.fillUserForm();
                             //save new user data
                             var saveUser = document.getElementById("saveUser");
                             saveUser.addEventListener("click", function() {
-                                user = u.editUser();
-                                userDataBase.child('profile').update(user);
+                                euser = u.editUser();
+                                userDataBase.child('profile').update(euser);
+                                window.location.hash = "profile";
                             });
 
                             //init app     
@@ -735,11 +715,14 @@
                             var createNewRecord = document.getElementById("createNewRecord");
                             createNewRecord.addEventListener("click", function(event) {
                                 event.preventDefault();
-                                fireStorage['data'] = a.createNewRecord(); //return obj
-                                //console.log(fireStorage['data']);
-                                userDataBase.child('data').set(fireStorage['data']);
+                                //data = a.createNewRecord();
+                               
+                                console.log(data);
+                                userDataBase.child('data').set(a.createNewRecord());
+                                //fireStorage['data'] = []; //return obj
+                                //data = [];
                                 window.location.hash = "log";
-                                window.location.reload();
+                                //window.location.reload();
                             }, false);
 
                             //save target
@@ -748,8 +731,9 @@
                                 fireStorage['target'] = a.createTarget(); //return obj
                                 //console.log(fireStorage.target);
                                 userDataBase.child('target').set(fireStorage['target']);
+                                window.location.hash = "log";
                             });
-                           
+
                         } else {
                             console.log("An error has accure, can't load objects");
                             //console.log(fireStorage);
@@ -757,8 +741,8 @@
 
                     }); //end data fire sync func
 
-                    
-                    
+
+
                 } else {
                     // User is signed out.
                     location.href = "signIn.html";
