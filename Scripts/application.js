@@ -121,9 +121,6 @@ function cleanData(val, fix) {
 }
 //Construct Data Object
 function dataObj(dt, weig, wais, hau, ar, che, hip, fpr, fkg, bmass, form, activ, kcal, com) {
-
-
-
     this.measurementDate = dt;
     this.weightKgs = cleanData(weig, 2);
     this.waistCm = cleanData(wais, 2);
@@ -212,22 +209,24 @@ function appData(dt, tar, ur) {
     var targetBodyMass = document.getElementById("targetDataBodyMassKgs");
     //used for target table rendering
 
-    this.headerFields = new dataObj(
-        "Measurement Date",
-        "Weight, kg",
-        "Waist, cm",
-        "Haunch, cm",
-        "Arms, cm",
-        "Chest, cm",
-        "Hips, cm",
-        "Fats %",
-        "Fat, kg",
-        "Body Mass, kg",
-        "Calc Formula",
-        "Physical Activity",
-        "Kcal",
-        "Comment"
-    );
+    this.headerFields = {
+
+        measurementDate: "Measurement Date",
+        weightKgs: "Weight, kg",
+        waistCm: "Waist, cm",
+        haunchCm: "Haunch, cm",
+        armsCm: "Arms, cm",
+        chestCm: "Chest, cm",
+        hipsCm: "Hips, cm",
+        fatsPercent: "Fats %",
+        fatKgs: "Fat, kg",
+        bodyMassKgs: "Body Mass, kg",
+        bmrFormula: "Calc Formula",
+        physicalActivity: "Physical Activity",
+        bmaKcal: "Kcal",
+        comment: "Comment"
+
+    };
 
 
 
@@ -637,10 +636,10 @@ function appUser(userObj) {
 
     //dom elements, display user
     this.displayUser = function () {
-    document.getElementById("userName").innerHTML = this.user.name;
-    document.getElementById("userBirth").innerHTML = this.user.birth;
-    document.getElementById("userGender").innerHTML = this.user.gender;
-    document.getElementById("userHeight").innerHTML = this.user.height;
+        document.getElementById("userName").innerHTML = this.user.name;
+        document.getElementById("userBirth").innerHTML = this.user.birth;
+        document.getElementById("userGender").innerHTML = this.user.gender;
+        document.getElementById("userHeight").innerHTML = this.user.height;
     }
     //dom edit user form
     var editName = document.getElementById("editUserName");
@@ -650,10 +649,10 @@ function appUser(userObj) {
 
     //fill up edit user form based on existing data data
     this.fillUserForm = function () {
-    editName.value = this.user.name;
-    editBirth.value = this.user.birth;
-    editGender.value = this.user.gender;
-    editHeight.value = this.user.height;
+        editName.value = this.user.name;
+        editBirth.value = this.user.birth;
+        editGender.value = this.user.gender;
+        editHeight.value = this.user.height;
     }
     //return modifyed user
     this.editUser = function () {
