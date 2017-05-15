@@ -145,9 +145,9 @@ function userObj(na, bi, ge, he) {
 }
 //main object JSON data
 function storageObj() {
-    this.profile = new userObj('Me', '', '', ''),
-        this.target = new dataObj('', '', '', '', '', '', '', '', '', '', '', '', '', '')
-    this.data = []
+    this.profile = new userObj('Me', '', '', '');
+    this.target = new dataObj('', '', '', '', '', '', '', '', '', '', '', '', '', '');
+    this.data = [];
 };
 
 /* * MAIN FUNCTIONS */
@@ -167,9 +167,10 @@ function appData(dt, tar, ur) {
     this.target = tar; //dataObj
     this.user = ur; //userObj
 
-    var birth = this.user.birth;
-    var gender = this.user.gender;
-    var height = this.user.height;
+    //var mybirth = this.user.birth;
+    //var mygender = this.user.gender;
+    //var myheight = this.user.height;
+
     var bgColor; //color for readonly fields
 
     //dom elements
@@ -228,11 +229,10 @@ function appData(dt, tar, ur) {
 
     };
 
-
-
     //return data array with added new obj
     this.createNewRecord = function () {
 
+        var setObj;
 
         //construct object
         var newData = new dataObj(
@@ -246,7 +246,6 @@ function appData(dt, tar, ur) {
             parseFloat(Number(formFatsPercent.value).toFixed(2)),
             parseFloat(Number(formFatKgs.value).toFixed(2)),
             parseFloat(Number(formBodyMass.value).toFixed(2)),
-
             formBMRFormulaTxt,
             parseFloat(Number(formActivity.value).toFixed(3)),
             parseInt(Number(formBMAKcal.value).toFixed(0)),
@@ -254,34 +253,56 @@ function appData(dt, tar, ur) {
         );
 
         //add obj to data array
-        this.data.unshift(newData);
+
+        if (this.data == undefined) {
+
+            setObj = [];
+            setObj.unshift(newData);
+            //this.data = [];
+            //this.data.unshift(newData);
+
+        } else {
+
+            setObj = this.data;
+            setObj.unshift(newData);
+            setObj.sort((b, a) => new Date(a.measurementDate).getTime() - new Date(b.measurementDate).getTime());
+            //this.data.unshift(newData);
+            //sort by date
+            //this.data.sort((b, a) => new Date(a.measurementDate).getTime() - new Date(b.measurementDate).getTime());
+
+        }
+
+
 
         //sort objects by date
-        //this.data.sort((b, a) => new Date(a.measurementDate).getTime() - new Date(b.measurementDate).getTime());
         //return data object
-        return this.data;
+        //return this.data;
+        return setObj;
 
     }
 
     //fill up form based on last record
     this.fillNewDataForm = function () {
 
-        var obj = this.data[0];
+        formDate.value = todaysDate();
 
-        if (obj) { //if there is records
-            var today = todaysDate();
+        if (this.data && this.data[0]) {
 
-            formDate.value = today;
-            formWeight.value = obj.weightKgs;
-            formWaist.value = obj.waistCm;
-            formHaunch.value = obj.haunchCm - 0.5;
-            formArms.value = obj.armsCm;
-            formChest.value = obj.chestCm;
-            formHips.value = obj.hipsCm;
+            var obj = this.data[0];
 
-            //others are calculate dinamicaly
+            if (obj) { //if there is records
+
+                formWeight.value = obj.weightKgs;
+                formWaist.value = obj.waistCm;
+                formHaunch.value = obj.haunchCm - 0.5;
+                formArms.value = obj.armsCm;
+                formChest.value = obj.chestCm;
+                formHips.value = obj.hipsCm;
+
+                //others are calculate dinamicaly
+            }
+
         }
-
     }
 
     //fill new record readonly prop
@@ -291,30 +312,12 @@ function appData(dt, tar, ur) {
         formFatKgs.value = "";
         formBodyMass.value = "";
         formBMAKcal.value = "";
-        formValidationMsg.innerHTML = ""
-        //TO DO DA SE DOBAVI V TOP NA FUNC
-        //            IF INVALID DATA
-        //              gender
-        //              height
-        //              formHaunch
-        //              formWaist
-        //             formWeight
-        // Please fix some of the fallowing issues to enable calculations.
-
-
-        //            formFatsPercent.placeholder = "invalid data";
+        formValidationMsg.innerHTML = "";
 
         var weight = cleanData(formWeight.value, 2);
         var haunch = cleanData(formHaunch.value, 2);
         var waist = cleanData(formWaist.value, 2);
-
-
-
-        //var bla = formWeight.value;
-
-
-
-        //SET ALL VALUES TO ""
+        var height = cleanData(this.user.height, 2);
 
         if (formChekbox.checked == true) { //unlock fields
 
@@ -341,18 +344,18 @@ function appData(dt, tar, ur) {
             formBodyMass.style.backgroundColor = bgColor;
             formBMAKcal.style.backgroundColor = bgColor;
 
-
             //check if all data for calculations
-            if ((gender == "Male" || gender == "Female") &&
-                (birth.length == 10) &&
-                weight != "" && haunch != "" && waist != ""
+            if ((this.user.gender == "Male" || this.user.gender == "Female") &&
+                (this.user.birth.length == 10) &&
+                weight != "" && waist != "" &&
+                haunch != "" && height != ""
             ) {
                 //do calcs
                 //console.log("true");
                 //update fields
 
                 var fatPr = calcFatsPercent(
-                    gender,
+                    this.user.gender,
                     height,
                     haunch,
                     waist);
@@ -365,8 +368,8 @@ function appData(dt, tar, ur) {
                 formBodyMass.value = bodyMassKgs;
 
                 var bmaKcal = calcBMAKcal(
-                    gender,
-                    birth,
+                    this.user.gender,
+                    this.user.birth,
                     formBMRFormula.value,
                     formActivity.value,
                     weight,
@@ -403,36 +406,50 @@ function appData(dt, tar, ur) {
 
     //generate table with data
     this.displayTableData = function () {
-        var table = "";
-        for (i = 0; i < this.data.length; i++) {
-            table += "<tr class=\"item\">";
-            table += "<td>" + (this.data.length - i) + "</td>";
-            //for (var prop in data[i]) {
-            //    table += "<td>" + data[i][prop] + "</td>";
-            //}
-            table += "<td nowrap>" + this.data[i]["measurementDate"] + "</td>";
-            table += "<td nowrap>" + this.data[i]["weightKgs"] + "</td>";
-            table += "<td nowrap>" + this.data[i]["waistCm"] + "</td>";
-            table += "<td nowrap>" + this.data[i]["haunchCm"] + "</td>";
-            table += "<td nowrap>" + this.data[i]["armsCm"] + "</td>";
-            table += "<td nowrap>" + this.data[i]["chestCm"] + "</td>";
-            table += "<td nowrap>" + this.data[i]["hipsCm"] + "</td>";
-            table += "<td nowrap>" + this.data[i]["fatsPercent"] + "</td>";
-            table += "<td nowrap>" + this.data[i]["fatKgs"] + "</td>";
-            table += "<td nowrap>" + this.data[i]["bodyMassKgs"] + "</td>";
-            table += "<td wrap>" + this.data[i]["bmrFormula"] + "</td>";
-            table += "<td nowrap>" + this.data[i]["physicalActivity"] + "</td>";
-            table += "<td nowrap>" + this.data[i]["bmaKcal"] + "</td>";
-            table += "<td wrap>" + this.data[i]["comment"] + "</td>";
 
-            table += "<td>";
-            table += "<button value=\"" + i + "\" class=\"btn btn-danger btn-xs\">";
-            table += "<span class=\"glyphicon glyphicon-remove\">";
-            table += "</span></button>";
-            table += "</td>";
-            table += "</tr>";
+
+        if (this.data) {
+
+            var table = "";
+
+            for (i = 0; i < this.data.length; i++) {
+                table += "<tr class=\"item\">";
+                table += "<td>" + (this.data.length - i) + "</td>";
+                //for (var prop in data[i]) {
+                //    table += "<td>" + data[i][prop] + "</td>";
+                //}
+                table += "<td nowrap>" + this.data[i]["measurementDate"] + "</td>";
+                table += "<td nowrap>" + this.data[i]["weightKgs"] + "</td>";
+                table += "<td nowrap>" + this.data[i]["waistCm"] + "</td>";
+                table += "<td nowrap>" + this.data[i]["haunchCm"] + "</td>";
+                table += "<td nowrap>" + this.data[i]["armsCm"] + "</td>";
+                table += "<td nowrap>" + this.data[i]["chestCm"] + "</td>";
+                table += "<td nowrap>" + this.data[i]["hipsCm"] + "</td>";
+                table += "<td nowrap>" + this.data[i]["fatsPercent"] + "</td>";
+                table += "<td nowrap>" + this.data[i]["fatKgs"] + "</td>";
+                table += "<td nowrap>" + this.data[i]["bodyMassKgs"] + "</td>";
+                table += "<td wrap>" + this.data[i]["bmrFormula"] + "</td>";
+                table += "<td nowrap>" + this.data[i]["physicalActivity"] + "</td>";
+                table += "<td nowrap>" + this.data[i]["bmaKcal"] + "</td>";
+                table += "<td wrap>" + this.data[i]["comment"] + "</td>";
+
+                table += "<td>";
+                table += "<button value=\"" + i + "\" class=\"btn btn-danger btn-xs\">";
+                table += "<span class=\"glyphicon glyphicon-remove\">";
+                table += "</span></button>";
+                table += "</td>";
+                table += "</tr>";
+            }
+
+            dataTable.innerHTML = table;
+
+        } else {
+
+            table = "<tr><td colspan=\"16\"><h3>";
+            table += "<a href=\"#createRecord\">Hey, create your first record by pressing <i style=\"color:#fff\" class=\"glyphicon glyphicon-plus\"></i> in the upper right!</a>";
+            table += "</h3></td></tr>";
+            dataTable.innerHTML = table;
         }
-        dataTable.innerHTML = table;
     }
 
     //delete record from data array, return array
@@ -446,49 +463,74 @@ function appData(dt, tar, ur) {
     //display user target
     this.displayTarget = function () {
 
-        var progress = this.data[0];
-
-        var tableRows = [];
-        var tableCells = [];
-
-        //construct multidimensioanl array
-        for (var prop in this.target) {
-            if (this.target[prop] != '') {
-                //console.log(this.headerFields[prop] + " - " + progress[prop] + " - " + this.target[prop]);
-                tableCells = [this.headerFields[prop], progress[prop], this.target[prop]];
-                tableRows.push(tableCells);
-            }
-            //  arr = [
-            //          ['field name', 'target', 'last record'],
-            //          ['field name', 'target', 'last record'],
-            //          ['field name', 'target', 'last record'],
-            //        ]
-        }
-
-        //loop to display the data
         var table = "";
-        for (var i = 0; i < tableRows.length; i++) {
-            //console.log(tableRows[i]);
-            table += "<tr>";
-            table += "<td nowrap class=\"text-right\"><b>" + tableRows[i][0] + "</b></td>";
-            table += "<td nowrap class=\"text-left\">" + tableRows[i][1] + "</td>";
-            table += "<td nowrap class=\"text-left\">" + tableRows[i][2] + "</td>";
 
-            switch (compareList.value) {
-                case "b10d":
-                    table += "<td nowrap class=\"text-left\">" + "10" + "</td>";
-                    break;
-                case "b30d":
-                    table += "<td nowrap class=\"text-left\">" + "30" + "</td>";
-                    break;
-                case "f1r":
-                    table += "<td nowrap class=\"text-left\">" + "f1r" + "</td>";
-                    break;
-                default:
-                    table += "<td nowrap class=\"text-left\">" + "NaN" + "</td>";
+        if (this.data && this.data[0]) {
+
+            var progress = this.data[0];
+            var tableRows = [];
+            var tableCells = [];
+
+            //construct multidimensioanl array
+            for (var prop in this.target) {
+                if (this.target[prop] != '') {
+                    //console.log(this.headerFields[prop] + " - " + progress[prop] + " - " + this.target[prop]);
+                    tableCells = [this.headerFields[prop], progress[prop], this.target[prop]];
+                    tableRows.push(tableCells);
+                }
+                //  arr = [
+                //          ['field name', 'target', 'last record'],
+                //          ['field name', 'target', 'last record'],
+                //          ['field name', 'target', 'last record'],
+                //        ]
             }
-            table += "</tr>";
+
+            //loop to display the data
+            if (tableRows.length > 0) {
+                for (var i = 0; i < tableRows.length; i++) {
+                    //console.log(tableRows[i]);
+                    table += "<tr>";
+                    table += "<td nowrap class=\"text-right\"><b>" + tableRows[i][0] + "</b></td>";
+                    table += "<td nowrap class=\"text-left\">" + tableRows[i][1] + "</td>";
+                    table += "<td nowrap class=\"text-left\">" + tableRows[i][2] + "</td>";
+
+                    // TO DO COMPARE FROM DROP LIST FOR BEFORE 10, 30 DAYS RESULTS
+                    switch (compareList.value) {
+                        case "b10d":
+                            table += "<td nowrap class=\"text-left\">" + "10" + "</td>";
+                            break;
+                        case "b30d":
+                            table += "<td nowrap class=\"text-left\">" + "30" + "</td>";
+                            break;
+                        case "f1r":
+                            table += "<td nowrap class=\"text-left\">" + "f1r" + "</td>";
+                            break;
+                        default:
+                            table += "<td nowrap class=\"text-left\">" + "NaN" + "</td>";
+                    }
+                    table += "</tr>";
+                    //check if no target
+                }
+                
+            } else {
+                //no target
+                //console.log(tableRows);
+                table += "<tr><td colspan=\"4\"><ul>";
+                table += "<p>No records and/or target found</p>";
+                table += "<p><a href=\"#createRecord\" style=\"color:#fff\"><i class=\"glyphicon glyphicon-plus\"></i> Add Data</a></p>";
+                table += "<p><a href=\"#createTarget\" style=\"color:#fff\"><i class=\"glyphicon glyphicon-edit\"></i> Write a Target</a></p>";
+                table += "</ul></td></tr>";
+            }
+
+        } else {
+            //no data
+            table += "<tr><td colspan=\"4\"><ul>";
+            table += "<p>No records and/or target found</p>";
+            table += "<p><a href=\"#createRecord\" style=\"color:#fff\"><i class=\"glyphicon glyphicon-plus\"></i> Add Data</a></p>";
+            table += "<p><a href=\"#createTarget\" style=\"color:#fff\"><i class=\"glyphicon glyphicon-edit\"></i> Write a Target</a></p>";
+            table += "</ul></td></tr>";
         }
+
         progressTable.innerHTML = table;
     }
 
@@ -523,84 +565,6 @@ function appData(dt, tar, ur) {
 
         //chart global config
         Chart.defaults.global.defaultFontColor = '#fff';
-
-        //datasets
-        var xFatsPercentData = constructArray(this.data, "fatsPercent");
-        var xFatsPercent = {
-            type: "line",
-            yAxisID: "y-axis-2",
-            label: "FatsPercent",
-            data: xFatsPercentData,
-            borderColor: window.chartColors.red,
-            backgroundColor: window.chartColors.red,
-            //borderWidth: 2,
-            //pointRadius: 1,
-            //pointHoverRadius: 5,
-            fill: false
-        };
-        var xWeightKgsData = constructArray(this.data, "weightKgs");
-        var xWeightKgs = {
-            type: "bar",
-            yAxisID: "y-axis-1",
-            label: "kgs",
-            data: xWeightKgsData,
-            //borderSkipped: "top",
-            //borderWidth: 10,
-            borderColor: window.chartColors.indigo,
-            backgroundColor: window.chartColors.indigo
-        };
-
-        var chartDataLabels = constructChartLabels(this.data, 'measurementDate');
-        var chartData = {
-            labels: chartDataLabels,
-            datasets: [xFatsPercent, xWeightKgs]
-        };
-
-        var chartOptions = {
-            responsive: true,
-            tooltips: {
-                enabled: true,
-                mode: "index",
-                intersect: true,
-                position: "nearest",
-            },
-            scales: {
-                xAxes: [
-                    {
-                        barPercentage: 1,
-                        categoryPercentage: 1,
-                        gridLines: {
-                            display: false
-                        }
-                    }
-                ],
-
-                yAxes: [
-                    //one obj for each y axes
-                    {
-                        id: "y-axis-1",
-                        type: "linear", //"linear", "logarithmic", "time",...
-                        position: "left",
-                        gridLines: {
-                            display: false
-                        },
-                    },
-                    {
-                        id: "y-axis-2",
-                        type: "linear",
-                        position: "right",
-                        gridLines: {
-                            display: false
-                        },
-                        ticks: {
-                            //beginAtZero: true
-                            min: 3
-                        }
-                    }
-                ] //end yAxes
-            } //end scales
-        };
-
         var ctx = document.getElementById("mainChart").getContext("2d");
 
         if (this.mainChart != null || this.mainChart != undefined) {
@@ -608,12 +572,99 @@ function appData(dt, tar, ur) {
             // console.log("chart destroyed");
         }
 
-        this.mainChart = new Chart(ctx, {
-            type: 'bar',
-            data: chartData,
-            options: chartOptions
-        }); //ctx end  
+        if (this.data) {
+            //datasets
+            var xFatsPercentData = constructArray(this.data, "fatsPercent");
+            var xFatsPercent = {
+                type: "line",
+                yAxisID: "y-axis-2",
+                label: "FatsPercent",
+                data: xFatsPercentData,
+                borderColor: window.chartColors.red,
+                backgroundColor: window.chartColors.red,
+                //borderWidth: 2,
+                //pointRadius: 1,
+                //pointHoverRadius: 5,
+                fill: false
+            };
+            var xWeightKgsData = constructArray(this.data, "weightKgs");
+            var xWeightKgs = {
+                type: "bar",
+                yAxisID: "y-axis-1",
+                label: "kgs",
+                data: xWeightKgsData,
+                //borderSkipped: "top",
+                //borderWidth: 10,
+                borderColor: window.chartColors.indigo,
+                backgroundColor: window.chartColors.indigo
+            };
 
+            var chartDataLabels = constructChartLabels(this.data, 'measurementDate');
+            var chartData = {
+                labels: chartDataLabels,
+                datasets: [xFatsPercent, xWeightKgs]
+            };
+
+            var chartOptions = {
+                responsive: true,
+                tooltips: {
+                    enabled: true,
+                    mode: "index",
+                    intersect: true,
+                    position: "nearest",
+                },
+                scales: {
+                    xAxes: [
+                        {
+                            barPercentage: 1,
+                            categoryPercentage: 1,
+                            gridLines: {
+                                display: false
+                            }
+                    }
+                ],
+
+                    yAxes: [
+                    //one obj for each y axes
+                        {
+                            id: "y-axis-1",
+                            type: "linear", //"linear", "logarithmic", "time",...
+                            position: "left",
+                            gridLines: {
+                                display: false
+                            },
+                    },
+                        {
+                            id: "y-axis-2",
+                            type: "linear",
+                            position: "right",
+                            gridLines: {
+                                display: false
+                            },
+                            ticks: {
+                                //beginAtZero: true
+                                min: 3
+                            }
+                    }
+                ] //end yAxes
+                } //end scales
+            };
+
+            //draw chart
+            this.mainChart = new Chart(ctx, {
+                type: 'bar',
+                data: chartData,
+                options: chartOptions
+            });
+
+        } else {
+
+            ctx.font = "16px Arial";
+            ctx.fillStyle = "white";
+            ctx.textAlign = "left";
+            ctx.fillText("There is no data to display.", 10, 20);
+
+        }
     }
 
 
