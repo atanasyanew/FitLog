@@ -595,12 +595,12 @@
     window.onload = function() {
         // load app like demo
         // FitLogAppDemo();
-        removeHashNav();
-        // hashNav(); //need to init
+        //removeHashNav();
+         hashNav(); //need to init
         initApp();
     };
 
-    // window.onhashchange = hashNav;
+     window.onhashchange = hashNav;
 
 </script>
 
@@ -608,8 +608,6 @@
 
 <script type="text/javascript">
     initApp = function() {
-
-
 
         firebase.auth().onAuthStateChanged(function(user) {
 
@@ -660,10 +658,6 @@
                     });
 
                     //init clear obj to prevent bugs
-                    //var fireStorage = new storageObj();
-                    //var initData = fireStorage.data;
-                    //var initTarget = fireStorage.target;
-                    //var initUser = fireStorage.profile;
 
                     var initData, initTarget, initUser;
 
