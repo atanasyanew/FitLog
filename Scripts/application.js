@@ -19,7 +19,8 @@ function FitLogAppDemo() {
     //init storage
     if (localStorage.fitLogApp == undefined) {
         //init empty storage   
-        localStorage.setItem('fitLogApp', JSON.stringify(new storageObj()));
+        //localStorage.setItem('fitLogApp', JSON.stringify(new storageObj()));
+        localStorage.setItem('fitLogApp', JSON.stringify(fakeObj));
         document.location.reload();
     } else {
         storage = JSON.parse(localStorage.fitLogApp); //get localstorage data
@@ -155,7 +156,7 @@ function storageObj() {
 
 /* * MAIN FUNCTIONS */
 function appData(dt, tar, ur) {
-
+"use strict";
     /* 
     object	{
             profile: {},
@@ -296,13 +297,13 @@ function appData(dt, tar, ur) {
             if (obj) { //if there is records
 
                 formWeight.value = obj.weightKgs;
-                formWaist.value = obj.waistCm;
+                formWaist.value = obj.waistCm - 0.1;
                 formHaunch.value = obj.haunchCm - 0.5;
                 formArms.value = obj.armsCm;
                 formChest.value = obj.chestCm;
                 formHips.value = obj.hipsCm;
-
                 //others are calculate dinamicaly
+                //console.log("triggered: fillNewDataForm()");
             }
 
         }
@@ -316,13 +317,29 @@ function appData(dt, tar, ur) {
         formBodyMass.value = "";
         formBMAKcal.value = "";
         formValidationMsg.innerHTML = "";
+        
+        var feedbackMsg = "<div class=\"form-group text-danger\">";
+                feedbackMsg += "<label for=\"example-text-input\" class=\"control-label col-xs-4\"></label>";
+                feedbackMsg += "<div class=\"col-xs-8\">";
+                feedbackMsg += "<p><b>Please fix some of the following issues to enable calculations.</b></p>"
+                feedbackMsg += "<ul class=\"list-group\">";
+                feedbackMsg += "<li><b>Gender</b></li>";
+                feedbackMsg += "<li><b>Data of Birth</b></li>";
+                feedbackMsg += "<li><b>Weight, kg</b></li>";
+                feedbackMsg += "<li><b>Waist, cm</b></li>";
+                feedbackMsg += "<li><b>Haunch, cm</b></li>";
+                feedbackMsg += "</ul></div></div>";
 
+        
+        if (this.user) {
+             
         var weight = cleanData(formWeight.value, 2);
         var haunch = cleanData(formHaunch.value, 2);
         var waist = cleanData(formWaist.value, 2);
         var height = cleanData(this.user.height, 2);
-
-        if (formChekbox.checked == true) { //unlock fields
+        
+        //unclock fields for custom data
+        if (formChekbox.checked == true) { 
 
             formFatsPercent.readOnly = false;
             formFatKgs.readOnly = false;
@@ -333,9 +350,9 @@ function appData(dt, tar, ur) {
             formFatKgs.style.backgroundColor = bgColor;
             formBodyMass.style.backgroundColor = bgColor;
             formBMAKcal.style.backgroundColor = bgColor;
-
+            
+        //automatic calcs
         } else {
-
 
             formFatsPercent.readOnly = true;
             formFatKgs.readOnly = true;
@@ -348,15 +365,12 @@ function appData(dt, tar, ur) {
             formBMAKcal.style.backgroundColor = bgColor;
 
             //check if all data for calculations
-            if ((this.user.gender == "Male" || this.user.gender == "Female") &&
+            if ( (this.user.gender == "Male" || this.user.gender == "Female") &&
                 (this.user.birth.length == 10) &&
                 weight != "" && waist != "" &&
                 haunch != "" && height != ""
             ) {
                 //do calcs
-                //console.log("true");
-                //update fields
-
                 var fatPr = calcFatsPercent(
                     this.user.gender,
                     height,
@@ -378,27 +392,16 @@ function appData(dt, tar, ur) {
                     weight,
                     height,
                     bodyMassKgs);
-                formBMAKcal.value = bmaKcal;
+                    formBMAKcal.value = bmaKcal;
 
             } else {
                 //give user feedback
-                //console.log("false");
-                var feedbackMsg = "<div class=\"form-group text-danger\">";
-                feedbackMsg += "<label for=\"example-text-input\" class=\"control-label col-xs-4\"></label>";
-                feedbackMsg += "<div class=\"col-xs-8\">";
-                feedbackMsg += "<p><b>Please fix some of the following issues to enable calculations.</b></p>"
-                feedbackMsg += "<ul class=\"list-group\">";
-                feedbackMsg += "<li><b>Gender</b></li>";
-                feedbackMsg += "<li><b>Data of Birth</b></li>";
-                feedbackMsg += "<li><b>Weight, kg</b></li>";
-                feedbackMsg += "<li><b>Waist, cm</b></li>";
-                feedbackMsg += "<li><b>Haunch, cm</b></li>";
-                feedbackMsg += "</ul></div></div>";
                 formValidationMsg.innerHTML = feedbackMsg;
             }
-
-
-        }
+        } //emd automatic calcs
+         } else {
+             formValidationMsg.innerHTML = feedbackMsg;
+         }
 
         //debug
         //console.log("formFatsPercent " + formFatsPercent.value);
@@ -415,7 +418,7 @@ function appData(dt, tar, ur) {
 
             var table = "";
 
-            for (i = 0; i < this.data.length; i++) {
+            for (var i = 0; i < this.data.length; i++) {
                 table += "<tr class=\"item\">";
                 table += "<td>" + (this.data.length - i) + "</td>";
                 //for (var prop in data[i]) {
@@ -577,12 +580,11 @@ function appData(dt, tar, ur) {
 
         if (this.data) {
             //datasets
-            var xFatsPercentData = constructArray(this.data, "fatsPercent");
             var xFatsPercent = {
                 type: "line",
                 yAxisID: "y-axis-2",
-                label: "FatsPercent",
-                data: xFatsPercentData,
+                label: "Fats (%)",
+                data: constructArray(this.data, "fatsPercent"),
                 borderColor: window.chartColors.red,
                 backgroundColor: window.chartColors.red,
                 //borderWidth: 2,
@@ -590,16 +592,13 @@ function appData(dt, tar, ur) {
                 //pointHoverRadius: 5,
                 fill: false
             };
-            var xWeightKgsData = constructArray(this.data, "weightKgs");
+
             var xWeightKgs = {
                 type: "bar",
                 yAxisID: "y-axis-1",
-                label: "kgs",
-                data: xWeightKgsData,
-                //borderSkipped: "top",
-                //borderWidth: 10,
-                borderColor: window.chartColors.indigo,
-                backgroundColor: window.chartColors.indigo
+                label: "Weight (kg)",
+                data: constructArray(this.data, "weightKgs"),
+                backgroundColor: window.chartColors.purple
             };
 
             var chartDataLabels = constructChartLabels(this.data, 'measurementDate');
@@ -619,7 +618,7 @@ function appData(dt, tar, ur) {
                 scales: {
                     xAxes: [
                         {
-                            barPercentage: 1,
+                            barPercentage: 0.9,
                             categoryPercentage: 1,
                             gridLines: {
                                 display: false
@@ -670,26 +669,22 @@ function appData(dt, tar, ur) {
         }
     }
 
-    //draw detailed chart
-    this.drawDetailedChart = function () {
+    //draw cm chart
+    this.drawChartOne = function () {
 
         //chart global config
         //Chart.defaults.global.defaultFontColor = '#fff';
-        var ctxChart = document.getElementById("detailedChart").getContext("2d");
+        var ctxChart = document.getElementById("ChartOne").getContext("2d");
 
-        if (this.drawDetailedChart != null || this.drawDetailedChart != undefined) {
-            //          this.drawDetailedChart.destroy();
-            //  console.log("chart destroyed");
-        };
+        //                if (this.drawChartOne() != null) {
+        //                    this.drawChartOne.destroy();
+        //                    //  console.log("chart destroyed");
+        //                };
 
         if (this.data) {
-
-
-
-            //line, waistCm, Y2
             var dataSet1 = {
                 type: "line",
-                yAxisID: "y-axis-2",
+                yAxisID: "y-axis-1",
                 label: "Waist (cm)",
                 data: constructArray(this.data, "waistCm"),
                 borderWidth: 3,
@@ -697,10 +692,10 @@ function appData(dt, tar, ur) {
                 pointHoverRadius: 5,
                 fill: false
             };
-            //line, haunchCm, Y2
+
             var dataSet2 = {
                 type: "line",
-                yAxisID: "y-axis-2",
+                yAxisID: "y-axis-1",
                 label: "Haunch (cm)",
                 data: constructArray(this.data, "haunchCm"),
                 borderWidth: 3,
@@ -708,10 +703,9 @@ function appData(dt, tar, ur) {
                 pointHoverRadius: 5,
                 fill: false
             };
-            //line, armsCm, Y2
             var dataSet3 = {
                 type: "line",
-                yAxisID: "y-axis-2",
+                yAxisID: "y-axis-1",
                 label: "Arms (cm)",
                 data: constructArray(this.data, "armsCm"),
                 borderWidth: 3,
@@ -719,10 +713,9 @@ function appData(dt, tar, ur) {
                 pointHoverRadius: 5,
                 fill: false
             };
-            //line, chestCm, Y2
             var dataSet4 = {
                 type: "line",
-                yAxisID: "y-axis-2",
+                yAxisID: "y-axis-1",
                 label: "Chest (cm)",
                 data: constructArray(this.data, "chestCm"),
                 borderWidth: 3,
@@ -730,10 +723,9 @@ function appData(dt, tar, ur) {
                 pointHoverRadius: 5,
                 fill: false
             };
-            //line, hipsCm, Y2
             var dataSet5 = {
                 type: "line",
-                yAxisID: "y-axis-2",
+                yAxisID: "y-axis-1",
                 label: "Hips (cm)",
                 data: constructArray(this.data, "hipsCm"),
                 borderWidth: 3,
@@ -741,173 +733,6 @@ function appData(dt, tar, ur) {
                 pointHoverRadius: 5,
                 fill: false
             };
-
-            /*
-            
-                    //bar, weightKgs,
-            //            var dataSet1 = {
-            //                type: "bar",
-            //                yAxisID: "y-axis-3",
-            //                label: "Weight (kg)",
-            //                data: constructArray(this.data, "weightKgs"),
-            //                //borderSkipped: "top",
-            //                //borderWidth: 10,
-            //                fill: false
-            //            };
-            
-            
-            
-            
-            //line, fatsPercent, Y4
-            var dataSet7 = {
-                type: "line",
-                yAxisID: "y-axis-4",
-                label: "Fats (%)",
-                data: constructArray(this.data, "fatsPercent"),
-                //borderWidth: 2,
-                //pointRadius: 1,
-                //pointHoverRadius: 5,
-                fill: false
-            };
-            //line, fatKgs, Y1
-            var dataSet8 = {
-                type: "bar",
-                yAxisID: "y-axis-1",
-                label: "Fats (kg)",
-                data: constructArray(this.data, "fatKgs"),
-                //borderWidth: 2,
-                //pointRadius: 1,
-                //pointHoverRadius: 5,
-                fill: false
-            };
-            //bar, bodyMassKgs, Y1
-            var dataSet9 = {
-                type: "bar",
-                yAxisID: "y-axis-1",
-                label: "Body Mass (kg)",
-                data: constructArray(this.data, "bodyMassKgs"),
-                //borderWidth: 2,
-                //pointRadius: 1,
-                //pointHoverRadius: 5,
-                fill: false
-            };
-            //line, physicalActivity, y5
-            var dataSet10 = {
-                type: "line",
-                yAxisID: "y-axis-5",
-                label: "Activity",
-                data: constructArray(this.data, "physicalActivity"),
-                //borderWidth: 2,
-                //pointRadius: 1,
-                //pointHoverRadius: 5,
-                fill: false
-            };
-            //line, bmaKcal, y6
-            var dataSet11 = {
-                type: "line",
-                yAxisID: "y-axis-6",
-                label: "kcal",
-                data: constructArray(this.data, "bmaKcal"),
-                //borderWidth: 2,
-                //pointRadius: 1,
-                //pointHoverRadius: 5,
-                fill: false
-            };
-
-            // betther way to manage chart colors
-//           / dataSet8.backgroundColor = window.chartColors.GrenadineL;
-//           / dataSet9.backgroundColor = window.chartColors.Grenadine;
-            //y2
-            
-            yAxes: [
-
-                        //fatKgs, bodyMassKgs
-                        {
-                            stacked: true,
-                            id: "y-axis-1",
-                            type: "linear", //"linear", "logarithmic", "time",...
-                            position: "left",
-                            display: true,
-                            gridLines: {
-                                display: false
-                            },
-                    },
-                        // haunchCm, armsCm
-                        {
-                            id: "y-axis-2",
-                            type: "linear",
-                            position: "left",
-                            display: true,
-                            gridLines: {
-                                display: false
-                            },
-                            ticks: {
-                                //beginAtZero: true
-                                // min: 3
-                            }
-                    },
-                        // armsCm, chestCm, hipsCm
-                        {
-                            id: "y-axis-3",
-                            type: "linear",
-                            position: "left",
-                            display: true,
-                            gridLines: {
-                                display: false
-                            },
-                            ticks: {
-                                //  beginAtZero: true
-                                //min: 3
-                            }
-                    },
-                        //fatsPercent
-                        {
-                            id: "y-axis-4",
-                            type: "linear",
-                            position: "right",
-                            display: true,
-                            gridLines: {
-                                display: false
-                            },
-                            ticks: {
-                                min: 3
-                            }
-                    },
-                        //physicalActivity
-                        {
-                            id: "y-axis-5",
-                            type: "linear",
-                            position: "right",
-                            display: true,
-                            gridLines: {
-                                display: false
-                            },
-
-                    },
-                        //bmaKcal
-                        {
-                            id: "y-axis-6",
-                            type: "linear",
-                            position: "left",
-                            display: true,
-                            gridLines: {
-                                display: false
-                            }
-                    }
-
-                ] //end yAxes
-                
-                
-                
-            */
-            //    red: 'rgb(255, 99, 132)',
-            //    orange: 'rgb(255, 159, 64)',
-            //    yellow: 'rgb(255, 205, 86)',
-            //    green: 'rgb(75, 192, 192)',
-            //    blue: 'rgb(54, 162, 235)',
-            //    purple: 'rgb(153, 102, 255)',
-            //    indigo: 'rgb(63, 81, 181)'
-
 
             dataSet1.backgroundColor = window.chartColors.green; //waist
             dataSet2.backgroundColor = window.chartColors.purple; //haunch
@@ -921,7 +746,6 @@ function appData(dt, tar, ur) {
             dataSet4.borderColor = window.chartColors.blue;
             dataSet5.borderColor = window.chartColors.indigo;
 
-
             var chartData = {
                 labels: constructChartLabels(this.data, 'measurementDate'),
                 //datasets array order is important too
@@ -930,6 +754,111 @@ function appData(dt, tar, ur) {
 
             var chartOptions = {
                 responsive: true,
+                tooltips: {
+                    enabled: true,
+                    mode: "index",
+                    intersect: true,
+                    position: "nearest",
+                },
+                scales: {
+                    xAxes: [
+                        {
+                            //                            barPercentage: 1,
+                            //                            categoryPercentage: 1,
+                            gridLines: {
+                                display: false
+                            }
+                    }
+                ],
+                    //one obj for each y axes
+                    yAxes: [
+
+                        {
+                            id: "y-axis-1",
+                            type: "linear",
+                            position: "left",
+                            display: true,
+                            gridLines: {
+                                display: false
+                            },
+                            ticks: {
+                                //beginAtZero: true
+                                // min: 3
+                            }
+                    }
+                ] //end yAxes
+                } //end scales
+            };
+
+            //draw chart
+            this.drawChartOne = new Chart(ctxChart, {
+                type: 'bar',
+                data: chartData,
+                options: chartOptions
+            });
+
+        } else {
+
+            ctxChart.font = "16px Arial";
+            ctxChart.fillStyle = "white";
+            ctxChart.textAlign = "left";
+            ctxChart.fillText("There is no data to display.", 10, 20);
+
+        };
+    }
+
+    //draw detailed chart
+    this.drawChartTree = function () {
+
+        //chart global config
+        //Chart.defaults.global.defaultFontColor = '#fff';
+        var ctxChart = document.getElementById("ChartTree").getContext("2d");
+
+        //        if (this.drawDetailedChart != null || this.drawDetailedChart != undefined) {
+        //            this.drawChartOne.destroy();
+        //            //  console.log("chart destroyed");
+        //        };
+
+        if (this.data) {
+
+            var dataSet1 = {
+                type: "line",
+                yAxisID: "y-axis-1",
+                label: "Fats (%)",
+                data: constructArray(this.data, "fatsPercent"),
+                //                borderWidth: 3,
+                //                pointRadius: 2,
+                //                pointHoverRadius: 5,
+                fill: false
+            };
+
+            var dataSet2 = {
+                type: "line",
+                yAxisID: "y-axis-2",
+                label: "Physical activity",
+                data: constructArray(this.data, "physicalActivity"),
+                //                borderWidth: 3,
+                //                pointRadius: 2,
+                //                pointHoverRadius: 5,
+                fill: false
+            };
+
+            dataSet1.backgroundColor = window.chartColors.red;
+            dataSet2.backgroundColor = window.chartColors.green;
+
+            dataSet1.borderColor = window.chartColors.red;
+            dataSet2.borderColor = window.chartColors.green;
+
+
+            var chartData = {
+                labels: constructChartLabels(this.data, 'measurementDate'),
+                //datasets array order is important too
+                datasets: [dataSet1, dataSet2]
+            };
+
+            var chartOptions = {
+                responsive: true,
+                // maintainAspectRatio: false,
                 tooltips: {
                     enabled: true,
                     mode: "index",
@@ -950,7 +879,7 @@ function appData(dt, tar, ur) {
                     yAxes: [
 
                         {
-                            id: "y-axis-2",
+                            id: "y-axis-1",
                             type: "linear",
                             position: "left",
                             display: true,
@@ -958,8 +887,22 @@ function appData(dt, tar, ur) {
                                 display: false
                             },
                             ticks: {
-                                //beginAtZero: true
-                                // min: 3
+                                // beginAtZero: true
+                                min: 3
+                            }
+                    },
+
+                        {
+                            id: "y-axis-2",
+                            type: "linear",
+                            position: "right",
+                            display: true,
+                            gridLines: {
+                                display: false
+                            },
+                            ticks: {
+                                // beginAtZero: true
+                                min: 1
                             }
                     }
                 ] //end yAxes
@@ -967,7 +910,7 @@ function appData(dt, tar, ur) {
             };
 
             //draw chart
-            this.drawDetailedChart = new Chart(ctxChart, {
+            this.drawChartTree = new Chart(ctxChart, {
                 type: 'bar',
                 data: chartData,
                 options: chartOptions
@@ -983,6 +926,70 @@ function appData(dt, tar, ur) {
         };
     }
 
+    //pie chart
+    this.drawChartTwo = function () {
+
+        //chart global config
+        //Chart.defaults.global.defaultFontColor = '#fff';
+        var ctxChart = document.getElementById("ChartTwo").getContext("2d");
+
+        if (this.drawChartTwo != null || this.drawChartTwo != undefined) {
+            // this.drawChartTwo().destroy();
+            //console.log(this.drawChartTwo);
+        };
+
+
+
+        if (this.data && this.data[0]) {
+
+            var fatKgs = this.data[0].fatKgs;
+            var bodyMassKgs = this.data[0].bodyMassKgs;
+
+            //bodyMassKgs
+
+            var chartData = {
+                labels: ["Fats (kg)", "Body Mass (kg)"],
+                datasets: [
+                    {
+                        data: [fatKgs, bodyMassKgs],
+                        backgroundColor: [
+                window.chartColors.yellow,
+                 window.chartColors.red
+            ]
+
+        }]
+            };
+
+            var chartOptions = {
+                responsive: true,
+                tooltips: {
+                    enabled: true,
+                    mode: "index",
+                    intersect: true,
+                    position: "nearest",
+                },
+                animation: {
+                    animateRotate: true,
+                    animateScale: true
+                },
+            };
+
+            //draw chart
+            this.drawChartTwo = new Chart(ctxChart, {
+                type: 'pie',
+                data: chartData,
+                options: chartOptions
+            });
+
+        } else {
+
+            ctxChart.font = "16px Arial";
+            ctxChart.fillStyle = "white";
+            ctxChart.textAlign = "left";
+            ctxChart.fillText("There is no data to display.", 10, 20);
+
+        };
+    }
 
 }
 
@@ -1003,6 +1010,9 @@ function appUser(userObj) {
 
     //dom elements, display user
     this.displayUser = function () {
+
+        document.getElementById("userNavBar").innerHTML = this.user.name;
+
         document.getElementById("userName").innerHTML = this.user.name;
         document.getElementById("userBirth").innerHTML = this.user.birth;
         document.getElementById("userGender").innerHTML = this.user.gender;
@@ -1292,6 +1302,7 @@ window.chartColors = {
     PaleDogwood: "#EDCDC2",
     PinkYarrow: "#5A7247",
     Hazelnut: "#CFB095",
+    DustyCedar: "#AD5D5D",
     //from chart js
     red: 'rgb(255, 99, 132)',
     orange: 'rgb(255, 159, 64)',

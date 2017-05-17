@@ -22,7 +22,7 @@
     <script>
         firebase.auth().onAuthStateChanged(function(user) {
             if (!user) {
-                window.location.href = "signIn.html";
+                // window.location.href = "signIn.html";
             }
         });
 
@@ -65,8 +65,8 @@
                 </ul>
 
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="" onclick="injectFakeData(fakeObj())">LS +</a></li>
-                    <li><a href="#profile"><i class="glyphicon glyphicon-user"></i> Me</a></li>
+                    <!--                    <li><a href="" onclick="injectFakeData(fakeObj())">LS +</a></li>-->
+                    <li><a href="#profile"><i class="glyphicon glyphicon-user"></i> <span id="userNavBar"> Me<span></a></li>
                     <li><a href="#" id="signOut"><i class="glyphicon glyphicon-log-out"></i> Log Out</a></li>
                 </ul>
 
@@ -154,16 +154,31 @@
             </div>
         </div>
 
-        <!--     CHART MANNY Y AXIS     -->
+        <!--     CHARTS     -->
         <div class="page" id="chart">
             <div class="row">
                 <div class="col-xs-12">
                     <div class="well transperant">
-                        <legend>Detailed Chart</legend>
-                        <div><canvas id="detailedChart"></canvas></div>
+                        <legend>Chart (cm)</legend>
+                        <div><canvas id="ChartOne"></canvas></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="well transperant">
+                        <legend>Weight Parse</legend>
+                        <div><canvas id="ChartTwo"></canvas></div>
                     </div>
                 </div>
 
+                <div class="col-md-8">
+                    <div class="well transperant">
+                        <legend>Fats % and Activity</legend>
+                        <div><canvas id="ChartTree"></canvas></div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -578,8 +593,7 @@
         <hr>
         <footer class="">
             <p class="">
-                &copy; 2017, Atanas Yanev Labs |
-                <a href="https://github.com/atanasyanew"><i class="fa fa-github" aria-hidden="true"></i> GitHub</a> |
+                &copy; 2017, Atanas Yanev |
                 <a href="http://lnked.in/ayanev"><i class="fa fa-linkedin-square" aria-hidden="true"></i> LinkedIn</a>
             </p>
         </footer>
@@ -588,9 +602,11 @@
 
     </div>
     <!-- /container -->
+    <!-- /container -->
 
 
 </body>
+<div><canvas id="ChartTree"></canvas></div>
 
 </html>
 
@@ -603,7 +619,7 @@
     window.onload = function() {
         // load app like demo
         // FitLogAppDemo();
-//        removeHashNav();
+        removeHashNav();
         hashNav(); //need to init
         initApp();
     };
@@ -619,151 +635,118 @@
 <script type="text/javascript">
     initApp = function() {
 
-        firebase.auth().onAuthStateChanged(function(user) {
+        //signOut
+        var signOut = document.getElementById('signOut');
+        signOut.addEventListener('click', () => {
+            firebase.auth().signOut()
+        });
 
-                //modules:
-                //if user
-                //if model
-                //if model is correct
+        //firebase auth 
+        firebase.auth().onAuthStateChanged(function(user) {
 
                 if (user) {
                     // User is signed in.
-                    var displayName = user.displayName;
                     // var email = user.email;
                     // var emailVerified = user.emailVerified;
-                    var photoURL = user.photoURL;
-                    var uid = user.uid;
+                    // var photoURL = user.photoURL;
                     // var providerData = user.providerData;
+                    var uid = user.uid;
+                    var displayName = user.displayName;
 
-                    // console.log(displayName);
-                    // console.log(email);
-                    // console.log(emailVerified);
-                    // console.log(photoURL);
-                    // console.log(uid);
-
-                    //signOut event
-                    var signOut = document.getElementById('signOut');
-                    signOut.addEventListener('click', function(event) {
-                        firebase.auth().signOut();
-                        window.location.href = "login.html";
-                    });
-
-                    //ref database
-                    const userDataBase = firebase.database().ref('dataBase').child(uid);
-
-                    //check for storage
-                    userDataBase.once('value', function(snapshot) {
-
-                        //console.log(snapshot.exists());
-                        if (snapshot.exists()) {
-                            console.log("existing uid");
-                        } else {
-                            //init new empty object
-                            var emptyObj = new storageObj();
-                            //set name from provider info
-                            emptyObj['profile'].name = displayName;
-                            userDataBase.set(emptyObj);
-                            console.log("no uid, created snapshot for this uid");
-                        }
-                    });
-
-                    //init clear obj to prevent bugs
+                    //USER DATABASE REF
+                    var userDataBase = firebase.database().ref('dataBase').child(uid);
+                    //INIT APP FUNCTIONS
                     var initData, initTarget, initUser;
-
                     var a = new appData(initData, initTarget, initUser);
                     var u = new appUser(initUser);
 
-                    //sync firestorage
-                    userDataBase.on('value', snap => {
+                    //INIT STORAGE
+                    userDataBase.once('value', function(snapshot) {
 
-                        //init storage
+                        if (snapshot.exists()) {
+                            //existing user
+                            //console.log("init existing user");
+                        } else {
+                            // new empty object
+                            var emptyObj = new storageObj();
+                            emptyObj['profile'].name = displayName;
+                            userDataBase.set(emptyObj);
+                            //console.log("user db created");
+                        }
+                    });
+
+                    //APP START
+                    userDataBase.on('value', function(snap) {
+
                         if (snap.exists()) {
 
-                            var fireStorage = snap.val(); //get localstorage data
-
-                            //start app class
+                            //get data
+                            var fireStorage = snap.val();
+                            //assign data
                             a.data = fireStorage.data;
                             a.target = fireStorage.target;
                             a.user = fireStorage.profile;
                             u.user = fireStorage.profile;
 
-
+                            //init app 
                             u.displayUser();
                             u.fillUserForm();
-                            //save new user data
-                            var saveUser = document.getElementById("saveUser");
-                            saveUser.addEventListener("click", function() {
-                                euser = u.editUser();
-                                userDataBase.child('profile').update(euser);
-                                window.location.hash = "profile";
-                            });
-
-                            //init app     
                             a.displayTableData();
                             a.displayTarget();
                             a.drawMainChart();
-                            a.drawDetailedChart();
+                            // a.drawChartOne();
+                            // a.drawChartTree();
+                            // a.drawChartTwo();
                             a.fillNewDataForm();
                             a.fillNewDataFormReadonly();
 
-                            //delete Record
+                            //DELETE RECORDS
                             var tablBtns = document.getElementById("DataTable").querySelectorAll("button");
-                            //addEventListener for all btns 
-                            for (var i = 0; i < tablBtns.length; i++) {
-                                tablBtns[i].addEventListener('click', function(event) {
-                                    event.preventDefault();
+                            tablBtns.forEach(function(item) {
+                                item.addEventListener('click', function() {
                                     if (confirm("Are you sure?")) {
-                                        //alert(this.value);
-                                        //console.log("value for del: " + this.value);
-                                        fireStorage['data'] = a.deleteRecord(this.value); //return obj
-                                        //console.log(storage);
-                                        userDataBase.child('data').set(fireStorage['data']);
-                                    }
-
-                                }, false);
-                            }
-
-                            //update readonly props new record form
-                            var newDataForm = document.getElementById("newDataForm");
-                            newDataForm.addEventListener("change", function() {
-                                a.fillNewDataFormReadonly();
-                            });
-                            newDataForm.addEventListener("click", function() {
-                                a.fillNewDataFormReadonly();
-                            });
-
-                            //update progres table
-                            var progTableSelectList = document.getElementById("progressTableSelectList");
-                            progTableSelectList.addEventListener("change", function() {
-                                a.displayTarget();
-                            });
-
-                            //save target
-                            var saveTarget = document.getElementById("saveTarget");
-                            saveTarget.addEventListener("click", function() {
-                                fireStorage['target'] = a.createTarget(); //return obj
-                                //console.log(fireStorage.target);
-                                userDataBase.child('target').set(fireStorage['target']);
-                                window.location.hash = "log";
+                                        // alert("item." + item.value + " | this." + this.value);
+                                        userDataBase.child('data').set(a.deleteRecord(this.value));
+                                    };
+                                });
                             });
 
                         } else {
                             console.log("An error has accure, can't load objects");
-                            //console.log(fireStorage);
                         }
 
                     }); //end data fire sync func
 
+                    
+                    //save target
+                    var saveTarget = document.getElementById("saveTarget");
+                    saveTarget.addEventListener("click", () => {
+                        fireStorage['target'] = a.createTarget(); //return obj
+                        userDataBase.child('target').set(fireStorage['target']);
+                        window.location.hash = "log";
+                    });
+
                     //save new data
                     var createNewRecord = document.getElementById("createNewRecord");
-                    createNewRecord.addEventListener("click", function() {
-
-                        addData = a.createNewRecord();
-                        //console.log(addData.length);
-                        userDataBase.child('data').set(addData);
+                    createNewRecord.addEventListener("click", () => {
+                        userDataBase.child('data').set(a.createNewRecord());
                         window.location.hash = "log";
-                        //window.location.reload();
                     });
+
+                    //save new user data
+                    var saveUser = document.getElementById("saveUser");
+                    saveUser.addEventListener("click", () => {
+                        userDataBase.child('profile').update(u.editUser());
+                        window.location.hash = "profile";
+                    });
+
+                    //update readonly props new record form
+                    var newDataForm = document.getElementById("newDataForm");
+                    newDataForm.addEventListener("click", () => {a.fillNewDataFormReadonly()}, false);
+                    
+                    //update progres table
+                    var progTableSelectList = document.getElementById("progressTableSelectList");
+                    progTableSelectList.addEventListener("change", () => a.displayTarget(), false);
 
                 } else {
                     // User is signed out.
