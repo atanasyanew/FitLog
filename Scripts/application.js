@@ -2,6 +2,9 @@
  *
  * application core scripts
  *
+ *
+ *  TO DO:
+    - target, b10d, b30d
  */
 
 
@@ -511,7 +514,7 @@ function appData(dt, tar, ur) {
                     table += "</tr>";
                     //check if no target
                 }
-                
+
             } else {
                 //no target
                 //console.log(tableRows);
@@ -665,6 +668,319 @@ function appData(dt, tar, ur) {
             ctx.fillText("There is no data to display.", 10, 20);
 
         }
+    }
+
+    //draw detailed chart
+    this.drawDetailedChart = function () {
+
+        //chart global config
+        //Chart.defaults.global.defaultFontColor = '#fff';
+        var ctxChart = document.getElementById("detailedChart").getContext("2d");
+
+        if (this.drawDetailedChart != null || this.drawDetailedChart != undefined) {
+            //          this.drawDetailedChart.destroy();
+            //  console.log("chart destroyed");
+        };
+
+        if (this.data) {
+
+
+
+            //line, waistCm, Y2
+            var dataSet1 = {
+                type: "line",
+                yAxisID: "y-axis-2",
+                label: "Waist (cm)",
+                data: constructArray(this.data, "waistCm"),
+                borderWidth: 3,
+                pointRadius: 2,
+                pointHoverRadius: 5,
+                fill: false
+            };
+            //line, haunchCm, Y2
+            var dataSet2 = {
+                type: "line",
+                yAxisID: "y-axis-2",
+                label: "Haunch (cm)",
+                data: constructArray(this.data, "haunchCm"),
+                borderWidth: 3,
+                pointRadius: 2,
+                pointHoverRadius: 5,
+                fill: false
+            };
+            //line, armsCm, Y2
+            var dataSet3 = {
+                type: "line",
+                yAxisID: "y-axis-2",
+                label: "Arms (cm)",
+                data: constructArray(this.data, "armsCm"),
+                borderWidth: 3,
+                pointRadius: 2,
+                pointHoverRadius: 5,
+                fill: false
+            };
+            //line, chestCm, Y2
+            var dataSet4 = {
+                type: "line",
+                yAxisID: "y-axis-2",
+                label: "Chest (cm)",
+                data: constructArray(this.data, "chestCm"),
+                borderWidth: 3,
+                pointRadius: 2,
+                pointHoverRadius: 5,
+                fill: false
+            };
+            //line, hipsCm, Y2
+            var dataSet5 = {
+                type: "line",
+                yAxisID: "y-axis-2",
+                label: "Hips (cm)",
+                data: constructArray(this.data, "hipsCm"),
+                borderWidth: 3,
+                pointRadius: 2,
+                pointHoverRadius: 5,
+                fill: false
+            };
+
+            /*
+            
+                    //bar, weightKgs,
+            //            var dataSet1 = {
+            //                type: "bar",
+            //                yAxisID: "y-axis-3",
+            //                label: "Weight (kg)",
+            //                data: constructArray(this.data, "weightKgs"),
+            //                //borderSkipped: "top",
+            //                //borderWidth: 10,
+            //                fill: false
+            //            };
+            
+            
+            
+            
+            //line, fatsPercent, Y4
+            var dataSet7 = {
+                type: "line",
+                yAxisID: "y-axis-4",
+                label: "Fats (%)",
+                data: constructArray(this.data, "fatsPercent"),
+                //borderWidth: 2,
+                //pointRadius: 1,
+                //pointHoverRadius: 5,
+                fill: false
+            };
+            //line, fatKgs, Y1
+            var dataSet8 = {
+                type: "bar",
+                yAxisID: "y-axis-1",
+                label: "Fats (kg)",
+                data: constructArray(this.data, "fatKgs"),
+                //borderWidth: 2,
+                //pointRadius: 1,
+                //pointHoverRadius: 5,
+                fill: false
+            };
+            //bar, bodyMassKgs, Y1
+            var dataSet9 = {
+                type: "bar",
+                yAxisID: "y-axis-1",
+                label: "Body Mass (kg)",
+                data: constructArray(this.data, "bodyMassKgs"),
+                //borderWidth: 2,
+                //pointRadius: 1,
+                //pointHoverRadius: 5,
+                fill: false
+            };
+            //line, physicalActivity, y5
+            var dataSet10 = {
+                type: "line",
+                yAxisID: "y-axis-5",
+                label: "Activity",
+                data: constructArray(this.data, "physicalActivity"),
+                //borderWidth: 2,
+                //pointRadius: 1,
+                //pointHoverRadius: 5,
+                fill: false
+            };
+            //line, bmaKcal, y6
+            var dataSet11 = {
+                type: "line",
+                yAxisID: "y-axis-6",
+                label: "kcal",
+                data: constructArray(this.data, "bmaKcal"),
+                //borderWidth: 2,
+                //pointRadius: 1,
+                //pointHoverRadius: 5,
+                fill: false
+            };
+
+            // betther way to manage chart colors
+//           / dataSet8.backgroundColor = window.chartColors.GrenadineL;
+//           / dataSet9.backgroundColor = window.chartColors.Grenadine;
+            //y2
+            
+            yAxes: [
+
+                        //fatKgs, bodyMassKgs
+                        {
+                            stacked: true,
+                            id: "y-axis-1",
+                            type: "linear", //"linear", "logarithmic", "time",...
+                            position: "left",
+                            display: true,
+                            gridLines: {
+                                display: false
+                            },
+                    },
+                        // haunchCm, armsCm
+                        {
+                            id: "y-axis-2",
+                            type: "linear",
+                            position: "left",
+                            display: true,
+                            gridLines: {
+                                display: false
+                            },
+                            ticks: {
+                                //beginAtZero: true
+                                // min: 3
+                            }
+                    },
+                        // armsCm, chestCm, hipsCm
+                        {
+                            id: "y-axis-3",
+                            type: "linear",
+                            position: "left",
+                            display: true,
+                            gridLines: {
+                                display: false
+                            },
+                            ticks: {
+                                //  beginAtZero: true
+                                //min: 3
+                            }
+                    },
+                        //fatsPercent
+                        {
+                            id: "y-axis-4",
+                            type: "linear",
+                            position: "right",
+                            display: true,
+                            gridLines: {
+                                display: false
+                            },
+                            ticks: {
+                                min: 3
+                            }
+                    },
+                        //physicalActivity
+                        {
+                            id: "y-axis-5",
+                            type: "linear",
+                            position: "right",
+                            display: true,
+                            gridLines: {
+                                display: false
+                            },
+
+                    },
+                        //bmaKcal
+                        {
+                            id: "y-axis-6",
+                            type: "linear",
+                            position: "left",
+                            display: true,
+                            gridLines: {
+                                display: false
+                            }
+                    }
+
+                ] //end yAxes
+                
+                
+                
+            */
+            //    red: 'rgb(255, 99, 132)',
+            //    orange: 'rgb(255, 159, 64)',
+            //    yellow: 'rgb(255, 205, 86)',
+            //    green: 'rgb(75, 192, 192)',
+            //    blue: 'rgb(54, 162, 235)',
+            //    purple: 'rgb(153, 102, 255)',
+            //    indigo: 'rgb(63, 81, 181)'
+
+
+            dataSet1.backgroundColor = window.chartColors.green; //waist
+            dataSet2.backgroundColor = window.chartColors.purple; //haunch
+            dataSet3.backgroundColor = window.chartColors.red; //arms
+            dataSet4.backgroundColor = window.chartColors.blue; //chest
+            dataSet5.backgroundColor = window.chartColors.indigo; // hips
+
+            dataSet1.borderColor = window.chartColors.green;
+            dataSet2.borderColor = window.chartColors.purple;
+            dataSet3.borderColor = window.chartColors.red;
+            dataSet4.borderColor = window.chartColors.blue;
+            dataSet5.borderColor = window.chartColors.indigo;
+
+
+            var chartData = {
+                labels: constructChartLabels(this.data, 'measurementDate'),
+                //datasets array order is important too
+                datasets: [dataSet1, dataSet2, dataSet3, dataSet4, dataSet5]
+            };
+
+            var chartOptions = {
+                responsive: true,
+                tooltips: {
+                    enabled: true,
+                    mode: "index",
+                    intersect: true,
+                    position: "nearest",
+                },
+                scales: {
+                    xAxes: [
+                        {
+                            barPercentage: 1,
+                            categoryPercentage: 1,
+                            gridLines: {
+                                display: false
+                            }
+                    }
+                ],
+                    //one obj for each y axes
+                    yAxes: [
+
+                        {
+                            id: "y-axis-2",
+                            type: "linear",
+                            position: "left",
+                            display: true,
+                            gridLines: {
+                                display: false
+                            },
+                            ticks: {
+                                //beginAtZero: true
+                                // min: 3
+                            }
+                    }
+                ] //end yAxes
+                } //end scales
+            };
+
+            //draw chart
+            this.drawDetailedChart = new Chart(ctxChart, {
+                type: 'bar',
+                data: chartData,
+                options: chartOptions
+            });
+
+        } else {
+
+            ctxChart.font = "16px Arial";
+            ctxChart.fillStyle = "white";
+            ctxChart.textAlign = "left";
+            ctxChart.fillText("There is no data to display.", 10, 20);
+
+        };
     }
 
 
@@ -878,23 +1194,72 @@ function todaysDate() {
 }
 //hash nav bar
 function hashNav() {
+    //array with all animations
+    var animationsArr = ['rotatingPlane',
+                        'wave',
+                        'wanderingCubes',
+                        'chasingDots',
+                        'threeBounce',
+                        'circle',
+                        'cubeGrid',
+                        'fadingCircle'];
+    //random animation
+    var animation = animationsArr[(Math.random() * animationsArr.length) | 0];
 
+    //globals
     var pages = document.querySelectorAll(".page"); // get all pages
     var hash = location.hash.substring(1); //get hash
     var showPage = document.getElementById(hash); //get page to show
+    var time = 600;
 
-    //be sure all are not displayed
+    //modal loading options
+    var loadingOptions = {
+        // position: 'auto',
+        // text: '',
+        color: '#fff',
+        opacity: '0.6',
+        backgroundColor: 'rgb(0,0,0)',
+        animation: animation
+    };
+
+    //start ui animation
+    $('body').loadingModal(loadingOptions);
+    $('body').loadingModal('show');
+
+    //be sure all the pages are hide
     for (var i = 0; i < pages.length; i++) {
         pages[i].style.display = "none";
     }
 
-    if (showPage) {
-        showPage.style.display = "block";
+    //set timeout when to show pages
+    setTimeout(function () {
+        if (showPage) {
+            showPage.style.display = "block";
+        } else {
+            document.getElementById("log").style.display = "block";
+        }
+        $('body').loadingModal('hide');
+    }, time);
 
-    } else {
-        document.getElementById("log").style.display = "block";
-    }
+    //$('body').loadingModal('destroy');
     return false; // cancel the click
+
+    //old nav
+    //    var pages = document.querySelectorAll(".page"); // get all pages
+    //    var hash = location.hash.substring(1); //get hash
+    //    var showPage = document.getElementById(hash); //get page to show
+    //
+    //    //be sure all are not displayed
+    //    for (var i = 0; i < pages.length; i++) {
+    //        pages[i].style.display = "none";
+    //    }
+    //    if (showPage) {
+    //        showPage.style.display = "block";
+    //
+    //    } else {
+    //        document.getElementById("log").style.display = "block";
+    //    }
+    //    return false; // cancel the click
 }
 //remove hash nav 
 function removeHashNav() {
@@ -905,6 +1270,29 @@ function removeHashNav() {
 }
 //chart colors
 window.chartColors = {
+    //colors 2017
+    AuroraRed: '#B93A32',
+    Grenadine: '#DC4C46',
+    GrenadineL: '#e26d69',
+    TawnyPort: '#672E3B',
+    TawnyPortL: '#8d3f51',
+    BalletSlipper: '#F3D6E4',
+    Butterum: '#C48F65',
+    NavyPeony: '#223A5E',
+    NeutralGray: '#898E8C',
+    ShadedSpruce: '#005960',
+    GoldenLime: '#9C9A40',
+    Marina: '#4F84C4',
+    AutumnMaple: '#D2691E',
+    Niagara: "#578CA9",
+    PrimroseYellow: "#F6D155",
+    LapisBlue: "#004B8D",
+    Flame: "#F2552C",
+    IslandParadise: "#95DEE3",
+    PaleDogwood: "#EDCDC2",
+    PinkYarrow: "#5A7247",
+    Hazelnut: "#CFB095",
+    //from chart js
     red: 'rgb(255, 99, 132)',
     orange: 'rgb(255, 159, 64)',
     yellow: 'rgb(255, 205, 86)',
