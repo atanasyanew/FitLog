@@ -656,6 +656,19 @@ function AppData(dt, tar, ur) {
             };
 
             //draw chart
+            //console.log(chartOptions);
+            //console.log(window.outerWidth);
+            //console.log(screen.width);
+
+            if (window.outerWidth < 768 || window.width < 768) {
+                //console.log("chart small screen triggered");
+                chartOptions.scales.xAxes[0].display = false;
+                chartOptions.scales.yAxes[0].display = false;
+                chartOptions.scales.yAxes[1].display = false;
+                Chart.defaults.global.elements.point.radius = 1;
+            };
+
+
             mainChart = new Chart(ctx, {
                 type: 'bar',
                 data: chartData,
@@ -694,9 +707,6 @@ function AppData(dt, tar, ur) {
                 yAxisID: "y-axis-1",
                 label: "Waist (cm)",
                 data: constructArray(this.data, "waistCm"),
-                borderWidth: 3,
-                pointRadius: 2,
-                pointHoverRadius: 5,
                 fill: false
             };
 
@@ -705,9 +715,6 @@ function AppData(dt, tar, ur) {
                 yAxisID: "y-axis-1",
                 label: "Haunch (cm)",
                 data: constructArray(this.data, "haunchCm"),
-                borderWidth: 3,
-                pointRadius: 2,
-                pointHoverRadius: 5,
                 fill: false
             };
             var dataSet3 = {
@@ -715,9 +722,6 @@ function AppData(dt, tar, ur) {
                 yAxisID: "y-axis-1",
                 label: "Arms (cm)",
                 data: constructArray(this.data, "armsCm"),
-                borderWidth: 3,
-                pointRadius: 2,
-                pointHoverRadius: 5,
                 fill: false
             };
             var dataSet4 = {
@@ -725,9 +729,6 @@ function AppData(dt, tar, ur) {
                 yAxisID: "y-axis-1",
                 label: "Chest (cm)",
                 data: constructArray(this.data, "chestCm"),
-                borderWidth: 3,
-                pointRadius: 2,
-                pointHoverRadius: 5,
                 fill: false
             };
             var dataSet5 = {
@@ -735,9 +736,6 @@ function AppData(dt, tar, ur) {
                 yAxisID: "y-axis-1",
                 label: "Hips (cm)",
                 data: constructArray(this.data, "hipsCm"),
-                borderWidth: 3,
-                pointRadius: 2,
-                pointHoverRadius: 5,
                 fill: false
             };
 
@@ -795,6 +793,12 @@ function AppData(dt, tar, ur) {
                     }
                 ] //end yAxes
                 } //end scales
+            };
+
+            if (window.outerWidth < 768 || window.width < 768) {
+                //console.log("chart small screen triggered");
+                chartOptions.scales.xAxes[0].display = false;
+                chartOptions.scales.yAxes[0].display = false;
             };
 
             //draw chart
@@ -865,9 +869,6 @@ function AppData(dt, tar, ur) {
 
             var chartOptions = {
                 responsive: true,
-                legend: {
-                    display: true
-                },
                 tooltips: {
                     enabled: true,
                     mode: "index",
@@ -877,7 +878,7 @@ function AppData(dt, tar, ur) {
                 scales: {
                     xAxes: [
                         {
-                            display: false,
+                            display: true,
                             gridLines: {
                                 display: false
                             }
@@ -888,7 +889,7 @@ function AppData(dt, tar, ur) {
 
                         {
                             id: "y-axis-1",
-                            display: false,
+                            display: true,
                             type: "linear",
                             position: "left",
                             gridLines: {
@@ -902,7 +903,7 @@ function AppData(dt, tar, ur) {
 
                         {
                             id: "y-axis-2",
-                            display: false,
+                            display: true,
                             type: "linear",
                             position: "right",
                             gridLines: {
@@ -915,6 +916,14 @@ function AppData(dt, tar, ur) {
                     }
                 ] //end yAxes
                 } //end scales
+            };
+
+            if (window.outerWidth < 768 || window.width < 768) {
+                //console.log("chart small screen triggered");
+                chartOptions.scales.xAxes[0].display = false;
+                chartOptions.scales.yAxes[0].display = false;
+                chartOptions.scales.yAxes[1].display = false;
+
             };
 
             //draw chart
