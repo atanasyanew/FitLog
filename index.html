@@ -620,12 +620,12 @@
         // load app like demo
         // FitLogAppDemo();
         removeHashNav();
-        hashNav(); //need to init
+        //hashNav(); //need to init
         initApp();
     };
 
     window.onhashchange = function() {
-        hashNav();
+        //hashNav();
     }
 
 </script>
@@ -634,7 +634,7 @@
 
 <script type="text/javascript">
     initApp = function() {
-
+        "use strict";
         //signOut
         var signOut = document.getElementById('signOut');
         signOut.addEventListener('click', () => {
@@ -657,8 +657,8 @@
                     var userDataBase = firebase.database().ref('dataBase').child(uid);
                     //INIT APP FUNCTIONS
                     var initData, initTarget, initUser;
-                    var a = new appData(initData, initTarget, initUser);
-                    var u = new appUser(initUser);
+                    var a = new AppData(initData, initTarget, initUser);
+                    var u = new AppUser(initUser);
 
                     //INIT STORAGE
                     userDataBase.once('value', function(snapshot) {
@@ -693,11 +693,13 @@
                             u.fillUserForm();
                             a.displayTableData();
                             a.displayTarget();
+
                             a.drawMainChart();
-                            // a.drawChartOne();
-                            // a.drawChartTree();
-                            // a.drawChartTwo();
+                            a.drawChartOne();
+                            a.drawChartTree();
+                            a.drawChartTwo();
                             a.fillNewDataForm();
+
                             a.fillNewDataFormReadonly();
 
                             //DELETE RECORDS
@@ -717,7 +719,7 @@
 
                     }); //end data fire sync func
 
-                    
+
                     //save target
                     var saveTarget = document.getElementById("saveTarget");
                     saveTarget.addEventListener("click", () => {
@@ -742,8 +744,10 @@
 
                     //update readonly props new record form
                     var newDataForm = document.getElementById("newDataForm");
-                    newDataForm.addEventListener("click", () => {a.fillNewDataFormReadonly()}, false);
-                    
+                    newDataForm.addEventListener("click", () => {
+                        a.fillNewDataFormReadonly()
+                    }, false);
+
                     //update progres table
                     var progTableSelectList = document.getElementById("progressTableSelectList");
                     progTableSelectList.addEventListener("change", () => a.displayTarget(), false);

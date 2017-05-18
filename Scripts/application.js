@@ -10,6 +10,7 @@
 
 //local storage
 function FitLogAppDemo() {
+    "use strict";
 
     var storage;
     var data;
@@ -17,7 +18,7 @@ function FitLogAppDemo() {
     var user;
 
     //init storage
-    if (localStorage.fitLogApp == undefined) {
+    if (localStorage.fitLogApp === undefined) {
         //init empty storage   
         //localStorage.setItem('fitLogApp', JSON.stringify(new storageObj()));
         localStorage.setItem('fitLogApp', JSON.stringify(fakeObj));
@@ -31,7 +32,7 @@ function FitLogAppDemo() {
 
     if (data && target && user) {
         //init app     
-        a = new appData(data, target, user);
+        var a = new appData(data, target, user);
         a.displayTableData();
         a.drawMainChart();
         a.fillNewDataForm();
@@ -105,7 +106,7 @@ function FitLogAppDemo() {
 
     } else {
         console.log("An error has accure, can't load objects");
-        console.log(storage);
+        //console.log(storage);
     }
 
 
@@ -118,7 +119,7 @@ function FitLogAppDemo() {
 function cleanData(val, fix) {
 
     var cleanVal = parseFloat(Number(val).toFixed(fix));
-    if (cleanVal == NaN || cleanVal == 0 || cleanVal < 0) {
+    if (isNaN(cleanVal) || cleanVal === 0 || cleanVal < 0) {
         cleanVal = "";
     }
     return cleanVal;
@@ -152,11 +153,11 @@ function storageObj() {
     this.profile = new userObj('Me', '', '', '');
     this.target = new dataObj('', '', '', '', '', '', '', '', '', '', '', '', '', '');
     this.data = [];
-};
+}
 
 /* * MAIN FUNCTIONS */
-function appData(dt, tar, ur) {
-"use strict";
+function AppData(dt, tar, ur) {
+
     /* 
     object	{
             profile: {},
@@ -258,7 +259,7 @@ function appData(dt, tar, ur) {
 
         //add obj to data array
 
-        if (this.data == undefined) {
+        if (this.data === undefined) {
 
             setObj = [];
             setObj.unshift(newData);
@@ -283,7 +284,7 @@ function appData(dt, tar, ur) {
         //return this.data;
         return setObj;
 
-    }
+    };
 
     //fill up form based on last record
     this.fillNewDataForm = function () {
@@ -295,9 +296,9 @@ function appData(dt, tar, ur) {
             var obj = this.data[0];
 
             if (obj) { //if there is records
-
+                //cleanData(val, 2) //return number to fix
                 formWeight.value = obj.weightKgs;
-                formWaist.value = obj.waistCm - 0.1;
+                formWaist.value = cleanData((obj.waistCm - 0.1), 2);
                 formHaunch.value = obj.haunchCm - 0.5;
                 formArms.value = obj.armsCm;
                 formChest.value = obj.chestCm;
@@ -307,7 +308,7 @@ function appData(dt, tar, ur) {
             }
 
         }
-    }
+    };
 
     //fill new record readonly prop
     this.fillNewDataFormReadonly = function () {
@@ -317,106 +318,104 @@ function appData(dt, tar, ur) {
         formBodyMass.value = "";
         formBMAKcal.value = "";
         formValidationMsg.innerHTML = "";
-        
+
         var feedbackMsg = "<div class=\"form-group text-danger\">";
-                feedbackMsg += "<label for=\"example-text-input\" class=\"control-label col-xs-4\"></label>";
-                feedbackMsg += "<div class=\"col-xs-8\">";
-                feedbackMsg += "<p><b>Please fix some of the following issues to enable calculations.</b></p>"
-                feedbackMsg += "<ul class=\"list-group\">";
-                feedbackMsg += "<li><b>Gender</b></li>";
-                feedbackMsg += "<li><b>Data of Birth</b></li>";
-                feedbackMsg += "<li><b>Weight, kg</b></li>";
-                feedbackMsg += "<li><b>Waist, cm</b></li>";
-                feedbackMsg += "<li><b>Haunch, cm</b></li>";
-                feedbackMsg += "</ul></div></div>";
+        feedbackMsg += "<label for=\"example-text-input\" class=\"control-label col-xs-4\"></label>";
+        feedbackMsg += "<div class=\"col-xs-8\">";
+        feedbackMsg += "<p><b>Please fix some of the following issues to enable calculations.</b></p>";
+        feedbackMsg += "<ul class=\"list-group\">";
+        feedbackMsg += "<li><b>Gender</b></li>";
+        feedbackMsg += "<li><b>Data of Birth</b></li>";
+        feedbackMsg += "<li><b>Weight, kg</b></li>";
+        feedbackMsg += "<li><b>Waist, cm</b></li>";
+        feedbackMsg += "<li><b>Haunch, cm</b></li>";
+        feedbackMsg += "</ul></div></div>";
 
-        
+
         if (this.user) {
-             
-        var weight = cleanData(formWeight.value, 2);
-        var haunch = cleanData(formHaunch.value, 2);
-        var waist = cleanData(formWaist.value, 2);
-        var height = cleanData(this.user.height, 2);
-        
-        //unclock fields for custom data
-        if (formChekbox.checked == true) { 
 
-            formFatsPercent.readOnly = false;
-            formFatKgs.readOnly = false;
-            formBodyMass.readOnly = false;
-            formBMAKcal.readOnly = false;
-            bgColor = "rgba(0, 0, 0, 0.65)";
-            formFatsPercent.style.backgroundColor = bgColor;
-            formFatKgs.style.backgroundColor = bgColor;
-            formBodyMass.style.backgroundColor = bgColor;
-            formBMAKcal.style.backgroundColor = bgColor;
-            
-        //automatic calcs
-        } else {
+            var weight = cleanData(formWeight.value, 2);
+            var haunch = cleanData(formHaunch.value, 2);
+            var waist = cleanData(formWaist.value, 2);
+            var height = cleanData(this.user.height, 2);
 
-            formFatsPercent.readOnly = true;
-            formFatKgs.readOnly = true;
-            formBodyMass.readOnly = true;
-            formBMAKcal.readOnly = true;
-            bgColor = "rgba(3,3,3,0.25)";
-            formFatsPercent.style.backgroundColor = bgColor;
-            formFatKgs.style.backgroundColor = bgColor;
-            formBodyMass.style.backgroundColor = bgColor;
-            formBMAKcal.style.backgroundColor = bgColor;
+            //unclock fields for custom data
+            if (formChekbox.checked === true) {
 
-            //check if all data for calculations
-            if ( (this.user.gender == "Male" || this.user.gender == "Female") &&
-                (this.user.birth.length == 10) &&
-                weight != "" && waist != "" &&
-                haunch != "" && height != ""
-            ) {
-                //do calcs
-                var fatPr = calcFatsPercent(
-                    this.user.gender,
-                    height,
-                    haunch,
-                    waist);
-                formFatsPercent.value = fatPr;
+                formFatsPercent.readOnly = false;
+                formFatKgs.readOnly = false;
+                formBodyMass.readOnly = false;
+                formBMAKcal.readOnly = false;
+                bgColor = "rgba(0, 0, 0, 0.65)";
+                formFatsPercent.style.backgroundColor = bgColor;
+                formFatKgs.style.backgroundColor = bgColor;
+                formBodyMass.style.backgroundColor = bgColor;
+                formBMAKcal.style.backgroundColor = bgColor;
 
-                var fatKgs = calcFatKgs(fatPr, weight);
-                formFatKgs.value = fatKgs;
+                //automatic calcs
+            } else {
 
-                var bodyMassKgs = calcBodyMassKgs(fatKgs, weight)
-                formBodyMass.value = bodyMassKgs;
+                formFatsPercent.readOnly = true;
+                formFatKgs.readOnly = true;
+                formBodyMass.readOnly = true;
+                formBMAKcal.readOnly = true;
+                bgColor = "rgba(3,3,3,0.25)";
+                formFatsPercent.style.backgroundColor = bgColor;
+                formFatKgs.style.backgroundColor = bgColor;
+                formBodyMass.style.backgroundColor = bgColor;
+                formBMAKcal.style.backgroundColor = bgColor;
 
-                var bmaKcal = calcBMAKcal(
-                    this.user.gender,
-                    this.user.birth,
-                    formBMRFormula.value,
-                    formActivity.value,
-                    weight,
-                    height,
-                    bodyMassKgs);
+                //check if all data for calculations
+                if ((this.user.gender == "Male" || this.user.gender == "Female") &&
+                    (this.user.birth.length == 10) &&
+                    weight !== "" && waist !== "" &&
+                    haunch !== "" && height !== ""
+                ) {
+                    //do calcs
+                    var fatPr = calcFatsPercent(
+                        this.user.gender,
+                        height,
+                        haunch,
+                        waist);
+                    formFatsPercent.value = fatPr;
+
+                    var fatKgs = calcFatKgs(fatPr, weight);
+                    formFatKgs.value = fatKgs;
+
+                    var bodyMassKgs = calcBodyMassKgs(fatKgs, weight);
+                    formBodyMass.value = bodyMassKgs;
+
+                    var bmaKcal = calcBMAKcal(
+                        this.user.gender,
+                        this.user.birth,
+                        formBMRFormula.value,
+                        formActivity.value,
+                        weight,
+                        height,
+                        bodyMassKgs);
                     formBMAKcal.value = bmaKcal;
 
-            } else {
-                //give user feedback
-                formValidationMsg.innerHTML = feedbackMsg;
-            }
-        } //emd automatic calcs
-         } else {
-             formValidationMsg.innerHTML = feedbackMsg;
-         }
+                } else {
+                    //give user feedback
+                    formValidationMsg.innerHTML = feedbackMsg;
+                }
+            } //emd automatic calcs
+        } else {
+            formValidationMsg.innerHTML = feedbackMsg;
+        }
 
         //debug
         //console.log("formFatsPercent " + formFatsPercent.value);
         //console.log("formFatKgs " + formFatKgs.value);
         //console.log("formBodyMass " + formBodyMass.value);
         //console.log("formBMAKcal " + formBMAKcal.value);
-    }
+    };
 
     //generate table with data
     this.displayTableData = function () {
-
+        var table = "";
 
         if (this.data) {
-
-            var table = "";
 
             for (var i = 0; i < this.data.length; i++) {
                 table += "<tr class=\"item\">";
@@ -424,20 +423,20 @@ function appData(dt, tar, ur) {
                 //for (var prop in data[i]) {
                 //    table += "<td>" + data[i][prop] + "</td>";
                 //}
-                table += "<td nowrap>" + this.data[i]["measurementDate"] + "</td>";
-                table += "<td nowrap>" + this.data[i]["weightKgs"] + "</td>";
-                table += "<td nowrap>" + this.data[i]["waistCm"] + "</td>";
-                table += "<td nowrap>" + this.data[i]["haunchCm"] + "</td>";
-                table += "<td nowrap>" + this.data[i]["armsCm"] + "</td>";
-                table += "<td nowrap>" + this.data[i]["chestCm"] + "</td>";
-                table += "<td nowrap>" + this.data[i]["hipsCm"] + "</td>";
-                table += "<td nowrap>" + this.data[i]["fatsPercent"] + "</td>";
-                table += "<td nowrap>" + this.data[i]["fatKgs"] + "</td>";
-                table += "<td nowrap>" + this.data[i]["bodyMassKgs"] + "</td>";
-                table += "<td wrap>" + this.data[i]["bmrFormula"] + "</td>";
-                table += "<td nowrap>" + this.data[i]["physicalActivity"] + "</td>";
-                table += "<td nowrap>" + this.data[i]["bmaKcal"] + "</td>";
-                table += "<td wrap>" + this.data[i]["comment"] + "</td>";
+                table += "<td nowrap>" + this.data[i].measurementDate + "</td>";
+                table += "<td nowrap>" + this.data[i].weightKgs + "</td>";
+                table += "<td nowrap>" + this.data[i].waistCm + "</td>";
+                table += "<td nowrap>" + this.data[i].haunchCm + "</td>";
+                table += "<td nowrap>" + this.data[i].armsCm + "</td>";
+                table += "<td nowrap>" + this.data[i].chestCm + "</td>";
+                table += "<td nowrap>" + this.data[i].hipsCm + "</td>";
+                table += "<td nowrap>" + this.data[i].fatsPercent + "</td>";
+                table += "<td nowrap>" + this.data[i].fatKgs + "</td>";
+                table += "<td nowrap>" + this.data[i].bodyMassKgs + "</td>";
+                table += "<td wrap>" + this.data[i].bmrFormula + "</td>";
+                table += "<td nowrap>" + this.data[i].physicalActivity + "</td>";
+                table += "<td nowrap>" + this.data[i].bmaKcal + "</td>";
+                table += "<td wrap>" + this.data[i].comment + "</td>";
 
                 table += "<td>";
                 table += "<button value=\"" + i + "\" class=\"btn btn-danger btn-xs\">";
@@ -451,12 +450,12 @@ function appData(dt, tar, ur) {
 
         } else {
 
-            table = "<tr><td colspan=\"16\"><h3>";
+            table += "<tr><td colspan=\"16\"><h3>";
             table += "<a href=\"#createRecord\">Hey, create your first record by pressing <i style=\"color:#fff\" class=\"glyphicon glyphicon-plus\"></i> in the upper right!</a>";
             table += "</h3></td></tr>";
             dataTable.innerHTML = table;
         }
-    }
+    };
 
     //delete record from data array, return array
     this.deleteRecord = function (i) {
@@ -464,7 +463,7 @@ function appData(dt, tar, ur) {
         this.data.splice(i, 1);
         return this.data;
         // }
-    }
+    };
 
     //display user target
     this.displayTarget = function () {
@@ -479,7 +478,7 @@ function appData(dt, tar, ur) {
 
             //construct multidimensioanl array
             for (var prop in this.target) {
-                if (this.target[prop] != '') {
+                if (this.target[prop] !== '') {
                     //console.log(this.headerFields[prop] + " - " + progress[prop] + " - " + this.target[prop]);
                     tableCells = [this.headerFields[prop], progress[prop], this.target[prop]];
                     tableRows.push(tableCells);
@@ -538,7 +537,7 @@ function appData(dt, tar, ur) {
         }
 
         progressTable.innerHTML = table;
-    }
+    };
 
     //create target, return obj
     this.createTarget = function () {
@@ -558,25 +557,30 @@ function appData(dt, tar, ur) {
             '', //activ, 
             '', //kcal, 
             '' //com
-        )
+        );
 
         return obj;
 
         //this.target = obj;
         //return this.target;
-    }
+    };
 
     //draw Simplified chart
+    var mainChart = null;
     this.drawMainChart = function () {
 
         //chart global config
         Chart.defaults.global.defaultFontColor = '#fff';
         var ctx = document.getElementById("mainChart").getContext("2d");
 
-        if (this.mainChart != null || this.mainChart != undefined) {
-            this.mainChart.destroy();
-            // console.log("chart destroyed");
-        }
+        //        console.log(mainChart)
+        if (mainChart !== null) {
+            mainChart.destroy();
+            //              console.log("chart destroyed");
+            //              console.log(mainChart);
+        };
+
+
 
         if (this.data) {
             //datasets
@@ -601,9 +605,8 @@ function appData(dt, tar, ur) {
                 backgroundColor: window.chartColors.purple
             };
 
-            var chartDataLabels = constructChartLabels(this.data, 'measurementDate');
             var chartData = {
-                labels: chartDataLabels,
+                labels: constructChartLabels(this.data, 'measurementDate'),
                 datasets: [xFatsPercent, xWeightKgs]
             };
 
@@ -653,7 +656,7 @@ function appData(dt, tar, ur) {
             };
 
             //draw chart
-            this.mainChart = new Chart(ctx, {
+            mainChart = new Chart(ctx, {
                 type: 'bar',
                 data: chartData,
                 options: chartOptions
@@ -667,19 +670,23 @@ function appData(dt, tar, ur) {
             ctx.fillText("There is no data to display.", 10, 20);
 
         }
-    }
+
+    };
 
     //draw cm chart
+    var chartOne = null;
     this.drawChartOne = function () {
 
         //chart global config
         //Chart.defaults.global.defaultFontColor = '#fff';
         var ctxChart = document.getElementById("ChartOne").getContext("2d");
 
-        //                if (this.drawChartOne() != null) {
-        //                    this.drawChartOne.destroy();
-        //                    //  console.log("chart destroyed");
-        //                };
+        //        console.log(mainChart)
+        if (chartOne !== null) {
+            chartOne.destroy();
+            //              console.log("chart destroyed");
+            //              console.log(mainChart);
+        };
 
         if (this.data) {
             var dataSet1 = {
@@ -791,7 +798,7 @@ function appData(dt, tar, ur) {
             };
 
             //draw chart
-            this.drawChartOne = new Chart(ctxChart, {
+            chartOne = new Chart(ctxChart, {
                 type: 'bar',
                 data: chartData,
                 options: chartOptions
@@ -805,19 +812,19 @@ function appData(dt, tar, ur) {
             ctxChart.fillText("There is no data to display.", 10, 20);
 
         };
-    }
+    };
 
     //draw detailed chart
+    var chartTree = null;
     this.drawChartTree = function () {
 
         //chart global config
         //Chart.defaults.global.defaultFontColor = '#fff';
         var ctxChart = document.getElementById("ChartTree").getContext("2d");
 
-        //        if (this.drawDetailedChart != null || this.drawDetailedChart != undefined) {
-        //            this.drawChartOne.destroy();
-        //            //  console.log("chart destroyed");
-        //        };
+        if (chartTree !== null) {
+            chartTree.destroy();
+        };
 
         if (this.data) {
 
@@ -858,7 +865,9 @@ function appData(dt, tar, ur) {
 
             var chartOptions = {
                 responsive: true,
-                // maintainAspectRatio: false,
+                legend: {
+                    display: false
+                },
                 tooltips: {
                     enabled: true,
                     mode: "index",
@@ -868,8 +877,7 @@ function appData(dt, tar, ur) {
                 scales: {
                     xAxes: [
                         {
-                            barPercentage: 1,
-                            categoryPercentage: 1,
+                            display: false,
                             gridLines: {
                                 display: false
                             }
@@ -880,9 +888,9 @@ function appData(dt, tar, ur) {
 
                         {
                             id: "y-axis-1",
+                            display: false,
                             type: "linear",
                             position: "left",
-                            display: true,
                             gridLines: {
                                 display: false
                             },
@@ -894,9 +902,9 @@ function appData(dt, tar, ur) {
 
                         {
                             id: "y-axis-2",
+                            display: false,
                             type: "linear",
                             position: "right",
-                            display: true,
                             gridLines: {
                                 display: false
                             },
@@ -910,7 +918,7 @@ function appData(dt, tar, ur) {
             };
 
             //draw chart
-            this.drawChartTree = new Chart(ctxChart, {
+            chartTree = new Chart(ctxChart, {
                 type: 'bar',
                 data: chartData,
                 options: chartOptions
@@ -923,23 +931,23 @@ function appData(dt, tar, ur) {
             ctxChart.textAlign = "left";
             ctxChart.fillText("There is no data to display.", 10, 20);
 
-        };
-    }
+        }
+    };
 
     //pie chart
+    var chartTwo = null;
     this.drawChartTwo = function () {
 
         //chart global config
         //Chart.defaults.global.defaultFontColor = '#fff';
         var ctxChart = document.getElementById("ChartTwo").getContext("2d");
 
-        if (this.drawChartTwo != null || this.drawChartTwo != undefined) {
-            // this.drawChartTwo().destroy();
-            //console.log(this.drawChartTwo);
+        if (chartTwo !== null) {
+            chartTwo.destroy();
         };
 
 
-
+        // debugger;
         if (this.data && this.data[0]) {
 
             var fatKgs = this.data[0].fatKgs;
@@ -975,7 +983,7 @@ function appData(dt, tar, ur) {
             };
 
             //draw chart
-            this.drawChartTwo = new Chart(ctxChart, {
+            this.chartTwo = new Chart(ctxChart, {
                 type: 'pie',
                 data: chartData,
                 options: chartOptions
@@ -989,11 +997,11 @@ function appData(dt, tar, ur) {
             ctxChart.fillText("There is no data to display.", 10, 20);
 
         };
-    }
+    };
 
 }
 
-function appUser(userObj) {
+function AppUser(userObj) {
 
     /* * USER functions 
 
@@ -1017,7 +1025,7 @@ function appUser(userObj) {
         document.getElementById("userBirth").innerHTML = this.user.birth;
         document.getElementById("userGender").innerHTML = this.user.gender;
         document.getElementById("userHeight").innerHTML = this.user.height;
-    }
+    };
     //dom edit user form
     var editName = document.getElementById("editUserName");
     var editBirth = document.getElementById("editUserBirth");
@@ -1030,7 +1038,7 @@ function appUser(userObj) {
         editBirth.value = this.user.birth;
         editGender.value = this.user.gender;
         editHeight.value = this.user.height;
-    }
+    };
     //return modifyed user
     this.editUser = function () {
         this.user.name = editName.value;
@@ -1038,7 +1046,7 @@ function appUser(userObj) {
         this.user.gender = editGender.value;
         this.user.height = editHeight.value;
         return this.user;
-    }
+    };
 }
 
 /* * APPLICATION CALCULATIONS */
@@ -1056,15 +1064,15 @@ function calcFatsPercent(gender, height, haunch, waist) {
     }
 
     return cleanData(fatsPercent, 2);
-}
+};
 //calc fat kgs
 function calcFatKgs(fatsPercent, weight) {
     //([@[Fats, %]]/100)*[@[Weight, kgs]]
     var fatKgs;
-    fatKgs = (fatsPercent / 100) * weight
+    fatKgs = (fatsPercent / 100) * weight;
     //  return fatKgs.toFixed(2);
     return cleanData(fatKgs, 2);
-}
+};
 //calc body mass kgs
 function calcBodyMassKgs(fatKgs, weight) {
     //=[@[Weight, kgs]]-[@[Fat, kgs]]
@@ -1073,7 +1081,7 @@ function calcBodyMassKgs(fatKgs, weight) {
     // return bodyMassKgs.toFixed(2);
     return cleanData(bodyMassKgs, 2);
 
-}
+};
 //calc Basal metabolic with physical activity
 function calcBMAKcal(gender, birth, formula, activity, weight, height, bodyMass) {
 
@@ -1318,7 +1326,7 @@ window.chartColors = {
 function constructArray(arrWithObjs, objKey) {
     myArray = [];
     for (i = 0; i < arrWithObjs.length; i++) {
-        if (arrWithObjs[i][objKey] == '') {
+        if (arrWithObjs[i][objKey] === '') {
             myArray.unshift(NaN);
         } else {
             num = Number(arrWithObjs[i][objKey]);
@@ -1331,7 +1339,7 @@ function constructArray(arrWithObjs, objKey) {
 function constructChartLabels(arrWithObjs, objKey) {
     myArray = [];
     for (i = 0; i < arrWithObjs.length; i++) {
-        if (arrWithObjs[i][objKey] == '') {
+        if (arrWithObjs[i][objKey] === "") {
             myArray.unshift(NaN);
         } else {
             myArray.unshift(arrWithObjs[i][objKey]);
