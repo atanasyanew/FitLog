@@ -866,7 +866,7 @@ function AppData(dt, tar, ur) {
             var chartOptions = {
                 responsive: true,
                 legend: {
-                    display: false
+                    display: true
                 },
                 tooltips: {
                     enabled: true,
