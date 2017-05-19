@@ -26,6 +26,7 @@
                 window.location.href = "signIn.html";
             }
         });
+
     </script>
 
     <!--    APP SCRIPTS     -->
@@ -35,7 +36,7 @@
     -->
     <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-    
+
     <script src="Scripts/w3.js"></script>
     <script src="Scripts/Chart.bundle.js"></script>
     <script src="Scripts/app.js"></script>
@@ -67,7 +68,7 @@
                     <li><a href="#chart"><i class="fa fa-bar-chart"></i> Charts</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="#profile"><i class="glyphicon glyphicon-user"></i> <span id="userNavBar"> Me<span></a></li>
+                    <li><a href="#profile"><i class="glyphicon glyphicon-user"></i> <span id="userNavBar">Me<span></a></li>
                     <li><a href="#" id="signOut"><i class="glyphicon glyphicon-log-out"></i> Log Out</a></li>
                 </ul>
             </div>
@@ -102,7 +103,7 @@
                         </table>
                     </div>
                 </div>
-                
+
                 <div class="col-md-8">
                     <div class="well transperant" id="divMainChart">
                         <legend>Log Chart</legend>
@@ -253,8 +254,9 @@
                             </div>
 
                             <div class="form-group">
-                                <div class="col-md-8 col-md-offset-4 col-xs-12">
-                                    <input type="submit" value="Save" class="btn btn-success btn-large btn-block" id="saveUser">
+                                <label class="control-label col-xs-4"></label>
+                                <div class="col-xs-8">
+                                    <input type="submit" class="btn btn-success btn-large btn-block" id="saveUser">
                                 </div>
                             </div>
 
@@ -336,8 +338,9 @@
                             </div>
 
                             <div class="form-group">
-                                <div class="col-md-8 col-md-offset-4 col-xs-12">
-                                    <input type="button" id="saveTarget" value="Save" class="btn btn-default btn-success btn-large btn-block">
+                                <label class="control-label col-xs-4"></label>
+                                <div class="col-xs-8">
+                                    <input type="submit" class="btn btn-success btn-large btn-block" id="saveTarget">
                                 </div>
                             </div>
 
@@ -570,8 +573,9 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <div class="col-md-8 col-md-offset-4 col-xs-12">
-                                            <input type="button" value="Save" class="btn btn-default btn-success  btn-block" id="createNewRecord">
+                                        <label class="control-label col-xs-4"></label>
+                                        <div class="col-xs-8">
+                                            <input type="submit" class="btn btn-success btn-large btn-block" id="createNewRecord">
                                         </div>
                                     </div>
 
@@ -589,11 +593,9 @@
         <footer class="">
             <p class="">
                 &copy; 2017, Atanas Yanev |
-                <a href="http://lnked.in/ayanev"><i class="fa fa-linkedin-square" aria-hidden="true"></i> LinkedIn</a>
+<!--                <a href="http://lnked.in/ayanev"><i class="fa fa-linkedin-square" aria-hidden="true"></i> LinkedIn</a>-->
             </p>
         </footer>
-
-
 
     </div>
     <!-- /container -->
@@ -601,8 +603,6 @@
 
 
 </body>
-
-
 </html>
 
 
