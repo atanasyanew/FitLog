@@ -75,6 +75,7 @@
         </div>
     </div>
 
+    <!--    PAGES     -->
     <div class="container">
 
         <!--   LOG AND MAIN CHART     -->
@@ -228,9 +229,7 @@
                             <div class="form-group">
                                 <label class="control-label col-xs-4">Birth Date</label>
                                 <div class="col-xs-8">
-                                    <div class="input-group">
-                                        <input type="date" class="form-control input-date" id="editUserBirth">
-                                    </div>
+                                    <input type="date" class="form-control" id="editUserBirth">
                                 </div>
                             </div>
 
@@ -364,9 +363,7 @@
                                     <div class="form-group row">
                                         <label class="control-label col-xs-4">Date</label>
                                         <div class="col-xs-8">
-                                            <div class="input-group">
                                                 <input type="date" class="form-control" id="newDataMeasurementDate">
-                                            </div>
                                         </div>
                                     </div>
 
@@ -592,8 +589,8 @@
         <hr>
         <footer class="">
             <p class="">
-                &copy; 2017, Atanas Yanev |
-<!--                <a href="http://lnked.in/ayanev"><i class="fa fa-linkedin-square" aria-hidden="true"></i> LinkedIn</a>-->
+                &copy; 2017, Atanas Yanev
+                <!--          | <a href="http://lnked.in/ayanev"><i class="fa fa-linkedin-square" aria-hidden="true"></i> LinkedIn</a>-->
             </p>
         </footer>
 
@@ -603,6 +600,7 @@
 
 
 </body>
+
 </html>
 
 
@@ -610,6 +608,9 @@
 
 
 <script type="text/javascript">
+    
+
+    
     window.onload = function() {
         // load app like demo
         //         FitLogAppDemo();
@@ -649,6 +650,7 @@
                     // var emailVerified = user.emailVerified;
                     // var photoURL = user.photoURL;
                     // var providerData = user.providerData;
+                    console.log(user);
                     var uid = user.uid;
                     var displayName = user.displayName;
 
@@ -698,7 +700,6 @@
                             a.drawChartTree();
                             a.drawChartTwo();
                             a.fillNewDataForm();
-
                             a.fillNewDataFormReadonly();
 
                             //DELETE RECORDS
