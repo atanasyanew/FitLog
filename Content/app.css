@@ -32,14 +32,10 @@ body {
 .bgimg-signin {
     opacity: 0.8;
     background-image: url("https://firebasestorage.googleapis.com/v0/b/fitlog-e946c.appspot.com/o/images%2Fwp1873154-exercise-wallpapers.jpg?alt=media&token=dd1c4065-e322-4f9f-97aa-cba2b8430d17");
-/*    background-attachment: fixed;*/
+    /*    background-attachment: fixed;*/
     background-position: top;
     background-repeat: no-repeat;
-     max-width: 100%;
-    -webkit-background-size: cover;
--moz-background-size: cover;
--o-background-size: cover;
-    background-size: cover;
+    max-width: 100%;
 }
 
 footer {
