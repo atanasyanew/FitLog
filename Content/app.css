@@ -23,23 +23,20 @@ body {
     opacity: 0.9;
     background-image: url("https://firebasestorage.googleapis.com/v0/b/fitlog-e946c.appspot.com/o/images%2Fbgimg1.jpg?alt=media&token=4f63ef27-a5f0-4364-b796-2744b5dcb67a");
     /*    background-image: url("Images/bgimg1.jpg");*/
-    /*
     background-attachment: fixed;
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
-*/
 }
 
 .bgimg-signin {
+    min-height: 100%;
     opacity: 0.8;
     background-image: url("https://firebasestorage.googleapis.com/v0/b/fitlog-e946c.appspot.com/o/images%2Fwp1873154-exercise-wallpapers.jpg?alt=media&token=dd1c4065-e322-4f9f-97aa-cba2b8430d17");
     background-attachment: fixed;
     background-position: top;
     background-repeat: no-repeat;
     background-size: cover;
-    min-height: 100%;
-    color: #fff;
 }
 
 footer {
