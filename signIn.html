@@ -68,53 +68,53 @@
         
         body {
             padding-top: 0px;
-            padding-bottom: 0px;
+            padding-bottom: 00px;
             background-color: #333;
             color: #fff;
             /*             font-family: "Times New Roman", Georgia, Serif;*/
         }
         
-        .footer {
+        .bgopacity {
+            background: rgba(3, 3, 3, 0.8);
+            color: #fff;
+            min-height: 100%;
+            min-width: 100%;
             position: absolute;
-            bottom: 0;
         }
 
     </style>
 </head>
 
 <body class="bgimg-signin">
+    <div class="bgopacity">
 
+        <div class="container-fluid">
 
-    <div class="container-fluid">
-        <a href=""> <img src="Content/Images/logo_black.svg" height="100"></a>
-    </div>
+            <!--   LOGO      -->
+            <div class="container">
+                <a href=""> <img src="Content/Images/logo_black.svg" height="100"></a>
+            </div>
 
+            <!--     SLOGANS AND FIREBASE UI      -->
+            <div class="container">
+                <h2 class="">A professional fit tracker</h2>
+                <h2 class="" style="margin-left:1.5em">Note your progression, <span>achieve your goals</span></h2>
+                <h3 class="text-center">Sign up for free or try out <a href="http://lnked.in/ayanev" target="_blank">Demo</a></h3>
+                <div class="row" id="firebaseui-auth-container"></div>
+            </div>
+            <br> <br>
 
-    <div class="container">
-        <h2 class="font-weight-bold">A professional fit tracker</h2>
-        <h2 class="font-weight-bold">Note your progression, <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;achieve your goals</h2>
-        <br>
-        <h3 class="text-center">Sign in for free<br> or try out<br> <b>Demo</b> page</h3>
-        <div class="row" id="firebaseui-auth-container"></div>
+            <!--     FOOTER     -->
+            <div class="navbar-fixed-bottom">
+                <div class="container">
+                    <h5 class="navbar-text pull-left">&copy; 2017 -
+                        <a href="http://lnked.in/ayanev" target="_blank">Atanas Yanev</a>
+                    </h5>
+                </div>
+            </div>
 
-    </div>
-
-
-<!--
-    <footer class="footer">
-        <div class="container">
-            <p class=""> &copy; 2017, Atanas Yanev</p>
         </div>
-    </footer>
--->
-  <div class="navbar navbar-default navbar-fixed-bottom">
-    <div class="container">
-      <p class="navbar-text pull-left">&copy; 2017 - 
-           <a href="http://lnked.in/ayanev" target="_blank" >Atanas Yanev</a>
-      </p>
     </div>
-  </div>
-
 </body>
 
 </html>
