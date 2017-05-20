@@ -4,17 +4,30 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#2F3BA2">
-    <!--    to do add metas from frendly chart-->
+    <meta name="description" content="Professional fit tracker">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#353538">
     <title>Fit log</title>
 
+    <!-- Add to homescreen for Chrome on Android -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="Fit log">
+    <meta name="theme-color" content="#353538">
 
-    <!--     STYLESHEETS     -->
+    <!-- Add to homescreen for Safari on iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Fit log">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#353538">
+
+    <!-- Tile icon for Win8 -->
+    <meta name="msapplication-TileColor" content="#353538">
+    <meta name="msapplication-navbutton-color" content="#353538">
+
+    <!-- STYLESHEETS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <link rel="stylesheet" href="Content/app.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
+    <link rel="stylesheet" href="Content/app.css">
 
     <!--    FIREBASE  -->
     <script src="https://www.gstatic.com/firebasejs/3.9.0/firebase.js"></script>
@@ -26,27 +39,22 @@
                 window.location.href = "signIn.html";
             }
         });
-
     </script>
 
-    <!--    APP SCRIPTS     -->
-    <!--
+    <!--    APP SCRIPTS  
     <script src="Scripts/jquery.min.js"></script>
     <script src="Scripts/bootstrap.min.js"></script>
     -->
+
     <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-
     <script src="Scripts/w3.js"></script>
     <script src="Scripts/Chart.bundle.js"></script>
     <script src="Scripts/app.js"></script>
-
-    <!--     LOADING UI SCRIPTS     -->
     <script src="Scripts/jquery.loadingModal.min.js" type="text/javascript"></script>
     <link rel="stylesheet" href="Content/jquery.loadingModal.min.css" type="text/css" />
 
 </head>
-
 
 <body class="bgimg">
 
@@ -363,7 +371,7 @@
                                     <div class="form-group row">
                                         <label class="control-label col-xs-4">Date</label>
                                         <div class="col-xs-8">
-                                                <input type="date" class="form-control" id="newDataMeasurementDate">
+                                            <input type="date" class="form-control" id="newDataMeasurementDate">
                                         </div>
                                     </div>
 
@@ -608,9 +616,6 @@
 
 
 <script type="text/javascript">
-    
-
-    
     window.onload = function() {
         // load app like demo
         //         FitLogAppDemo();
