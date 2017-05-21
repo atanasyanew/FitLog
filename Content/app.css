@@ -105,6 +105,14 @@ textarea {
     max-height: none;
 }
 
+.navbar-brand-svg {
+    padding: 0px;
+    height: 100%;
+    padding: 0px;
+    padding-left: 15px;
+    width: auto;
+}
+
 
 /*TABLES, DLs*/
 
