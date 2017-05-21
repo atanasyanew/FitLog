@@ -10,107 +10,103 @@
 
 //local storage
 function FitLogAppDemo() {
+
     "use strict";
 
-    var storage;
-    var data;
-    var target;
-    var user;
+    // signOut / redirect to signin page
+    document.getElementById('signOut').addEventListener('click', () => {
+        location.href = "signin.html";
+    });
 
-    //init storage
+    // INIT STORAGE 
+    var userDataBase;
     if (localStorage.fitLogApp === undefined) {
-        //init empty storage   
-        //localStorage.setItem('fitLogApp', JSON.stringify(new storageObj()));
-        localStorage.setItem('fitLogApp', JSON.stringify(fakeObj));
-        document.location.reload();
-    } else {
-        storage = JSON.parse(localStorage.fitLogApp); //get localstorage data
-        data = storage.data;
-        target = storage.target;
-        user = storage.profile;
+        localStorage.setItem('fitLogApp', JSON.stringify(fakeObj()));
     }
+    userDataBase = JSON.parse(localStorage.getItem('fitLogApp'));
 
-    if (data && target && user) {
-        //init app     
-        var a = new appData(data, target, user);
+
+    // INIT APP, NULL OBJs
+    var initData, initTarget, initUser;
+    var a = new AppData(initData, initTarget, initUser);
+    var u = new AppUser(initUser);
+
+    // Simulate .on() firebase method, but for LS
+    function updateOnLSChange() {
+        // add objects to app
+        a.data = userDataBase.data;
+        a.target = userDataBase.target;
+        a.user = userDataBase.profile;
+
+        u.user = userDataBase.profile;
+
+        u.displayUser();
+        u.fillUserForm();
         a.displayTableData();
-        a.drawMainChart();
-        a.fillNewDataForm();
-        a.fillNewDataFormReadonly();
         a.displayTarget();
 
-        //delete Record
+        a.drawMainChart();
+        a.drawChartOne();
+        a.drawChartTree();
+        a.drawChartTwo();
+        a.fillNewDataForm();
+        a.fillNewDataFormReadonly();
+
+        //DELETE RECORDS
         var tablBtns = document.getElementById("DataTable").querySelectorAll("button");
-        //addEventListener for all btns 
-        for (var i = 0; i < tablBtns.length; i++) {
-            tablBtns[i].addEventListener('click', function () {
-
+        tablBtns.forEach(function (item) {
+            item.addEventListener('click', function () {
                 if (confirm("Are you sure?")) {
-                    //alert(this.value);
-                    //console.log("value for del: " + this.value);
-                    storage['data'] = a.deleteRecord(this.value); //return obj
-                    //console.log(storage);
-                    localStorage.setItem('fitLogApp', JSON.stringify(storage));
-                    document.location.reload();
-                }
-
-            }, false);
-        }
-
-        //update readonly props new record form
-        var newDataForm = document.getElementById("newDataForm");
-        newDataForm.addEventListener("change", function () {
-            a.fillNewDataFormReadonly();
-        });
-        newDataForm.addEventListener("click", function () {
-            a.fillNewDataFormReadonly();
+                    // alert("item." + item.value + " | this." + this.value);
+                    userDataBase['data'] = a.deleteRecord(this.value);
+                    //console.log(userDataBase.data);
+                    localStorage.setItem('fitLogApp', JSON.stringify(userDataBase));
+                    updateOnLSChange();
+                };
+            });
         });
 
-        //update progres table
-        var progTableSelectList = document.getElementById("progressTableSelectList");
-        progTableSelectList.addEventListener("change", function () {
-            a.displayTarget();
-        });
-
-        //save new data
-        var createNewRecord = document.getElementById("createNewRecord");
-        createNewRecord.addEventListener("click", function () {
-            storage['data'] = a.createNewRecord(); //return obj
-            //console.log(storage.data);
-            localStorage.setItem('fitLogApp', JSON.stringify(storage));
-            document.location.reload();
-        });
-
-        //save target
-        var saveTarget = document.getElementById("saveTarget");
-        saveTarget.addEventListener("click", function () {
-            storage['target'] = a.createTarget(); //return obj
-            //console.log(storage);
-            localStorage.setItem('fitLogApp', JSON.stringify(storage));
-            document.location.reload();
-        });
-
-
-
-        u = new appUser(user);
-
-        //save new user data
-        var saveUser = document.getElementById("saveUser");
-        saveUser.addEventListener("click", function () {
-            user = u.editUser();
-            //console.log(storage);
-            localStorage.setItem('fitLogApp', JSON.stringify(storage));
-            document.location.reload();
-        });
-
-
-    } else {
-        console.log("An error has accure, can't load objects");
-        //console.log(storage);
     }
 
+    // call function to fill app for first time
+    updateOnLSChange();
 
+    //save target
+    var saveTarget = document.getElementById("saveTarget");
+    saveTarget.addEventListener("click", () => {
+        userDataBase['target'] = a.createTarget(); //return obj
+        localStorage.setItem('fitLogApp', JSON.stringify(userDataBase));
+        updateOnLSChange();
+        window.location.hash = "log";
+    });
 
+    //save new data
+    var createNewRecord = document.getElementById("createNewRecord");
+    createNewRecord.addEventListener("click", () => {
+        userDataBase['data'] = a.createNewRecord();
+        localStorage.setItem('fitLogApp', JSON.stringify(userDataBase));
+        updateOnLSChange();
+        window.location.hash = "log";
+    });
+
+    //save new user data
+    var saveUser = document.getElementById("saveUser");
+    saveUser.addEventListener("click", () => {
+        userDataBase['profile'] = u.editUser();
+        localStorage.setItem('fitLogApp', JSON.stringify(userDataBase));
+        updateOnLSChange();
+        window.location.hash = "profile";
+    });
+
+    //update readonly props new record form
+    var newDataForm = document.getElementById("newDataForm");
+    newDataForm.addEventListener("click", () => {
+        a.fillNewDataFormReadonly()
+    }, false);
+
+    //update progres table
+    var progTableSelectList = document.getElementById("progressTableSelectList");
+    progTableSelectList.addEventListener("change", () => a.displayTarget(), false);
 
 }
 
@@ -1356,38 +1352,47 @@ function constructChartLabels(arrWithObjs, objKey) {
     }
     return myArray;
 }
+
 //FORM plus and minus buttons
-$('.btn-number').click(function (e) {
-    e.preventDefault();
+function formАuxiliaryBtns() {
+        // btns example
+        // <button type="button" class="btn btn-danger btn-number"  data-type="minus" data-field="quant[3]">
+        // <input type="number" name="quant[3]" class="form-control input-number" value="170" min="140" max="250" id="editUserHeight">                                      
+        // <button type="button" class="btn btn-success btn-number" data-type="plus" data-field="quant[3]">
 
-    fieldName = $(this).attr('data-field');
-    type = $(this).attr('data-type');
-    var input = $("input[name='" + fieldName + "']");
-    var currentVal = parseInt(input.val());
-    if (!isNaN(currentVal)) {
-        if (type == 'minus') {
+        $('.btn-number').click(function(e) {
+            e.preventDefault();
 
-            if (currentVal > input.attr('min')) {
-                input.val(currentVal - 1).change();
+            fieldName = $(this).attr('data-field');
+            type = $(this).attr('data-type');
+
+            var input = $("input[name='" + fieldName + "']");
+            var currentVal = parseInt(input.val());
+            if (!isNaN(currentVal)) {
+                if (type == 'minus') {
+
+                    if (currentVal > input.attr('min')) {
+                        input.val(currentVal - 1).change();
+                    }
+                    if (parseInt(input.val()) == input.attr('min')) {
+                        $(this).attr('disabled', true);
+                    }
+
+                } else if (type == 'plus') {
+
+                    if (currentVal < input.attr('max')) {
+                        input.val(currentVal + 1).change();
+                    }
+                    if (parseInt(input.val()) == input.attr('max')) {
+                        $(this).attr('disabled', true);
+                    }
+
+                }
+            } else {
+                input.val(0);
             }
-            if (parseInt(input.val()) == input.attr('min')) {
-                $(this).attr('disabled', true);
-            }
+        });
 
-        } else if (type == 'plus') {
-
-            if (currentVal < input.attr('max')) {
-                input.val(currentVal + 1).change();
-            }
-            if (parseInt(input.val()) == input.attr('max')) {
-                $(this).attr('disabled', true);
-            }
-
-        }
-    } else {
-        input.val(0);
-    }
-});
 // OTHER FORMS STUFF
 /*
 $('.input-number').focusin(function(){
@@ -1431,6 +1436,8 @@ $(".input-number").keydown(function (e) {
         }
     });
 */
+    }
+
 function fakeObj() {
 
     /*
@@ -1447,9 +1454,9 @@ function fakeObj() {
     //object
     this.object = new storageObj();
     //user 
-    object.profile = new userObj("AY", "1991-01-01", "Male", 171);
+    object.profile = new userObj("I am a Demo", "1991-01-01", "Male", 172);
     //target
-    object.target = new dataObj('', 68, 81, '', '40', '105', '', 12, '', '', '', '', '', '');
+    object.target = new dataObj('', 72, '', '', 40, 105, '', 12, '', '', '', '', '', '');
 
     //data array
     var arr = [];
@@ -1480,9 +1487,6 @@ function fakeObj() {
     arr.unshift(new dataObj('2016-06-14', 75.0, 85, 96, 36.0, 105, 52.0, 20.41, 15.3, 59.7, 'H-Ben rev', 1.600, 2722, 'comment3'));
     arr.unshift(new dataObj('2016-06-26', 75.0, 86, 98, 35.0, 104, 53.0, 21.80, 16.4, 58.7, 'H-Benedict', 1.600, 2741, 'comment6'));
     arr.unshift(new dataObj('2016-07-19', 75.0, 88, 97, 35.5, 104, 53.0, 21.83, 16.4, 58.6, 'H-Benedict', 1.600, 2741, 'comment7'));
-    arr.unshift(new dataObj('2016-08-04', 75.0, 88, 97, 36.0, 101, 54.0, 21.83, 16.4, 58.6, 'H-Benedict', 1.600, 2741, 'comment9'));
-    arr.unshift(new dataObj('2016-10-09', 78.0, 95, 99, 34.0, 104, 53.0, 24.96, 19.5, 58.5, 'H-Benedict', 1.600, 2804, 'comment0'));
-    arr.unshift(new dataObj('2017-03-27', 75.5, 87, 99, 35.0, 104, 51.0, 22.64, 17.1, 58.4, 'H-Ben rev', 1.725, 2955, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'));
 
     //ADD DATA TO THE OBJECT
     object.data = arr;

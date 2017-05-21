@@ -34,18 +34,18 @@
     <script src="config.js"></script>
     <script>
         // NO USER
-        firebase.auth().onAuthStateChanged(function(user) {
-            if (!user) {
-                window.location.href = "signIn.html";
-            }
-        });
+        //        firebase.auth().onAuthStateChanged(function(user) {
+        //            if (!user) {
+        //                window.location.href = "signin.html";
+        //            }
+        //        });
 
     </script>
 
-    <!--    APP SCRIPTS  
-    <script src="Scripts/jquery.min.js"></script>
-    <script src="Scripts/bootstrap.min.js"></script>
-    -->
+    <!--  APP SCRIPTS  -->
+    <!--    <script src="Scripts/jquery.min.js"></script>-->
+    <!--    <script src="Scripts/bootstrap.min.js"></script>-->
+
 
     <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
@@ -608,166 +608,158 @@
 
     </div>
     <!-- /container -->
-    <!-- /container -->
 
+    <script>
+        fitLogApp = function() {
+            "use strict";
+            //signOut
+            var signOut = document.getElementById('signOut');
+            signOut.addEventListener('click', () => {
+                firebase.auth().signOut()
+            });
+
+            //firebase auth 
+            firebase.auth().onAuthStateChanged(function(user) {
+
+                    if (user) {
+                        // User is signed in.
+                        // var email = user.email;
+                        // var emailVerified = user.emailVerified;
+                        // var photoURL = user.photoURL;
+                        // var providerData = user.providerData;
+                        // console.log(user);
+                        var uid = user.uid;
+                        var displayName = user.displayName;
+
+                        //USER DATABASE REF
+                        var userDataBase = firebase.database().ref('dataBase').child(uid);
+                        //INIT APP FUNCTIONS
+                        var initData, initTarget, initUser;
+                        var a = new AppData(initData, initTarget, initUser);
+                        var u = new AppUser(initUser);
+
+                        //INIT STORAGE
+                        userDataBase.once('value', function(snapshot) {
+
+                            if (snapshot.exists()) {
+                                //existing user
+                                //console.log("init existing user");
+                            } else {
+                                // new empty object
+                                var emptyObj = new storageObj();
+                                emptyObj['profile'].name = displayName;
+                                userDataBase.set(emptyObj);
+                                //console.log("user db created");
+                            }
+                        });
+
+                        //APP START, sync with firebase
+                        userDataBase.on('value', function(snap) {
+
+                            if (snap.exists()) {
+
+                                //get data
+                                var fireStorage = snap.val();
+                                //assign data
+                                a.data = fireStorage.data;
+                                a.target = fireStorage.target;
+                                a.user = fireStorage.profile;
+                                u.user = fireStorage.profile;
+
+                                //init app 
+                                u.displayUser();
+                                u.fillUserForm();
+                                a.displayTableData();
+                                a.displayTarget();
+
+                                a.drawMainChart();
+                                a.drawChartOne();
+                                a.drawChartTree();
+                                a.drawChartTwo();
+                                a.fillNewDataForm();
+                                a.fillNewDataFormReadonly();
+
+                                //DELETE RECORDS
+                                var tablBtns = document.getElementById("DataTable").querySelectorAll("button");
+                                tablBtns.forEach(function(item) {
+                                    item.addEventListener('click', function() {
+                                        if (confirm("Are you sure?")) {
+                                            // alert("item." + item.value + " | this." + this.value);
+                                            userDataBase.child('data').set(a.deleteRecord(this.value));
+                                        };
+                                    });
+                                });
+
+                            } else {
+                                console.log("An error has accure, can't load objects");
+                            }
+
+                        }); //end data fire sync func
+
+                        //save target
+                        var saveTarget = document.getElementById("saveTarget");
+                        saveTarget.addEventListener("click", () => {
+                            // fireStorage['target'] = a.createTarget(); //return obj
+                            userDataBase.child('target').set(a.createTarget());
+                            window.location.hash = "log";
+                        });
+
+                        //save new data
+                        var createNewRecord = document.getElementById("createNewRecord");
+                        createNewRecord.addEventListener("click", () => {
+                            userDataBase.child('data').set(a.createNewRecord());
+                            window.location.hash = "log";
+                        });
+
+                        //save new user data
+                        var saveUser = document.getElementById("saveUser");
+                        saveUser.addEventListener("click", () => {
+                            userDataBase.child('profile').update(u.editUser());
+                            window.location.hash = "profile";
+                        });
+
+                        //update readonly props new record form
+                        var newDataForm = document.getElementById("newDataForm");
+                        newDataForm.addEventListener("click", () => {
+                            a.fillNewDataFormReadonly()
+                        }, false);
+
+                        //update progres table
+                        var progTableSelectList = document.getElementById("progressTableSelectList");
+                        progTableSelectList.addEventListener("change", () => a.displayTarget(), false);
+
+                    } else {
+                        // User is signed out.
+                        location.href = "signin.html";
+                    }
+                },
+                function(error) {
+                    console.log(error);
+                });
+        };
+    </script>
+
+    <script>
+        window.onload = function() {
+        
+            //FitLogAppDemo();
+            // hashNav(); //need to init
+            removeHashNav();
+            fitLogApp();
+            formАuxiliaryBtns();
+        };
+
+        //window.onhashchange = () => hashNav();
+
+        //fix navbar collapse for hashnav
+        $(document).on('click', '.navbar-collapse.in', function(e) {
+            if ($(e.target).is('a') && $(e.target).attr('class') != 'dropdown-toggle') {
+                $(this).collapse('hide');
+            }
+        });
+
+    </script>
 
 </body>
 
 </html>
-
-
-
-
-
-<script type="text/javascript">
-    window.onload = function() {
-        // load app like demo
-        //         FitLogAppDemo();
-        //        removeHashNav();
-        hashNav(); //need to init
-        initApp();
-    };
-
-    window.onhashchange = function() {
-        hashNav();
-    }
-
-    //fix navbar collapse for hashnav
-    $(document).on('click', '.navbar-collapse.in', function(e) {
-        if ($(e.target).is('a') && $(e.target).attr('class') != 'dropdown-toggle') {
-            $(this).collapse('hide');
-        }
-    });
-
-
-
-
-    initApp = function() {
-        "use strict";
-        //signOut
-        var signOut = document.getElementById('signOut');
-        signOut.addEventListener('click', () => {
-            firebase.auth().signOut()
-        });
-
-        //firebase auth 
-        firebase.auth().onAuthStateChanged(function(user) {
-
-                if (user) {
-                    // User is signed in.
-                    // var email = user.email;
-                    // var emailVerified = user.emailVerified;
-                    // var photoURL = user.photoURL;
-                    // var providerData = user.providerData;
-                    console.log(user);
-                    var uid = user.uid;
-                    var displayName = user.displayName;
-
-                    //USER DATABASE REF
-                    var userDataBase = firebase.database().ref('dataBase').child(uid);
-                    //INIT APP FUNCTIONS
-                    var initData, initTarget, initUser;
-                    var a = new AppData(initData, initTarget, initUser);
-                    var u = new AppUser(initUser);
-
-                    //INIT STORAGE
-                    userDataBase.once('value', function(snapshot) {
-
-                        if (snapshot.exists()) {
-                            //existing user
-                            //console.log("init existing user");
-                        } else {
-                            // new empty object
-                            var emptyObj = new storageObj();
-                            emptyObj['profile'].name = displayName;
-                            userDataBase.set(emptyObj);
-                            //console.log("user db created");
-                        }
-                    });
-
-                    //APP START, sync with firebase
-                    userDataBase.on('value', function(snap) {
-
-                        if (snap.exists()) {
-
-                            //get data
-                            var fireStorage = snap.val();
-                            //assign data
-                            a.data = fireStorage.data;
-                            a.target = fireStorage.target;
-                            a.user = fireStorage.profile;
-                            u.user = fireStorage.profile;
-
-                            //init app 
-                            u.displayUser();
-                            u.fillUserForm();
-                            a.displayTableData();
-                            a.displayTarget();
-
-                            a.drawMainChart();
-                            a.drawChartOne();
-                            a.drawChartTree();
-                            a.drawChartTwo();
-                            a.fillNewDataForm();
-                            a.fillNewDataFormReadonly();
-
-                            //DELETE RECORDS
-                            var tablBtns = document.getElementById("DataTable").querySelectorAll("button");
-                            tablBtns.forEach(function(item) {
-                                item.addEventListener('click', function() {
-                                    if (confirm("Are you sure?")) {
-                                        // alert("item." + item.value + " | this." + this.value);
-                                        userDataBase.child('data').set(a.deleteRecord(this.value));
-                                    };
-                                });
-                            });
-
-                        } else {
-                            console.log("An error has accure, can't load objects");
-                        }
-
-                    }); //end data fire sync func
-
-                    //save target
-                    var saveTarget = document.getElementById("saveTarget");
-                    saveTarget.addEventListener("click", () => {
-                        // fireStorage['target'] = a.createTarget(); //return obj
-                        userDataBase.child('target').set(a.createTarget());
-                        window.location.hash = "log";
-                    });
-
-                    //save new data
-                    var createNewRecord = document.getElementById("createNewRecord");
-                    createNewRecord.addEventListener("click", () => {
-                        userDataBase.child('data').set(a.createNewRecord());
-                        window.location.hash = "log";
-                    });
-
-                    //save new user data
-                    var saveUser = document.getElementById("saveUser");
-                    saveUser.addEventListener("click", () => {
-                        userDataBase.child('profile').update(u.editUser());
-                        window.location.hash = "profile";
-                    });
-
-                    //update readonly props new record form
-                    var newDataForm = document.getElementById("newDataForm");
-                    newDataForm.addEventListener("click", () => {
-                        a.fillNewDataFormReadonly()
-                    }, false);
-
-                    //update progres table
-                    var progTableSelectList = document.getElementById("progressTableSelectList");
-                    progTableSelectList.addEventListener("change", () => a.displayTarget(), false);
-
-                } else {
-                    // User is signed out.
-                    location.href = "signIn.html";
-                }
-            },
-            function(error) {
-                console.log(error);
-            });
-    };
-
-</script>
