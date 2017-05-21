@@ -5,6 +5,7 @@
  *
  *  TO DO:
     - target, b10d, b30d
+    - touch friendly, swipe left right etc..
  */
 
 
@@ -496,19 +497,19 @@ function AppData(dt, tar, ur) {
                     table += "<td nowrap class=\"text-left\">" + tableRows[i][2] + "</td>";
 
                     // TO DO COMPARE FROM DROP LIST FOR BEFORE 10, 30 DAYS RESULTS
-//                    switch (compareList.value) {
-//                        case "b10d":
-//                            table += "<td nowrap class=\"text-left\">" + "10" + "</td>";
-//                            break;
-//                        case "b30d":
-//                            table += "<td nowrap class=\"text-left\">" + "30" + "</td>";
-//                            break;
-//                        case "f1r":
-//                            table += "<td nowrap class=\"text-left\">" + "f1r" + "</td>";
-//                            break;
-//                        default:
-//                            table += "<td nowrap class=\"text-left\">" + "NaN" + "</td>";
-//                    }
+                    //                    switch (compareList.value) {
+                    //                        case "b10d":
+                    //                            table += "<td nowrap class=\"text-left\">" + "10" + "</td>";
+                    //                            break;
+                    //                        case "b30d":
+                    //                            table += "<td nowrap class=\"text-left\">" + "30" + "</td>";
+                    //                            break;
+                    //                        case "f1r":
+                    //                            table += "<td nowrap class=\"text-left\">" + "f1r" + "</td>";
+                    //                            break;
+                    //                        default:
+                    //                            table += "<td nowrap class=\"text-left\">" + "NaN" + "</td>";
+                    //                    }
                     table += "</tr>";
                     //check if no target
                 }
@@ -1355,88 +1356,88 @@ function constructChartLabels(arrWithObjs, objKey) {
 
 //FORM plus and minus buttons
 function formАuxiliaryBtns() {
-        // btns example
-        // <button type="button" class="btn btn-danger btn-number"  data-type="minus" data-field="quant[3]">
-        // <input type="number" name="quant[3]" class="form-control input-number" value="170" min="140" max="250" id="editUserHeight">                                      
-        // <button type="button" class="btn btn-success btn-number" data-type="plus" data-field="quant[3]">
+    // btns example
+    // <button type="button" class="btn btn-danger btn-number"  data-type="minus" data-field="quant[3]">
+    // <input type="number" name="quant[3]" class="form-control input-number" value="170" min="140" max="250" id="editUserHeight">                                      
+    // <button type="button" class="btn btn-success btn-number" data-type="plus" data-field="quant[3]">
 
-        $('.btn-number').click(function(e) {
-            e.preventDefault();
+    $('.btn-number').click(function (e) {
+        e.preventDefault();
 
-            fieldName = $(this).attr('data-field');
-            type = $(this).attr('data-type');
+        fieldName = $(this).attr('data-field');
+        type = $(this).attr('data-type');
 
-            var input = $("input[name='" + fieldName + "']");
-            var currentVal = parseInt(input.val());
-            if (!isNaN(currentVal)) {
-                if (type == 'minus') {
+        var input = $("input[name='" + fieldName + "']");
+        var currentVal = parseInt(input.val());
+        if (!isNaN(currentVal)) {
+            if (type == 'minus') {
 
-                    if (currentVal > input.attr('min')) {
-                        input.val(currentVal - 1).change();
-                    }
-                    if (parseInt(input.val()) == input.attr('min')) {
-                        $(this).attr('disabled', true);
-                    }
-
-                } else if (type == 'plus') {
-
-                    if (currentVal < input.attr('max')) {
-                        input.val(currentVal + 1).change();
-                    }
-                    if (parseInt(input.val()) == input.attr('max')) {
-                        $(this).attr('disabled', true);
-                    }
-
+                if (currentVal > input.attr('min')) {
+                    input.val(currentVal - 1).change();
                 }
-            } else {
-                input.val(0);
+                if (parseInt(input.val()) == input.attr('min')) {
+                    $(this).attr('disabled', true);
+                }
+
+            } else if (type == 'plus') {
+
+                if (currentVal < input.attr('max')) {
+                    input.val(currentVal + 1).change();
+                }
+                if (parseInt(input.val()) == input.attr('max')) {
+                    $(this).attr('disabled', true);
+                }
+
             }
-        });
-
-// OTHER FORMS STUFF
-/*
-$('.input-number').focusin(function(){
-   $(this).data('oldValue', $(this).val());
-});
-$('.input-number').change(function() {
-
-    minValue =  parseInt($(this).attr('min'));
-    maxValue =  parseInt($(this).attr('max'));
-    valueCurrent = parseInt($(this).val());
-
-    name = $(this).attr('name');
-    if(valueCurrent >= minValue) {
-        $(".btn-number[data-type='minus'][data-field='"+name+"']").removeAttr('disabled')
-    } else {
-        alert('Sorry, the minimum value was reached');
-        $(this).val($(this).data('oldValue'));
-    }
-    if(valueCurrent <= maxValue) {
-        $(".btn-number[data-type='plus'][data-field='"+name+"']").removeAttr('disabled')
-    } else {
-        alert('Sorry, the maximum value was reached');
-        $(this).val($(this).data('oldValue'));
-    }
-
-
-});
-$(".input-number").keydown(function (e) {
-        // Allow: backspace, delete, tab, escape, enter and .
-        if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 190]) !== -1 ||
-             // Allow: Ctrl+A
-            (e.keyCode == 65 && e.ctrlKey === true) ||
-             // Allow: home, end, left, right
-            (e.keyCode >= 35 && e.keyCode <= 39)) {
-                 // let it happen, don't do anything
-                 return;
-        }
-        // Ensure that it is a number and stop the keypress
-        if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
-            e.preventDefault();
+        } else {
+            input.val(0);
         }
     });
-*/
-    }
+
+    // OTHER FORMS STUFF
+    /*
+    $('.input-number').focusin(function(){
+       $(this).data('oldValue', $(this).val());
+    });
+    $('.input-number').change(function() {
+
+        minValue =  parseInt($(this).attr('min'));
+        maxValue =  parseInt($(this).attr('max'));
+        valueCurrent = parseInt($(this).val());
+
+        name = $(this).attr('name');
+        if(valueCurrent >= minValue) {
+            $(".btn-number[data-type='minus'][data-field='"+name+"']").removeAttr('disabled')
+        } else {
+            alert('Sorry, the minimum value was reached');
+            $(this).val($(this).data('oldValue'));
+        }
+        if(valueCurrent <= maxValue) {
+            $(".btn-number[data-type='plus'][data-field='"+name+"']").removeAttr('disabled')
+        } else {
+            alert('Sorry, the maximum value was reached');
+            $(this).val($(this).data('oldValue'));
+        }
+
+
+    });
+    $(".input-number").keydown(function (e) {
+            // Allow: backspace, delete, tab, escape, enter and .
+            if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 190]) !== -1 ||
+                 // Allow: Ctrl+A
+                (e.keyCode == 65 && e.ctrlKey === true) ||
+                 // Allow: home, end, left, right
+                (e.keyCode >= 35 && e.keyCode <= 39)) {
+                     // let it happen, don't do anything
+                     return;
+            }
+            // Ensure that it is a number and stop the keypress
+            if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                e.preventDefault();
+            }
+        });
+    */
+}
 
 function fakeObj() {
 
@@ -1460,33 +1461,32 @@ function fakeObj() {
 
     //data array
     var arr = [];
-    arr.unshift(new dataObj('2015-07-27', 75.5, 87, 99, 35.0, 104, 51.0, 22.64, 17.1, 58.4, 'H-Ben rev', 1.725, 2955, 'comment1'));
-    arr.unshift(new dataObj('2015-08-12', 74.5, 87, 99, 35.5, 107, 50.0, 22.64, 16.9, 57.6, 'H-Ben rev', 1.725, 2932, 'comment2'));
-    arr.unshift(new dataObj('2015-08-17', 73.5, 84, 96, 35.0, 106, 52.0, 20.12, 14.8, 58.7, 'H-Ben rev', 1.725, 2910, 'comment3'));
-    arr.unshift(new dataObj('2015-09-01', 73.0, 84, 96, 34.0, 102, 51.0, 20.12, 14.7, 58.3, 'H-Ben rev', 1.725, 2899, 'comment4'));
-    arr.unshift(new dataObj('2015-09-08', 71.5, 84, 95, 35.0, 104, 52.0, 19.57, 14.0, 57.5, 'H-Ben rev', 1.725, 2866, 'comment5'));
-    arr.unshift(new dataObj('2015-09-19', 70.6, 83, 94, 35.0, 104, 52.0, 18.73, 13.2, 57.4, 'H-Ben rev', 1.725, 2846, 'comme6nt'));
-    arr.unshift(new dataObj('2015-10-04', 68.0, 81, 94, 34.0, 104, 50.0, 18.15, 12.5, 56.5, 'H-Ben rev', 1.725, 2810, 'commen7t'));
-    arr.unshift(new dataObj('2016-01-02', 71.0, 84, 96, 33.0, 100, 52.0, 20.12, 14.3, 56.7, 'H-Ben rev', 1.725, 2845, 'comment8'));
-    arr.unshift(new dataObj('2016-01-16', 73.0, 84, 96, 34.0, 103, 52.0, 20.12, 14.7, 58.3, 'H-Ben rev', 1.725, 2890, 'comment'));
-    arr.unshift(new dataObj('2016-01-21', 72.0, 84, 96, 34.5, 103, 52.0, 20.12, 14.5, 57.5, 'H-Ben rev', 1.725, 2868, 'comment'));
-    arr.unshift(new dataObj('2016-01-29', 72.0, 84, 97, 35.0, 103, 52.0, '', 14.9, 57.1, 'H-Ben rev', 1.725, 2868, 'cormment'));
-    arr.unshift(new dataObj('2016-02-06', 72.5, 83, 97, 35.0, 102, 53.0, 20.38, 14.8, 57.7, 'H-Ben rev', 1.725, 2879, 'commdent'));
-    arr.unshift(new dataObj('2016-02-13', 73.0, 83, 97, 35.5, 103, 53.0, 20.38, 14.9, 58.1, 'H-Ben rev', 1.725, 2890, 'comdment'));
-    arr.unshift(new dataObj('2016-02-22', 73.0, 82, 97, 36.0, 104, 52.0, 20.09, 14.7, 58.3, 'H-Ben rev', 1.725, 2890, 'comment'));
-    arr.unshift(new dataObj('2016-02-26', 73.0, 83, 96, 36.0, 105, 53.0, 19.83, 14.5, 58.5, 'H-Ben rev', 1.725, 2890, 'commedsnt'));
-    arr.unshift(new dataObj('2016-03-13', 73.5, 82, 96, 35.0, 105, 52.0, 19.54, 14.4, 59.1, 'H-Ben rev', 1.725, 2901, 'comments'));
-    arr.unshift(new dataObj('2016-03-19', 73.6, 85, 95, 34.0, 104, 52.0, 19.86, 14.6, 59.0, 'H-Ben rev', 1.725, 2903, 'comments'));
-    arr.unshift(new dataObj('2016-04-02', 74.0, 85, 96, 36.0, 105, 52.0, 20.41, 15.1, 58.9, 'H-Ben rev', 1.725, 2912, 'commentr'));
-    arr.unshift(new dataObj('2016-04-08', 75.0, 84, 96, 35.0, 105, 52.0, 20.12, 15.1, 59.9, 'H-Ben rev', 1.725, 2934, 'comment5'));
-    arr.unshift(new dataObj('2016-04-16', 75.0, 85, 97, 35.5, 105, 51.0, 20.96, 15.7, 59.3, 'H-Ben rev', 1.725, 2934, 'comment3'));
-    arr.unshift(new dataObj('2016-04-23', 75.0, 85, 97, 36.0, 105, 51.0, 20.96, 15.7, 59.3, 'H-Ben rev', 1.600, 2722, 'comment5'));
-    arr.unshift(new dataObj('2016-05-06', 75.5, 86, 98, 36.0, 105, 52.0, 21.80, 16.5, 59.0, 'H-Ben rev', 1.600, 2732, 'comment4'));
-    arr.unshift(new dataObj('2016-05-13', 74.0, 86, 97, 36.0, 103, 52.0, 21.25, 15.7, 58.3, 'H-Ben rev', 1.600, 2701, 'comment6'));
-    arr.unshift(new dataObj('2016-05-22', 75.0, 85, 97, 36.5, 103, 52.0, 20.96, 15.7, 59.3, 'H-Ben rev', 1.600, 2722, 'comment5'));
-    arr.unshift(new dataObj('2016-06-14', 75.0, 85, 96, 36.0, 105, 52.0, 20.41, 15.3, 59.7, 'H-Ben rev', 1.600, 2722, 'comment3'));
-    arr.unshift(new dataObj('2016-06-26', 75.0, 86, 98, 35.0, 104, 53.0, 21.80, 16.4, 58.7, 'H-Benedict', 1.600, 2741, 'comment6'));
-    arr.unshift(new dataObj('2016-07-19', 75.0, 88, 97, 35.5, 104, 53.0, 21.83, 16.4, 58.6, 'H-Benedict', 1.600, 2741, 'comment7'));
+    arr.unshift(new dataObj('2015-05-06', 78, 91, 101, 34, 101, 51, 24.9, 19.422, 58.578, '1 - H-B, Mifflin St Jeor Equation rev. in 1990', 1.55, 3010.126104, ''));
+    arr.unshift(new dataObj('2015-05-30', 77, 89, 100, 33, 105, 51, 23.77, 18.3029, 58.6971, '1 - H-B, Mifflin St Jeor Equation rev. in 1990', 1.55, 2987.940672, 'Circuit workout'));
+    arr.unshift(new dataObj('2015-06-04', 77, 92, 101, 34, 103, 55, 25.19, 19.3963, 57.6037, '1 - H-B, Mifflin St Jeor Equation rev. in 1990', 1.55, 2854.53, ''));
+    arr.unshift(new dataObj('2015-06-13', 76, 89, 101, 33, 105, 53, 24.32, 18.4832, 57.5168, '2 - Katch-McArdle Formula ', 1.725, 2232.3708, ''));
+    arr.unshift(new dataObj('2015-06-27', 75.3, 89, 100, 34, 104, 53, 23.77, 17.89881, 57.40119, '1 - H-B, Mifflin St Jeor Equation rev. in 1990', 1.725, 2950.2254376, 'change workout'));
+    arr.unshift(new dataObj('2015-07-10', 74.9, 85, 100, 35, 106, 51.5, 22.61, 16.93489, 57.96511, '1 - H-B, Mifflin St Jeor Equation rev. in 1990', 1.725, 2941.3512648, ''));
+    arr.unshift(new dataObj('2015-07-27', 75.5, 87, 99, 35, 104, 51, 22.64, 17.0932, 58.4068, '1 - H-B, Mifflin St Jeor Equation rev. in 1990', 1.725, 2954.662524, ''));
+    arr.unshift(new dataObj('2015-08-12', 74.5, 87, 99, 35.5, 107, 50, 22.64, 16.8668, 57.6332, '1 - H-B, Mifflin St Jeor Equation rev. in 1990', 1.725, 2932.477092, ''));
+    arr.unshift(new dataObj('2015-08-17', 73.5, 84, 96, 35, 106, 52, 20.12, 14.7882, 58.7118, '1 - H-B, Mifflin St Jeor Equation rev. in 1990', 1.725, 2910.29166, 'change workout'));
+    arr.unshift(new dataObj('2015-09-01', 73, 84, 96, 34, 102, 51, 20.12, 14.6876, 58.3124, '1 - H-B, Mifflin St Jeor Equation rev. in 1990', 1.725, 2899.198944, ''));
+    arr.unshift(new dataObj('2015-09-08', 71.5, 84, 95, 35, 104, 52, 19.57, 13.99255, 57.50745, '1 - H-B, Mifflin St Jeor Equation rev. in 1990', 1.725, 2865.920796, ''));
+    arr.unshift(new dataObj('2015-09-19', 70.6, 83, 94, 35, 104, 52, 18.73, 13.22338, 57.37662, '1 - H-B, Mifflin St Jeor Equation rev. in 1990', 1.725, 2845.9539072, ''));
+    arr.unshift(new dataObj('2015-10-04', 69, 81, 94, 34, 104, 50, 18.15, 12.5235, 56.4765, '1 - H-B, Mifflin St Jeor Equation rev. in 1990', 1.725, 2810.457216, ''));
+    arr.unshift(new dataObj('2016-01-02', 71, 84, 96, 33, 100, 52, 20.12, 14.2852, 56.7148, '1 - H-B, Mifflin St Jeor Equation rev. in 1990', 1.725, 2845.426968, 'Change diet'));
+    arr.unshift(new dataObj('2016-01-16', 73, 84, 96, 34, 103, 52, 20.12, 14.6876, 58.3124, '1 - H-B, Mifflin St Jeor Equation rev. in 1990', 1.55, 2889.797832, ''));
+    arr.unshift(new dataObj('2016-01-21', 72, 84, 96, 34.5, 103, 52, 20.12, 14.4864, 57.5136, '1 - H-B, Mifflin St Jeor Equation rev. in 1990', 1.55, 2867.6124, ''));
+    arr.unshift(new dataObj('2016-01-29', 72, 84, 97, 35, 103, 52, 20.67, 14.8824, 57.1176, '1 - H-B, Mifflin St Jeor Equation rev. in 1990', 1.725, 2867.6124, ''));
+    arr.unshift(new dataObj('2016-02-06', 72.5, 83, 97, 35, 102, 53, 20.38, 14.7755, 57.7245, '1 - H-B, Mifflin St Jeor Equation rev. in 1990', 1.725, 2878.705116, ''));
+    arr.unshift(new dataObj('2016-02-13', 73, 83, 97, 35.5, 103, 53, 20.38, 14.8774, 58.1226, '1 - H-B, Mifflin St Jeor Equation rev. in 1990', 1.725, 2889.797832, ''));
+    arr.unshift(new dataObj('2016-02-22', 73, 82, 97, 36, 104, 52, 20.09, 14.6657, 58.3343, '1 - H-B, Mifflin St Jeor Equation rev. in 1990', 1.725, 2889.797832, ''));
+    arr.unshift(new dataObj('2016-02-26', 73, 83, 96, 36, 105, 53, 19.83, 14.4759, 58.5241, '1 - H-B, Mifflin St Jeor Equation rev. in 1990', 1.725, 2889.797832, ''));
+    arr.unshift(new dataObj('2016-03-13', 73.5, 82, 96, 35, 105, 52, 19.54, 14.3619, 59.1381, '1 - H-B, Mifflin St Jeor Equation rev. in 1990', 1.725, 2900.890548, 'Change workout'));
+    arr.unshift(new dataObj('2016-03-19', 73.6, 85, 95, 34, 104, 52, 19.86, 14.61696, 58.98304, '1 - H-B, Mifflin St Jeor Equation rev. in 1990', 1.725, 2903.1090912, ''));
+    arr.unshift(new dataObj('2016-04-02', 74, 85, 96, 36, 105, 52, 20.41, 15.1034, 58.8966, '1 - H-B, Mifflin St Jeor Equation rev. in 1990', 1.725, 2911.983264, ''));
+    arr.unshift(new dataObj('2016-04-08', 75, 84, 96, 35, 105, 52, 20.12, 15.09, 59.91, '1 - H-B, Mifflin St Jeor Equation rev. in 1990', 1.725, 2934.168696, 'new diet'));
+    arr.unshift(new dataObj('2016-07-19', 75.0, 88, 97, 35.5, 104, 53.0, 21.83, 16.4, 58.6, '1 - H-B, Mifflin St Jeor Equation rev. in 1990', 1.600, 2741, 'Circuit workout'));
 
     //ADD DATA TO THE OBJECT
     object.data = arr;

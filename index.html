@@ -34,11 +34,11 @@
     <script src="config.js"></script>
     <script>
         // NO USER
-        //        firebase.auth().onAuthStateChanged(function(user) {
-        //            if (!user) {
-        //                window.location.href = "signin.html";
-        //            }
-        //        });
+                firebase.auth().onAuthStateChanged(function(user) {
+                    if (!user) {
+                        window.location.href = "signin.html";
+                    }
+                });
 
     </script>
 
@@ -693,7 +693,7 @@
                                 });
 
                             } else {
-                                console.log("An error has accure, can't load objects");
+                                console.log("no db snap to load");
                             }
 
                         }); //end data fire sync func
@@ -745,10 +745,10 @@
     <script>
         window.onload = function() {
 
-            //FitLogAppDemo();
+            FitLogAppDemo();
             // hashNav(); //need to init
             removeHashNav();
-            fitLogApp();
+            // fitLogApp();
             formАuxiliaryBtns();
         };
 
