@@ -100,9 +100,10 @@
                         <table class="table table-borderless">
                             <thead>
                                 <tr>
-                                    <th class="text-center"></th>
-                                    <th class="text-center">Me</th>
-                                    <th class="text-center">Target</th>
+                                    <th class="text-right"></th>
+                                    <th class="text-left">Me</th>
+                                    <th class="text-left">Target</th>
+                                    <!--
                                     <th>
                                         <select class="inp-tra" id="progressTableSelectList">
                                             <option>b10d</option>
@@ -110,6 +111,7 @@
                                             <option>f1r</option>
                                         </select>
                                     </th>
+-->
                                 </tr>
                             </thead>
                             <tbody id="progressTable"></tbody>
@@ -725,8 +727,8 @@
                         }, false);
 
                         //update progres table
-                        var progTableSelectList = document.getElementById("progressTableSelectList");
-                        progTableSelectList.addEventListener("change", () => a.displayTarget(), false);
+                        // var progTableSelectList = document.getElementById("progressTableSelectList");
+                        // progTableSelectList.addEventListener("change", () => a.displayTarget(), false);
 
                     } else {
                         // User is signed out.
@@ -737,11 +739,12 @@
                     console.log(error);
                 });
         };
+
     </script>
 
     <script>
         window.onload = function() {
-        
+
             //FitLogAppDemo();
             // hashNav(); //need to init
             removeHashNav();

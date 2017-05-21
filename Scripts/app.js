@@ -105,8 +105,8 @@ function FitLogAppDemo() {
     }, false);
 
     //update progres table
-    var progTableSelectList = document.getElementById("progressTableSelectList");
-    progTableSelectList.addEventListener("change", () => a.displayTarget(), false);
+    // var progTableSelectList = document.getElementById("progressTableSelectList");
+    // progTableSelectList.addEventListener("change", () => a.displayTarget(), false);
 
 }
 
@@ -496,19 +496,19 @@ function AppData(dt, tar, ur) {
                     table += "<td nowrap class=\"text-left\">" + tableRows[i][2] + "</td>";
 
                     // TO DO COMPARE FROM DROP LIST FOR BEFORE 10, 30 DAYS RESULTS
-                    switch (compareList.value) {
-                        case "b10d":
-                            table += "<td nowrap class=\"text-left\">" + "10" + "</td>";
-                            break;
-                        case "b30d":
-                            table += "<td nowrap class=\"text-left\">" + "30" + "</td>";
-                            break;
-                        case "f1r":
-                            table += "<td nowrap class=\"text-left\">" + "f1r" + "</td>";
-                            break;
-                        default:
-                            table += "<td nowrap class=\"text-left\">" + "NaN" + "</td>";
-                    }
+//                    switch (compareList.value) {
+//                        case "b10d":
+//                            table += "<td nowrap class=\"text-left\">" + "10" + "</td>";
+//                            break;
+//                        case "b30d":
+//                            table += "<td nowrap class=\"text-left\">" + "30" + "</td>";
+//                            break;
+//                        case "f1r":
+//                            table += "<td nowrap class=\"text-left\">" + "f1r" + "</td>";
+//                            break;
+//                        default:
+//                            table += "<td nowrap class=\"text-left\">" + "NaN" + "</td>";
+//                    }
                     table += "</tr>";
                     //check if no target
                 }
