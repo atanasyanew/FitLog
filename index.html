@@ -745,14 +745,14 @@
     <script>
         window.onload = function() {
 
-            FitLogAppDemo();
-            // hashNav(); //need to init
-            removeHashNav();
-            // fitLogApp();
+//            FitLogAppDemo();
+             hashNav(); //need to init
+            // removeHashNav();
+             fitLogApp();
             formАuxiliaryBtns();
         };
 
-        //window.onhashchange = () => hashNav();
+        window.onhashchange = () => hashNav();
 
         //fix navbar collapse for hashnav
         $(document).on('click', '.navbar-collapse.in', function(e) {
