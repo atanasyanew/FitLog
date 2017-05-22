@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="Professional fit tracker">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#353538">
+    <title>Fit log</title>
+    
+    <!-- Web Application Manifest -->
+    <link rel="manifest" href="/manifest.json">
+
+    <!-- Add to homescreen for Chrome on Android -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="Fit log">
+    <meta name="theme-color" content="#353538">
+
+    <!-- Add to homescreen for Safari on iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Fit log">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#353538">
+
+    <!-- Tile icon for Win8 -->
+    <meta name="msapplication-TileColor" content="#353538">
+    <meta name="msapplication-navbutton-color" content="#353538">
+
+    <!-- STYLESHEETS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="./styles/app.css">
+
+    <!-- FIREBASE  -->
+    <!-- update the version number as needed -->
+    <script src="/__/firebase/4.0.0/firebase-app.js"></script>
+    <!-- include only the Firebase features as you need -->
+    <script src="/__/firebase/4.0.0/firebase-auth.js"></script>
+    <script src="/__/firebase/4.0.0/firebase-database.js"></script>
+    <!-- <script src="/__/firebase/4.0.0/firebase-messaging.js"></script>-->
+    <!-- <script src="/__/firebase/4.0.0/firebase-storage.js"></script>-->
+    <!-- initialize the SDK after all desired features are loaded -->
+    <script src="/__/firebase/init.js"></script>
+    <script>
+        // NO USER
+        firebase.auth().onAuthStateChanged(function(user) {
+            if (!user) {
+                window.location.href = "signin.html";
+            }
+        });
+
+    </script>
+
+    <!--  APP SCRIPTS  -->
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="./scripts/w3.js"></script>
+    <script src="./scripts/Chart.bundle.js"></script>
+    <script src="./scripts/app.js"></script>
+    <script src="./scripts/jquery.loadingModal.min.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="./styles/jquery.loadingModal.min.css" type="text/css" />
+
+</head>
+
+<body class="bgimg">
+
+    <!--   NAVIGATION     -->
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                <!--   <a href="" class="navbar-brand">Fit log</a>-->
+                <a class="navbar-brand" href="" style="padding:0px">
+                    <img alt="FitLog" class="navbar-brand-svg" src="./images/logo.svg">
+                </a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href="#log"><i class="glyphicon glyphicon-home"></i> Log</a></li>
+                    <li><a href="#data"><i class="fa fa-database"></i> Data</a></li>
+                    <li><a href="#chart"><i class="fa fa-bar-chart"></i> Charts</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#profile" id="userNavBar"><i class="glyphicon glyphicon-user"></i> Me</a></li>
+                    <li><a href="#" id="signOut"><i class="glyphicon glyphicon-log-out"></i> Log Out</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!--    PAGES     -->
+    <div class="container">
+
+        <!--     LOG AND MAIN CHART     -->
+        <div class="page" id="log">
+
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="well transperant">
+                        <legend>Log Overview <a href="#createTarget" class="aBtn "><i class="glyphicon glyphicon-edit"></i></a></legend>
+                        <table class="table table-borderless">
+                            <thead>
+                                <tr>
+                                    <th class="text-right"></th>
+                                    <th class="text-left">Me</th>
+                                    <th class="text-left">Target</th>
+                                    <!--
+                                    <th>
+                                        <select class="inp-tra" id="progressTableSelectList">
+                                            <option>b10d</option>
+                                            <option>b30d</option>
+                                            <option>f1r</option>
+                                        </select>
+                                    </th>
+-->
+                                </tr>
+                            </thead>
+                            <tbody id="progressTable"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="col-md-8">
+                    <div class="well transperant" id="divMainChart">
+                        <legend>Log Chart</legend>
+                        <div> <canvas id="mainChart"></canvas></div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!--     DATA TABLE     -->
+        <div class="page" id="data">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="well transperant table-responsive">
+                        <legend>My Data <a href="#createRecord" class="aBtn"><i class="glyphicon glyphicon-plus"></i></a></legend>
+                        <br>
+                        <table class="table table-sm table-hover navLinks">
+                            <thead>
+                                <tr>
+                                    <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(1)')">#</th>
+                                    <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(2)')">Date</th>
+                                    <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(3)')">Weight <br> (kg)</th>
+                                    <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(4)')">Waist <br> (cm)</th>
+                                    <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(5)')">Haunch (cm)</th>
+                                    <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(6)')">Arms (cm)</th>
+                                    <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(7)')">Chest (cm)</th>
+                                    <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(8)')">Hips (cm)</th>
+                                    <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(9)')">Fats (%)</th>
+                                    <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(10)')">Fats (kg)</th>
+                                    <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(11)')">Body Mass</th>
+                                    <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(1)')">Equation</th>
+                                    <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(1)')">Activity</th>
+                                    <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(12)')">kcal</th>
+                                    <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(13)')">Comment</th>
+                                    <th><i class="glyphicon glyphicon-edit"></i></th>
+                                </tr>
+                            </thead>
+                            <tbody id="DataTable">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--     CHARTS     -->
+        <div class="page" id="chart">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="well transperant">
+                        <legend>Chart (cm)</legend>
+                        <div><canvas id="ChartOne"></canvas></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="well transperant">
+                        <legend>Weight Parse</legend>
+                        <div><canvas id="ChartTwo"></canvas></div>
+                    </div>
+                </div>
+
+                <div class="col-md-8">
+                    <div class="well transperant">
+                        <legend>Fats % and Activity</legend>
+                        <div><canvas id="ChartTree"></canvas></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--     PROFILE PAGE     -->
+        <div class="page" id="profile">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="well transperant">
+                        <legend>Profile <a href="#editProfile" class="aBtn"><i class="glyphicon glyphicon-edit"></i></a>
+                        </legend>
+                        <dl class="dl-horizontal ">
+                            <dt>Name</dt>
+                            <dd id="userName"></dd>
+                            <dt>Birth</dt>
+                            <dd id="userBirth"></dd>
+                            <dt>Gender</dt>
+                            <dd id="userGender"></dd>
+                            <dt>Height, cm</dt>
+                            <dd id="userHeight"></dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--     FORM EDIT PROFILE     -->
+        <div class="page" id="editProfile">
+            <div class="row">
+                <div class=" col-md-4">
+                    <div class="well form-horizontal transperant">
+                        <fieldset>
+                            <legend>Edit Profile</legend>
+                            <div class="form-group">
+                                <label class="control-label col-xs-4">Name</label>
+                                <div class="col-xs-8">
+                                    <input class="form-control input-text" type="text" id="editUserName">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-xs-4">Gender</label>
+                                <div class="col-xs-8">
+                                    <select class="form-control inp-tra" id="editUserGender">
+                                        <option>Male</option>
+                                        <option>Female</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-xs-4">Birth Date</label>
+                                <div class="col-xs-8">
+                                    <input type="date" class="form-control" id="editUserBirth">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-xs-4">Height (cm)</label>
+                                <div class="col-xs-8">
+                                    <div class="input-group">
+                                        <span class="input-group-btn">
+                                            <button type="button" class="btn btn-danger btn-number"  data-type="minus" data-field="quant[3]">
+                                                <span class="glyphicon glyphicon-minus"></span>
+                                        </button>
+                                        </span>
+                                        <input type="number" name="quant[3]" class="form-control input-number" value="170" min="140" max="250" id="editUserHeight">
+                                        <span class="input-group-btn">
+                                            <button type="button" class="btn btn-success btn-number" data-type="plus" data-field="quant[3]">
+                                                <span class="glyphicon glyphicon-plus"></span>
+                                        </button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-xs-4"></label>
+                                <div class="col-xs-8">
+                                    <input type="submit" class="btn btn-success btn-large btn-block" id="saveUser">
+                                </div>
+                            </div>
+
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--     FORM CREATE TARGET     -->
+        <div class="page" id="createTarget">
+            <div class="row">
+                <div class=" col-md-4">
+                    <div class="well transperant form-horizontal">
+                        <fieldset>
+                            <legend>Write a Target</legend>
+
+                            <div class="form-group">
+                                <label for="example-number-input" class="control-label col-xs-4">Weight, kg</label>
+                                <div class="col-xs-8">
+                                    <input class="form-control" type="number" id="targetDataWeightKgs">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="example-number-input" class="control-label col-xs-4">Waist, cm</label>
+                                <div class="col-xs-8">
+                                    <input class="form-control" type="number" id="targetDataWaistCm">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="example-number-input" class="control-label col-xs-4">Haunch, cm</label>
+                                <div class="col-xs-8">
+                                    <input class="form-control" type="number" id="targetDataHaunchCm">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="example-number-input" class="control-label col-xs-4">Arms, cm</label>
+                                <div class="col-xs-8">
+                                    <input class="form-control" type="number" id="targetDataArmsCm">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="example-number-input" class="control-label col-xs-4">Chest, cm</label>
+                                <div class="col-xs-8">
+                                    <input class="form-control" type="number" id="targetDataChestCm">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="example-number-input" class="control-label col-xs-4">Hips, cm</label>
+                                <div class="col-xs-8">
+                                    <input class="form-control" type="number" id="targetDataHipsCm">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="example-number-input" class="control-label col-xs-4">Fats %</label>
+                                <div class="col-xs-8">
+                                    <input class="form-control" type="number" id="targetDataFatsPercent">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="example-number-input" class="control-label col-xs-4">Fat kgs</label>
+                                <div class="col-xs-8">
+                                    <input class="form-control" type="number" id="targetDataFatKgs">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="example-number-input" class="control-label col-xs-4">Body Mass</label>
+                                <div class="col-xs-8">
+                                    <input class="form-control" type="number" id="targetDataBodyMassKgs">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-xs-4"></label>
+                                <div class="col-xs-8">
+                                    <input type="submit" class="btn btn-success btn-large btn-block" id="saveTarget">
+                                </div>
+                            </div>
+
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--     FORM CREATE NEW RECORD     -->
+        <div class="page" id="createRecord">
+            <div class="row">
+                <div class=" col-md-8">
+                    <!-- NEW ROCORD form -->
+                    <div class="well transperant form-horizontal" id="newDataForm">
+                        <fieldset>
+                            <legend>Add New Data</legend>
+                            <div class="row">
+                                <div class="col-md-6">
+
+                                    <div class="form-group row">
+                                        <label class="control-label col-xs-4">Date</label>
+                                        <div class="col-xs-8">
+                                            <input type="date" class="form-control" id="newDataMeasurementDate">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="example-number-input" class="control-label col-xs-4">Weight, kg</label>
+                                        <div class="col-xs-8">
+                                            <div class="input-group">
+                                                <span class="input-group-btn">
+                                            <button type="button" class="btn btn-danger btn-number" data-type="minus" data-field="quant[4]">
+                                                <span class="glyphicon glyphicon-minus"></span>
+                                                </button>
+                                                </span>
+                                                <input type="number" name="quant[4]" class="form-control input-number" value="72" min="20" max="500" id="newDataWeightKgs">
+                                                <span class="input-group-btn">
+                                            <button type="button" class="btn btn-success btn-number" data-type="plus" data-field="quant[4]">
+                                                <span class="glyphicon glyphicon-plus"></span>
+                                                </button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="example-number-input" class="control-label col-xs-4">Waist, cm</label>
+                                        <div class="col-xs-8">
+                                            <div class="input-group">
+                                                <span class="input-group-btn">
+                                            <button type="button" class="btn btn-danger btn-number" data-type="minus" data-field="quant[5]">
+                                                <span class="glyphicon glyphicon-minus"></span>
+                                                </button>
+                                                </span>
+                                                <input type="number" name="quant[5]" class="form-control input-number" value="85" min="30" max="200" id="newDataWaistCm">
+                                                <span class="input-group-btn">
+                                            <button type="button" class="btn btn-success btn-number" data-type="plus" data-field="quant[5]">
+                                                <span class="glyphicon glyphicon-plus"></span>
+                                                </button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="example-number-input" class="control-label col-xs-4">Haunch, cm</label>
+                                        <div class="col-xs-8">
+                                            <div class="input-group">
+                                                <span class="input-group-btn">
+                                            <button type="button" class="btn btn-danger btn-number" data-type="minus" data-field="quant[6]">
+                                                <span class="glyphicon glyphicon-minus"></span>
+                                                </button>
+                                                </span>
+                                                <input type="number" name="quant[6]" class="form-control input-number" value="90" min="20" max="200" id="newDataHaunchCm">
+                                                <span class="input-group-btn">
+                                            <button type="button" class="btn btn-success btn-number" data-type="plus" data-field="quant[6]">
+                                                <span class="glyphicon glyphicon-plus"></span>
+                                                </button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="example-number-input" class="control-label col-xs-4">Arms, cm</label>
+                                        <div class="col-xs-8">
+                                            <div class="input-group">
+                                                <span class="input-group-btn">
+                                            <button type="button" class="btn btn-danger btn-number" data-type="minus" data-field="quant[7]">
+                                                <span class="glyphicon glyphicon-minus"></span>
+                                                </button>
+                                                </span>
+                                                <input type="number" name="quant[7]" class="form-control input-number" value="34" min="20" max="100" id="newDataArmsCm">
+                                                <span class="input-group-btn">
+                                            <button type="button" class="btn btn-success btn-number" data-type="plus" data-field="quant[7]">
+                                                <span class="glyphicon glyphicon-plus"></span>
+                                                </button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="example-number-input" class="control-label col-xs-4">Chest, cm</label>
+                                        <div class="col-xs-8">
+                                            <div class="input-group">
+                                                <span class="input-group-btn">
+                                            <button type="button" class="btn btn-danger btn-number"  data-type="minus" data-field="quant[8]">
+                                                <span class="glyphicon glyphicon-minus"></span>
+                                                </button>
+                                                </span>
+                                                <input type="number" name="quant[8]" class="form-control input-number" value="98" min="30" max="200" id="newDataChestCm">
+                                                <span class="input-group-btn">
+                                            <button type="button" class="btn btn-success btn-number" data-type="plus" data-field="quant[8]">
+                                                <span class="glyphicon glyphicon-plus"></span>
+                                                </button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="example-number-input" class="control-label col-xs-4">Hips, cm</label>
+                                        <div class="col-xs-8">
+                                            <div class="input-group">
+                                                <span class="input-group-btn">
+                                            <button type="button" class="btn btn-danger btn-number"  data-type="minus" data-field="quant[9]">
+                                                <span class="glyphicon glyphicon-minus"></span>
+                                                </button>
+                                                </span>
+                                                <input type="number" name="quant[9]" class="form-control input-number" value="45" min="20" max="100" id="newDataHipsCm">
+                                                <span class="input-group-btn">
+                                            <button type="button" class="btn btn-success btn-number" data-type="plus" data-field="quant[9]">
+                                                <span class="glyphicon glyphicon-plus"></span>
+                                                </button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
+
+                                    <div class="form-group">
+                                        <label for="example-number-input" class="control-label col-xs-4">Equation</label>
+                                        <div class="col-xs-8">
+                                            <select class="form-control inp-tra" id="newDataBMRFormula">
+                                        <option value="1">1 - H-B, Mifflin St Jeor Equation rev. in 1990 </option>
+                                        <option value="2">2 - Katch-McArdle Formula </option>
+                                        <option value="3">3 - H-B, Roza and Shizgal Equation rev. in 1984 </option>
+                                        <option value="4">4 - H-B, original equation published in 1918 </option>
+                                    </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="example-number-input" class="control-label col-xs-4">Physical activity</label>
+                                        <div class="col-xs-8">
+                                            <select class="form-control inp-tra" id="newDataPhysicalActivity">
+                                        <option value="1.2">1.200 - Little to no exercise </option>
+                                        <option value="1.375">1.375 - Light exercise (1–3 days per week) </option>
+                                        <option value="1.55">1.550 - Moderate exercise (3–5 days per week) </option>
+                                        <option value="1.725">1.725 - Heavy exercise (6–7 days per week) </option>
+                                        <option value="1.9">1.900 - very heavy (twice per day, extra heavy workouts) </option>
+                                    </select>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <!--     end of half part                      -->
+                                <div class="col-md-6">
+
+                                    <div class="form-group">
+                                        <label for="example-text-input" class="control-label col-xs-4">Comment</label>
+                                        <div class="col-xs-8">
+                                            <textarea class="form-control inp-tra" id="newDataComment" rows="3" placeholder="comment"></textarea>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="example-text-input" class="control-label col-xs-4"></label>
+                                        <div class="col-xs-8">
+                                            <div class="custom-control">
+                                                <input type="checkbox" class="custom-control-input" id="newDataCustomCheck">
+                                                <span class="custom-control-indicator"></span>
+                                                <span class="custom-control-description ">Custom data</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div id="newDataValidationMsg">
+                                        <!--
+                                    <div class="form-group">
+                                        <label for="example-text-input" class="control-label col-xs-4"></label>
+                                        <div class="col-xs-8">
+                                        </div>
+                                    </div>
+-->
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="example-text-input" class="control-label col-xs-4">Fats %</label>
+                                        <div class="col-xs-8">
+                                            <input class="form-control input-text" type="number" readonly id="newDataFatsPercent">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="example-text-input" class="control-label col-xs-4">Fats, kg</label>
+                                        <div class="col-xs-8">
+                                            <input class="form-control input-text" type="number" readonly id="newDataFatKgs">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="example-text-input" class="control-label col-xs-4">Body mass</label>
+                                        <div class="col-xs-8">
+                                            <input class="form-control input-text" type="number" readonly id="newDataBodyMassKgs">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="example-text-input" class="control-label col-xs-4">Daily kcal</label>
+                                        <div class="col-xs-8">
+                                            <input class="form-control input-text" type="number" readonly id="newDataBMAKcal">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-xs-4"></label>
+                                        <div class="col-xs-8">
+                                            <input type="submit" class="btn btn-success btn-large btn-block" id="createNewRecord">
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <!-- NEW RECORD form END-->
+                </div>
+            </div>
+        </div>
+
+        <!--     FOOTER     -->
+        <hr>
+        <footer class="">
+            <p class="">
+                &copy; 2017, Atanas Yanev
+                <!--          | <a href="http://lnked.in/ayanev"><i class="fa fa-linkedin-square" aria-hidden="true"></i> LinkedIn</a>-->
+            </p>
+        </footer>
+
+    </div>
+    <!-- /container -->
+
+    <script>
+        //app
+        fitLogApp = function() {
+            "use strict";
+            //signOut
+            var signOut = document.getElementById('signOut');
+            signOut.addEventListener('click', () => {
+                firebase.auth().signOut()
+            });
+
+            //firebase auth 
+            firebase.auth().onAuthStateChanged(function(user) {
+
+                    if (user) {
+                        // User is signed in.
+                        // var email = user.email;
+                        // var emailVerified = user.emailVerified;
+                        // var photoURL = user.photoURL;
+                        // var providerData = user.providerData;
+                        // console.log(user);
+                        var uid = user.uid;
+                        var displayName = user.displayName;
+
+                        //USER DATABASE REF
+                        var userDataBase = firebase.database().ref('dataBase').child(uid);
+                        //INIT APP FUNCTIONS
+                        var initData, initTarget, initUser;
+                        var a = new AppData(initData, initTarget, initUser);
+                        var u = new AppUser(initUser);
+
+                        //INIT STORAGE
+                        userDataBase.once('value', function(snapshot) {
+
+                            if (snapshot.exists()) {
+                                //existing user
+                                //console.log("init existing user");
+                            } else {
+                                // new empty object
+                                var emptyObj = new storageObj();
+                                emptyObj['profile'].name = displayName;
+                                userDataBase.set(emptyObj);
+                                //console.log("user db created");
+                            }
+                        });
+
+                        //APP START, sync with firebase
+                        userDataBase.on('value', function(snap) {
+
+                            if (snap.exists()) {
+
+                                //get data
+                                var fireStorage = snap.val();
+                                //assign data
+                                a.data = fireStorage.data;
+                                a.target = fireStorage.target;
+                                a.user = fireStorage.profile;
+                                u.user = fireStorage.profile;
+
+                                //init app 
+                                u.displayUser();
+                                u.fillUserForm();
+                                a.displayTableData();
+                                a.displayTarget();
+
+                                a.drawMainChart();
+                                a.drawChartOne();
+                                a.drawChartTree();
+                                a.drawChartTwo();
+                                a.fillNewDataForm();
+                                a.fillNewDataFormReadonly();
+
+                                //DELETE RECORDS
+                                var tablBtns = document.getElementById("DataTable").querySelectorAll("button");
+                                tablBtns.forEach(function(item) {
+                                    item.addEventListener('click', function() {
+                                        if (confirm("Are you sure?")) {
+                                            // alert("item." + item.value + " | this." + this.value);
+                                            userDataBase.child('data').set(a.deleteRecord(this.value));
+                                        };
+                                    });
+                                });
+
+                            } else {
+                                console.log("no db snap to load");
+                            }
+
+                        }); //end data fire sync func
+
+                        //save target
+                        var saveTarget = document.getElementById("saveTarget");
+                        saveTarget.addEventListener("click", () => {
+                            // fireStorage['target'] = a.createTarget(); //return obj
+                            userDataBase.child('target').set(a.createTarget());
+                            window.location.hash = "log";
+                        });
+
+                        //save new data
+                        var createNewRecord = document.getElementById("createNewRecord");
+                        createNewRecord.addEventListener("click", () => {
+                            userDataBase.child('data').set(a.createNewRecord());
+                            window.location.hash = "log";
+                        });
+
+                        //save new user data
+                        var saveUser = document.getElementById("saveUser");
+                        saveUser.addEventListener("click", () => {
+                            userDataBase.child('profile').update(u.editUser());
+                            window.location.hash = "profile";
+                        });
+
+                        //update readonly props new record form
+                        var newDataForm = document.getElementById("newDataForm");
+                        newDataForm.addEventListener("click", () => {
+                            a.fillNewDataFormReadonly()
+                        }, false);
+
+                        //update progres table
+                        // var progTableSelectList = document.getElementById("progressTableSelectList");
+                        // progTableSelectList.addEventListener("change", () => a.displayTarget(), false);
+
+                    } else {
+                        // User is signed out.
+                        location.href = "signin.html";
+                    }
+                },
+                function(error) {
+                    console.log(error);
+                });
+        };
+
+    </script>
+
+    <script>
+        window.onload = function() {
+            // FitLogAppDemo();
+            hashNav(); //init
+            // removeHashNav();
+            fitLogApp();
+            formАuxiliaryBtns();
+            window.onhashchange = () => hashNav();
+        };
+
+        //fix navbar collapse for hashnav
+        $(document).on('click', '.navbar-collapse.in', function(e) {
+            if ($(e.target).is('a') && $(e.target).attr('class') != 'dropdown-toggle') {
+                $(this).collapse('hide');
+            }
+        });
+
+    </script>
+
+</body>
+
+</html>

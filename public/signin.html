@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="Professional fit tracker">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#353538">
+    <title>Fit log</title>
+    
+    <!-- Web Application Manifest -->
+    <link rel="manifest" href="/manifest.json">
+
+    <!-- Add to homescreen for Chrome on Android -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="Fit log">
+    <meta name="theme-color" content="#353538">
+
+    <!-- Add to homescreen for Safari on iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Fit log">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#353538">
+
+    <!-- Tile icon for Win8 -->
+    <meta name="msapplication-TileColor" content="#353538">
+    <meta name="msapplication-navbutton-color" content="#353538">
+
+    <!-- FIREBASE  -->
+    <!-- update the version number as needed -->
+    <script src="/__/firebase/4.0.0/firebase-app.js"></script>
+    <!-- include only the Firebase features as you need -->
+    <script src="/__/firebase/4.0.0/firebase-auth.js"></script>
+    <!-- initialize the SDK after all desired features are loaded -->
+    <script src="/__/firebase/init.js"></script>
+
+    <!-- FIREBASE UI -->
+    <script src="https://cdn.firebase.com/libs/firebaseui/2.0.0/firebaseui.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/2.0.0/firebaseui.css" />
+
+    <script type="text/javascript">
+        // FirebaseUI config.
+        var uiConfig = {
+            signInSuccessUrl: 'index.html',
+            signInOptions: [
+                firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+                firebase.auth.FacebookAuthProvider.PROVIDER_ID,
+            ],
+            // Terms of service url.
+            // tosUrl: '<your-tos-url>'
+        };
+        // Initialize the FirebaseUI Widget using Firebase.
+        var ui = new firebaseui.auth.AuthUI(firebase.auth());
+        // The start method will wait until the DOM is loaded.
+        ui.start('#firebaseui-auth-container', uiConfig);
+
+    </script>
+
+    <!-- STYLESHEETS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="./styles/app.css">
+
+    <!-- CUSTOM STYLING -->
+    <style>
+        /* https://github.com/firebase/firebaseui-web/issues/121 */
+        
+        .firebaseui-info-bar {
+            margin-top: 10%;
+        }
+        
+        .mdl-shadow--2dp {
+            box-shadow: none;
+        }
+        
+        .mdl-progress {
+            height: 5px;
+        }
+        
+        div.mdl-progress::after {
+            color: black;
+            content: 'Authenticating';
+            display: block;
+            margin: 20px auto;
+            text-align: center;
+        }
+        
+        body {
+            padding-top: 0px;
+            padding-bottom: 0px;
+            background-color: #333;
+            color: #fff;
+        }
+        
+        .bgopacity {
+            background: rgba(3, 3, 3, 0.8);
+            min-height: 100%;
+            min-width: 100%;
+            position: absolute;
+        }
+
+    </style>
+
+</head>
+
+<body class="bgimg-signin">
+    <div class="bgopacity">
+        <div class="container-fluid">
+
+            <!--   LOGO      -->
+            <div class="container">
+                <a href=""> <img src="./images/logo.svg" height="100"></a>
+            </div>
+
+            <!--     SLOGANS AND FIREBASE UI      -->
+            <div class="container">
+                <h2 class="">A professional fit tracker</h2>
+                <h2 class="" style="margin-left:1.5em">Note your progress, achieve your goals</h2>
+                <h3 class="text-center">Sign up for free or try out <a href="./demo.html">Demo</a></h3>
+                <div class="row" id="firebaseui-auth-container"></div>
+            </div>
+            
+            <br>
+
+            <!--     FOOTER     -->
+            <div class="navbar-fixed-bottom">
+                <div class="container">
+                    <h5 class="navbar-text pull-left">&copy; 2017 -
+                        <a href="http://lnked.in/ayanev" target="_blank">Atanas Yanev</a>
+                    </h5>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</body>
+
+</html>
