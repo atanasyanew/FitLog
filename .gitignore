@@ -2,6 +2,7 @@
 
 # Ignore everything at root:
 /*
+/public/firebase-debug.log
 
 # Except for directories:
 !public/
