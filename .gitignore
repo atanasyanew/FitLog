@@ -1,3 +1,13 @@
 #my ignores
 
-_trash/*
+# Ignore everything at root:
+/*
+
+# Except for directories:
+!public/
+
+# Except files:
+!README
+
+#Except files of type:
+!*.txt

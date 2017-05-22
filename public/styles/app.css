@@ -31,7 +31,7 @@ body {
 .bgimg-signin {
     opacity: 0.8;
     background-image: url("./../images/signin.jpg");
-    /*    background-attachment: fixed;*/
+/*        background-attachment: fixed;*/
     background-position: top;
     background-repeat: no-repeat;
     max-width: 100%;
