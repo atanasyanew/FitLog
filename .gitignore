@@ -1,14 +1,9 @@
 #my ignores
 
 # Ignore everything at root:
-/*
+# /*
+
+
 /public/firebase-debug.log
 
-# Except for directories:
-!public/
-
-# Except files:
-!README
-
-#Except files of type:
-!*.txt
+database.rules.json
