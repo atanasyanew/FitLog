@@ -4,11 +4,11 @@
     "short_name": "Fit Log",
     "start_url": "/?utm_source=homescreen",
     "display": "standalone",
-    "background_color": "#755ad8",
-    "theme_color": "#755ad8",
+    "background_color": "#DCDCDC",
+    "theme_color": "#DCDCDC",
     "description": "A professional fit tracker to Note your progress and achieve your goals",
     "icons": [{
-        "src": "images/logo.png",
+        "src": "images/logo-275r.png",
         "sizes": "any",
         "type": "image/png"
   }]

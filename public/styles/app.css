@@ -5,6 +5,10 @@
  *
  */
 
+html {
+    height: 100%;
+}
+
 body {
     /* Set padding to keep content from hitting the edges */
     padding-top: 70px;
@@ -19,22 +23,23 @@ body {
 
 .bgimg {
     /* Create a Parallax Effect */
-    min-height: 100%;
     opacity: 0.9;
     background-image: url("./../images/bgimg.jpg");
     background-attachment: fixed;
-    background-position: center;
     background-repeat: no-repeat;
+    background-position: top left;
     background-size: cover;
+    min-height: 100%;
 }
 
 .bgimg-signin {
     opacity: 0.8;
     background-image: url("./../images/signin.jpg");
-/*        background-attachment: fixed;*/
-    background-position: top;
+    background-attachment: fixed;
     background-repeat: no-repeat;
-    max-width: 100%;
+    background-position: top center;
+    background-size: cover;
+    min-height: 100%;
 }
 
 footer {

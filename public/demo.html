@@ -26,7 +26,7 @@
 
     <!-- Tile icon for Win8 -->
     <meta name="msapplication-TileColor" content="#6559E4">
-    <meta name="msapplication-navbutton-color" content="#353538">
+    <meta name="msapplication-navbutton-color" content="#6559E4">
 
     <!-- STYLESHEETS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -35,23 +35,6 @@
 
     <!-- FIREBASE  -->
     <!-- update the version number as needed -->
-    <script src="/__/firebase/4.0.0/firebase-app.js"></script>
-    <!-- include only the Firebase features as you need -->
-    <script src="/__/firebase/4.0.0/firebase-auth.js"></script>
-    <script src="/__/firebase/4.0.0/firebase-database.js"></script>
-    <!-- <script src="/__/firebase/4.0.0/firebase-messaging.js"></script>-->
-    <!-- <script src="/__/firebase/4.0.0/firebase-storage.js"></script>-->
-    <!-- initialize the SDK after all desired features are loaded -->
-    <script src="/__/firebase/init.js"></script>
-    <script>
-        // NO USER
-        firebase.auth().onAuthStateChanged(function(user) {
-            if (!user) {
-                window.location.href = "signin.html";
-            }
-        });
-
-    </script>
 
     <!--  APP SCRIPTS  -->
     <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
@@ -608,150 +591,20 @@
         <!--     FOOTER     -->
         <hr>
         <footer class="">
-            <p class="">&copy; 2017, Atanas Yanev</p>
+            <p class="">
+                &copy; 2017, Atanas Yanev
+                <!--          | <a href="http://lnked.in/ayanev"><i class="fa fa-linkedin-square" aria-hidden="true"></i> LinkedIn</a>-->
+            </p>
         </footer>
 
     </div>
     <!-- /container -->
 
     <script>
-        //app
-        fitLogApp = function() {
-            "use strict";
-            //signOut
-            var signOut = document.getElementById('signOut');
-            signOut.addEventListener('click', () => {
-                firebase.auth().signOut()
-            });
-
-            //firebase auth 
-            firebase.auth().onAuthStateChanged(function(user) {
-
-                    if (user) {
-                        // User is signed in.
-                        // var email = user.email;
-                        // var emailVerified = user.emailVerified;
-                        // var photoURL = user.photoURL;
-                        // var providerData = user.providerData;
-                        // console.log(user);
-                        var uid = user.uid;
-                        var displayName = user.displayName;
-
-                        //USER DATABASE REF
-                        var userDataBase = firebase.database().ref('dataBase').child(uid);
-                        //INIT APP FUNCTIONS
-                        var initData, initTarget, initUser;
-                        var a = new AppData(initData, initTarget, initUser);
-                        var u = new AppUser(initUser);
-
-                        //INIT STORAGE
-                        userDataBase.once('value', function(snapshot) {
-
-                            if (snapshot.exists()) {
-                                //existing user
-                                //console.log("init existing user");
-                            } else {
-                                // new empty object
-                                var emptyObj = new storageObj();
-                                emptyObj['profile'].name = displayName;
-                                userDataBase.set(emptyObj);
-                                //console.log("user db created");
-                            }
-                        });
-
-                        //APP START, sync with firebase
-                        userDataBase.on('value', function(snap) {
-
-                            if (snap.exists()) {
-
-                                //get data
-                                var fireStorage = snap.val();
-                                //assign data
-                                a.data = fireStorage.data;
-                                a.target = fireStorage.target;
-                                a.user = fireStorage.profile;
-                                u.user = fireStorage.profile;
-
-                                //init app 
-                                u.displayUser();
-                                u.fillUserForm();
-                                a.displayTableData();
-                                a.displayTarget();
-
-                                a.drawMainChart();
-                                a.drawChartOne();
-                                a.drawChartTree();
-                                a.drawChartTwo();
-                                a.fillNewDataForm();
-                                a.fillNewDataFormReadonly();
-
-                                //DELETE RECORDS
-                                var tablBtns = document.getElementById("DataTable").querySelectorAll("button");
-                                tablBtns.forEach(function(item) {
-                                    item.addEventListener('click', function() {
-                                        if (confirm("Are you sure?")) {
-                                            // alert("item." + item.value + " | this." + this.value);
-                                            userDataBase.child('data').set(a.deleteRecord(this.value));
-                                        };
-                                    });
-                                });
-
-                            } else {
-                                console.log("no db snap to load");
-                            }
-
-                        }); //end data fire sync func
-
-                        //save target
-                        var saveTarget = document.getElementById("saveTarget");
-                        saveTarget.addEventListener("click", () => {
-                            // fireStorage['target'] = a.createTarget(); //return obj
-                            userDataBase.child('target').set(a.createTarget());
-                            window.location.hash = "log";
-                        });
-
-                        //save new data
-                        var createNewRecord = document.getElementById("createNewRecord");
-                        createNewRecord.addEventListener("click", () => {
-                            userDataBase.child('data').set(a.createNewRecord());
-                            window.location.hash = "log";
-                        });
-
-                        //save new user data
-                        var saveUser = document.getElementById("saveUser");
-                        saveUser.addEventListener("click", () => {
-                            userDataBase.child('profile').update(u.editUser());
-                            window.location.hash = "profile";
-                        });
-
-                        //update readonly props new record form
-                        var newDataForm = document.getElementById("newDataForm");
-                        newDataForm.addEventListener("click", () => {
-                            a.fillNewDataFormReadonly()
-                        }, false);
-
-                        //update progres table
-                        // var progTableSelectList = document.getElementById("progressTableSelectList");
-                        // progTableSelectList.addEventListener("change", () => a.displayTarget(), false);
-
-                    } else {
-                        // User is signed out.
-                        location.href = "signin.html";
-                    }
-                },
-                function(error) {
-                    console.log(error);
-                });
-        };
-
-    </script>
-
-    <script>
         window.onload = function() {
-            // FitLogAppDemo();
+            FitLogAppDemo();
             hashNav(); //init
-            //removeHashNav();
-            fitLogApp();
+            // removeHashNav();
             formАuxiliaryBtns();
             window.onhashchange = () => hashNav();
         };

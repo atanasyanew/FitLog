@@ -1265,7 +1265,7 @@ function hashNav() {
         $('body').loadingModal('hide');
     }, time);
 
-    //$('body').loadingModal('destroy');
+    //    $('body').loadingModal('destroy');
     return false; // cancel the click
 
     //old nav
