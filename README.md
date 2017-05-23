@@ -12,3 +12,10 @@ Simple fitness application which purpose is to note and visualise body progress
 * jQuery
 * jQuery-loadingModal
 * Bootstrap
+
+
+
+_ | _
+------------ | -------------
+![Image of Yaktocat](https://octodex.github.com/images/yaktocat.png) | ![Image of Yaktocat](https://octodex.github.com/images/yaktocat.png)
+![image](https://octodex.github.com/images/yaktocat.png) | ![image](https://octodex.github.com/images/yaktocat.png)
