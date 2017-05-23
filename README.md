@@ -13,11 +13,10 @@ Simple fitness application which purpose is to note and visualise body progress
 * jQuery-loadingModal
 * Bootstrap
 
+<!--
 ## App Screenshots
 <img src="https://rawgit.com/atanasyanew/FitLog/master/_Resources/screenshots/1.png" width="425"/> <img src="https://rawgit.com/atanasyanew/FitLog/master/_Resources/screenshots/2.png" width="425"/> 
-
 <img src="https://rawgit.com/atanasyanew/FitLog/master/_Resources/screenshots/3.png" width="425"/> <img src="https://rawgit.com/atanasyanew/FitLog/master/_Resources/screenshots/4.png" width="425"/> 
-
 <img src="https://rawgit.com/atanasyanew/FitLog/master/_Resources/screenshots/5.png" width="425"/> <img src="https://rawgit.com/atanasyanew/FitLog/master/_Resources/screenshots/6.png" width="425"/> 
-
 <img src="https://rawgit.com/atanasyanew/FitLog/master/_Resources/screenshots/7.png" width="425"/> 
+-->
