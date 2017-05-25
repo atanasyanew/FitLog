@@ -736,22 +736,32 @@ function AppData(dt, tar, ur) {
                 fill: false
             };
 
-            dataSet1.backgroundColor = window.chartColors.green; //waist
-            dataSet2.backgroundColor = window.chartColors.purple; //haunch
-            dataSet3.backgroundColor = window.chartColors.red; //arms
-            dataSet4.backgroundColor = window.chartColors.blue; //chest
+            // red
+            // orange
+            // yellow
+            // green
+            // blue
+            // purple
+            // grey
+            // greyy
+            // indigo
+            
+            dataSet1.backgroundColor = window.chartColors.orange; //waist
+            dataSet2.backgroundColor = window.chartColors.yellow; //haunch
+            dataSet3.backgroundColor = window.chartColors.purple; //arms
+            dataSet4.backgroundColor = window.chartColors.red; //chest
             dataSet5.backgroundColor = window.chartColors.indigo; // hips
 
-            dataSet1.borderColor = window.chartColors.green;
-            dataSet2.borderColor = window.chartColors.purple;
-            dataSet3.borderColor = window.chartColors.red;
-            dataSet4.borderColor = window.chartColors.blue;
+            dataSet1.borderColor = window.chartColors.orange;
+            dataSet2.borderColor = window.chartColors.yellow;
+            dataSet3.borderColor = window.chartColors.purple;
+            dataSet4.borderColor = window.chartColors.red;
             dataSet5.borderColor = window.chartColors.indigo;
 
             var chartData = {
                 labels: constructChartLabels(this.data, 'measurementDate'),
                 //datasets array order is important too
-                datasets: [dataSet1, dataSet2, dataSet3, dataSet4, dataSet5]
+                datasets: [dataSet4, dataSet2, dataSet1, dataSet5, dataSet3]
             };
 
             var chartOptions = {
@@ -1455,7 +1465,7 @@ function fakeObj() {
     //object
     this.object = new storageObj();
     //user 
-    object.profile = new userObj("I am a Demo", "1991-01-01", "Male", 172);
+    object.profile = new userObj("Demo User", "1991-01-01", "Male", 172);
     //target
     object.target = new dataObj('', 72, '', '', 40, 105, '', 12, '', '', '', '', '', '');
 
