@@ -4,12 +4,19 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="description" content="Professional fit tracker">
+    <meta name="description" content="Professional fit tracker to Note your progress and achieve your goals">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#6559E4">
     <title>Fit log</title>
     <!-- Tab bar icon -->
-    <link rel="shortcut icon" href="./images/logo-32.png" />
+    <link rel="shortcut icon" href="./images/logo_title.png" />
+
+    <!-- OPEN GRAPH (for social medias)  -->
+    <meta property="og:url" content="https://fitlog-app.firebaseapp.com/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Fitlog" />
+    <meta property="og:description" content="Professional Fit tracker to Note your progress and achieve your goals" />
+    <meta property="og:image" content="https://firebasestorage.googleapis.com/v0/b/fitlog-app.appspot.com/o/app-content%2Ffitlog_fb_posters%2F5.png?alt=media&token=56fa2a95-50b2-4028-bd4b-3597968aef9a" />
 
     <!-- Web Application Manifest -->
     <link rel="manifest" href="./manifest.json">
@@ -96,7 +103,7 @@
         </div>
     </div>
 
-    <!--    PAGES     -->
+       <!--    PAGES     -->
     <div class="container">
 
         <!--     LOG AND MAIN CHART     -->
@@ -105,34 +112,35 @@
             <div class="row">
                 <div class="col-md-4">
                     <div class="well transperant">
-                        <legend>LOG OVERVIEW <a href="#createTarget" class="aBtn "><i class="glyphicon glyphicon-edit"></i></a></legend>
-                        <table class="table table-borderless">
-                            <thead>
-                                <tr>
-                                    <th class="text-right"></th>
-                                    <th class="text-left">Me</th>
-                                    <th class="text-left">Target</th>
-                                    <!--
-                                    <th>
+                        <fieldset>
+                            <legend>LOG OVERVIEW <a href="#createTarget" class="aBtn "><i class="glyphicon glyphicon-edit"></i></a></legend>
+                            <table class="table table-borderless">
+                                <thead>
+                                    <tr>
+                                        <th class="text-right"></th>
+                                        <th class="text-left">Me</th>
+                                        <th class="text-left">Target</th>
+                                        <!-- <th>
                                         <select class="inp-tra" id="progressTableSelectList">
                                             <option>b10d</option>
                                             <option>b30d</option>
                                             <option>f1r</option>
                                         </select>
-                                    </th>
--->
-                                </tr>
-                            </thead>
-                            <tbody id="progressTable"></tbody>
-                        </table>
+                                    </th> -->
+                                    </tr>
+                                </thead>
+                                <tbody id="progressTable"></tbody>
+                            </table>
+                        </fieldset>
                     </div>
                 </div>
 
                 <div class="col-md-8">
                     <div class="well transperant" id="divMainChart">
-                        <legend>LOG CHART</legend>
-                        <div> <canvas id="mainChart"></canvas></div>
-
+                        <fieldset>
+                            <legend>LOG CHART</legend>
+                            <div> <canvas id="mainChart"></canvas></div>
+                        </fieldset>
                     </div>
                 </div>
             </div>
@@ -144,33 +152,35 @@
             <div class="row">
                 <div class="col-xs-12">
                     <div class="well transperant table-responsive">
-                        <legend>MY DATA <a href="#createRecord" class="aBtn"><i class="glyphicon glyphicon-plus"></i></a></legend>
-                        <p>Table with all the records made</p>
-                        <br>
-                        <table class="table table-sm table-hover navLinks">
-                            <thead>
-                                <tr>
-                                    <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(1)')">#</th>
-                                    <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(2)')">Date</th>
-                                    <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(3)')">Weight <br> (kg)</th>
-                                    <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(4)')">Waist <br> (cm)</th>
-                                    <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(5)')">Haunch (cm)</th>
-                                    <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(6)')">Arms (cm)</th>
-                                    <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(7)')">Chest (cm)</th>
-                                    <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(8)')">Hips (cm)</th>
-                                    <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(9)')">Fats (%)</th>
-                                    <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(10)')">Fats (kg)</th>
-                                    <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(11)')">Body Mass</th>
-                                    <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(1)')">Equation</th>
-                                    <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(1)')">Activity</th>
-                                    <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(12)')">kcal</th>
-                                    <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(13)')">Comment</th>
-                                    <th><i class="glyphicon glyphicon-edit"></i></th>
-                                </tr>
-                            </thead>
-                            <tbody id="DataTable">
-                            </tbody>
-                        </table>
+                        <fieldset>
+                            <legend>MY DATA <a href="#createRecord" class="aBtn"><i class="glyphicon glyphicon-plus"></i></a></legend>
+                            <p>Table with all the records made</p>
+                            <br>
+                            <table class="table table-sm table-hover navLinks">
+                                <thead>
+                                    <tr>
+                                        <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(1)')">#</th>
+                                        <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(2)')">Date</th>
+                                        <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(3)')">Weight <br> (kg)</th>
+                                        <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(4)')">Waist <br> (cm)</th>
+                                        <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(5)')">Haunch (cm)</th>
+                                        <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(6)')">Arms (cm)</th>
+                                        <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(7)')">Chest (cm)</th>
+                                        <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(8)')">Hips (cm)</th>
+                                        <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(9)')">Fats (%)</th>
+                                        <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(10)')">Fats (kg)</th>
+                                        <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(11)')">Body Mass</th>
+                                        <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(1)')">Equation</th>
+                                        <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(1)')">Activity</th>
+                                        <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(12)')">kcal</th>
+                                        <th onclick="w3.sortHTML('#DataTable', '.item', 'td:nth-child(13)')">Comment</th>
+                                        <th><i class="glyphicon glyphicon-edit"></i></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="DataTable">
+                                </tbody>
+                            </table>
+                        </fieldset>
                     </div>
                 </div>
             </div>
@@ -181,10 +191,12 @@
             <div class="row">
                 <div class="col-xs-12">
                     <div class="well transperant">
-                        <legend>CHART (cm)</legend>
-                        <p>Chart for all centimeter units</p>
-                        <br>
-                        <div><canvas id="ChartOne"></canvas></div>
+                        <fieldset>
+                            <legend>CHART (cm)</legend>
+                            <p>Chart for all centimeter units</p>
+                            <br>
+                            <div><canvas id="ChartOne"></canvas></div>
+                        </fieldset>
                     </div>
                 </div>
             </div>
@@ -192,19 +204,23 @@
             <div class="row">
                 <div class="col-md-4">
                     <div class="well transperant">
-                        <legend>WEIGHT OVERVIEW</legend>
-                        <p>Chart based on last record</p>
-                        <br>
-                        <div><canvas id="ChartTwo"></canvas></div>
+                        <fieldset>
+                            <legend>WEIGHT OVERVIEW</legend>
+                            <p>Chart based on last record</p>
+                            <br>
+                            <div><canvas id="ChartTwo"></canvas></div>
+                        </fieldset>
                     </div>
                 </div>
 
                 <div class="col-md-8">
                     <div class="well transperant">
-                        <legend>FATS % AND ACTIVITY</legend>
-                        <p>Body fats percentage and physical activities coefficient</p>
-                        <br>
-                        <div><canvas id="ChartTree"></canvas></div>
+                        <fieldset>
+                            <legend>FATS % AND ACTIVITY</legend>
+                            <p>Body fats percentage and physical activities coefficient</p>
+                            <br>
+                            <div><canvas id="ChartTree"></canvas></div>
+                        </fieldset>
                     </div>
                 </div>
             </div>
@@ -215,17 +231,19 @@
             <div class="row">
                 <div class="col-md-4">
                     <div class="well transperant">
-                        <legend>PROFILE <a href="#editProfile" class="aBtn"><i class="glyphicon glyphicon-edit"></i></a></legend>
-                        <dl class="dl-horizontal">
-                            <dt>Name</dt>
-                            <dd id="userName"></dd>
-                            <dt>Birth</dt>
-                            <dd id="userBirth"></dd>
-                            <dt>Gender</dt>
-                            <dd id="userGender"></dd>
-                            <dt>Height, cm</dt>
-                            <dd id="userHeight"></dd>
-                        </dl>
+                        <fieldset>
+                            <legend>PROFILE <a href="#editProfile" class="aBtn"><i class="glyphicon glyphicon-edit"></i></a></legend>
+                            <dl class="dl-horizontal">
+                                <dt>Name</dt>
+                                <dd id="userName"></dd>
+                                <dt>Birth</dt>
+                                <dd id="userBirth"></dd>
+                                <dt>Gender</dt>
+                                <dd id="userGender"></dd>
+                                <dt>Height, cm</dt>
+                                <dd id="userHeight"></dd>
+                            </dl>
+                        </fieldset>
                     </div>
                 </div>
             </div>
@@ -303,63 +321,63 @@
                             <legend>Register a Target</legend>
 
                             <div class="form-group">
-                                <label for="example-number-input" class="control-label col-xs-4">Weight, kg</label>
+                                <label class="control-label col-xs-4">Weight, kg</label>
                                 <div class="col-xs-8">
                                     <input class="form-control" type="number" id="targetDataWeightKgs">
                                 </div>
                             </div>
 
                             <div class="form-group">
-                                <label for="example-number-input" class="control-label col-xs-4">Waist, cm</label>
+                                <label class="control-label col-xs-4">Waist, cm</label>
                                 <div class="col-xs-8">
                                     <input class="form-control" type="number" id="targetDataWaistCm">
                                 </div>
                             </div>
 
                             <div class="form-group">
-                                <label for="example-number-input" class="control-label col-xs-4">Haunch, cm</label>
+                                <label class="control-label col-xs-4">Haunch, cm</label>
                                 <div class="col-xs-8">
                                     <input class="form-control" type="number" id="targetDataHaunchCm">
                                 </div>
                             </div>
 
                             <div class="form-group">
-                                <label for="example-number-input" class="control-label col-xs-4">Arms, cm</label>
+                                <label class="control-label col-xs-4">Arms, cm</label>
                                 <div class="col-xs-8">
                                     <input class="form-control" type="number" id="targetDataArmsCm">
                                 </div>
                             </div>
 
                             <div class="form-group">
-                                <label for="example-number-input" class="control-label col-xs-4">Chest, cm</label>
+                                <label class="control-label col-xs-4">Chest, cm</label>
                                 <div class="col-xs-8">
                                     <input class="form-control" type="number" id="targetDataChestCm">
                                 </div>
                             </div>
 
                             <div class="form-group">
-                                <label for="example-number-input" class="control-label col-xs-4">Hips, cm</label>
+                                <label class="control-label col-xs-4">Hips, cm</label>
                                 <div class="col-xs-8">
                                     <input class="form-control" type="number" id="targetDataHipsCm">
                                 </div>
                             </div>
 
                             <div class="form-group">
-                                <label for="example-number-input" class="control-label col-xs-4">Fats %</label>
+                                <label class="control-label col-xs-4">Fats %</label>
                                 <div class="col-xs-8">
                                     <input class="form-control" type="number" id="targetDataFatsPercent">
                                 </div>
                             </div>
 
                             <div class="form-group">
-                                <label for="example-number-input" class="control-label col-xs-4">Fat kgs</label>
+                                <label class="control-label col-xs-4">Fat kgs</label>
                                 <div class="col-xs-8">
                                     <input class="form-control" type="number" id="targetDataFatKgs">
                                 </div>
                             </div>
 
                             <div class="form-group">
-                                <label for="example-number-input" class="control-label col-xs-4">Body Mass</label>
+                                <label class="control-label col-xs-4">Body Mass</label>
                                 <div class="col-xs-8">
                                     <input class="form-control" type="number" id="targetDataBodyMassKgs">
                                 </div>
@@ -404,7 +422,7 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="example-number-input" class="control-label col-xs-4">Weight, kg</label>
+                                        <label class="control-label col-xs-4">Weight, kg</label>
                                         <div class="col-xs-8">
                                             <div class="input-group">
                                                 <span class="input-group-btn">
@@ -423,7 +441,7 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="example-number-input" class="control-label col-xs-4">Waist, cm</label>
+                                        <label class="control-label col-xs-4">Waist, cm</label>
                                         <div class="col-xs-8">
                                             <div class="input-group">
                                                 <span class="input-group-btn">
@@ -442,7 +460,7 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="example-number-input" class="control-label col-xs-4">Haunch, cm</label>
+                                        <label class="control-label col-xs-4">Haunch, cm</label>
                                         <div class="col-xs-8">
                                             <div class="input-group">
                                                 <span class="input-group-btn">
@@ -461,7 +479,7 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="example-number-input" class="control-label col-xs-4">Arms, cm</label>
+                                        <label class="control-label col-xs-4">Arms, cm</label>
                                         <div class="col-xs-8">
                                             <div class="input-group">
                                                 <span class="input-group-btn">
@@ -480,7 +498,7 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="example-number-input" class="control-label col-xs-4">Chest, cm</label>
+                                        <label class="control-label col-xs-4">Chest, cm</label>
                                         <div class="col-xs-8">
                                             <div class="input-group">
                                                 <span class="input-group-btn">
@@ -499,7 +517,7 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="example-number-input" class="control-label col-xs-4">Hips, cm</label>
+                                        <label class="control-label col-xs-4">Hips, cm</label>
                                         <div class="col-xs-8">
                                             <div class="input-group">
                                                 <span class="input-group-btn">
@@ -521,7 +539,7 @@
 
 
                                     <div class="form-group">
-                                        <label for="example-number-input" class="control-label col-xs-4">Equation</label>
+                                        <label class="control-label col-xs-4">Equation</label>
                                         <div class="col-xs-8">
                                             <select class="form-control inp-tra" id="newDataBMRFormula">
                                         <option value="1">1 - H-B, Mifflin St Jeor Equation rev. in 1990 </option>
@@ -533,7 +551,7 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="example-number-input" class="control-label col-xs-4">Physical activity</label>
+                                        <label class="control-label col-xs-4">Physical activity</label>
                                         <div class="col-xs-8">
                                             <select class="form-control inp-tra" id="newDataPhysicalActivity">
                                         <option value="1.2">Little to no exercise (1.2)</option>
@@ -550,14 +568,14 @@
                                 <div class="col-md-6">
 
                                     <div class="form-group">
-                                        <label for="example-text-input" class="control-label col-xs-4">Comment</label>
+                                        <label class="control-label col-xs-4">Comment</label>
                                         <div class="col-xs-8">
                                             <textarea class="form-control inp-tra" id="newDataComment" rows="3" placeholder="comment"></textarea>
                                         </div>
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="example-text-input" class="control-label col-xs-4"></label>
+                                        <label class="control-label col-xs-4"></label>
                                         <div class="col-xs-8">
                                             <div class="custom-control">
                                                 <input type="checkbox" class="custom-control-input" id="newDataCustomCheck">
@@ -578,28 +596,28 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="example-text-input" class="control-label col-xs-4">Fats %</label>
+                                        <label class="control-label col-xs-4">Fats %</label>
                                         <div class="col-xs-8">
                                             <input class="form-control input-text" type="number" readonly id="newDataFatsPercent">
                                         </div>
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="example-text-input" class="control-label col-xs-4">Fats, kg</label>
+                                        <label class="control-label col-xs-4">Fats, kg</label>
                                         <div class="col-xs-8">
                                             <input class="form-control input-text" type="number" readonly id="newDataFatKgs">
                                         </div>
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="example-text-input" class="control-label col-xs-4">Body mass</label>
+                                        <label class="control-label col-xs-4">Body mass</label>
                                         <div class="col-xs-8">
                                             <input class="form-control input-text" type="number" readonly id="newDataBodyMassKgs">
                                         </div>
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="example-text-input" class="control-label col-xs-4">Daily kcal</label>
+                                        <label class="control-label col-xs-4">Daily kcal</label>
                                         <div class="col-xs-8">
                                             <input class="form-control input-text" type="number" readonly id="newDataBMAKcal">
                                         </div>
@@ -625,80 +643,83 @@
         <div class="page" id="info">
             <div class="row">
                 <div class="well transperant">
-                    <legend>Contanct</legend>
-                    <p>Contact email: <a href="mailto:atanas.yanew@gmail.com?Subject=FitLog" target="_top" style="color:white">atanas.yanew@gmail.com</a></p>
+                    <fieldset>
+                        <legend>Contanct</legend>
+                        <p>Contact email: <a href="mailto:atanas.yanew@gmail.com?Subject=FitLog" target="_top" style="color:white">atanas.yanew@gmail.com</a></p>
+                    </fieldset>
                 </div>
             </div>
 
             <div class="row">
                 <div class="well transperant">
-                    <legend>A brief description of some terminology</legend>
-                    <p>This section describe some of the terminology and calculation workflow of the application</p>
-                    <br>
-                    <div>
-                        <h4><b>Fats %</b></h4>
-                        <p>The body fat percentage (BFP) is the total mass of fat divided by total body mass</p>
-                        <p>Average fat percentages differ according to the specified groups and categories</p>
-                        <table class="table table-bordered" style="width: auto;">
-                            <tr>
-                                <td>Description</td>
-                                <td>Women</td>
-                                <td>Men</td>
-                            </tr>
-                            <tr>
-                                <td>Essential fat</td>
-                                <td>10–13%</td>
-                                <td>2–5%</td>
-                            </tr>
-                            <tr>
-                                <td>Athletes</td>
-                                <td>14–20%</td>
-                                <td>6–12%</td>
-                            </tr>
-                            <tr>
-                                <td>Fitness</td>
-                                <td>21–24%</td>
-                                <td>13-16%</td>
-                            </tr>
-                            <tr>
-                                <td>Average </td>
-                                <td>25–30%</td>
-                                <td>17-21%</td>
-                            </tr>
-                            <tr>
-                                <td>Overweight</td>
-                                <td>31-39%</td>
-                                <td>22-29%</td>
-                            </tr>
-                            <tr>
-                                <td>Obese</td>
-                                <td>40%+</td>
-                                <td>30%+</td>
-                            </tr>
-                        </table>
-                    </div>
+                    <fieldset>
+                        <legend>A brief description of some terminology</legend>
+                        <p>This section describe some of the terminology and calculation workflow of the application</p>
+                        <br>
+                        <div>
+                            <h4><b>Fats %</b></h4>
+                            <p>The body fat percentage (BFP) is the total mass of fat divided by total body mass</p>
+                            <p>Average fat percentages differ according to the specified groups and categories</p>
+                            <table class="table table-bordered" style="width: auto;">
+                                <tr>
+                                    <td>Description</td>
+                                    <td>Women</td>
+                                    <td>Men</td>
+                                </tr>
+                                <tr>
+                                    <td>Essential fat</td>
+                                    <td>10–13%</td>
+                                    <td>2–5%</td>
+                                </tr>
+                                <tr>
+                                    <td>Athletes</td>
+                                    <td>14–20%</td>
+                                    <td>6–12%</td>
+                                </tr>
+                                <tr>
+                                    <td>Fitness</td>
+                                    <td>21–24%</td>
+                                    <td>13-16%</td>
+                                </tr>
+                                <tr>
+                                    <td>Average </td>
+                                    <td>25–30%</td>
+                                    <td>17-21%</td>
+                                </tr>
+                                <tr>
+                                    <td>Overweight</td>
+                                    <td>31-39%</td>
+                                    <td>22-29%</td>
+                                </tr>
+                                <tr>
+                                    <td>Obese</td>
+                                    <td>40%+</td>
+                                    <td>30%+</td>
+                                </tr>
+                            </table>
+                        </div>
 
 
-                    <br>
-                    <div>
-                        <h4><b>Daily kcal or Basal metabolic rate with physical activity</b></h4>
-                        <p>Basal Metabolic Rate (BMR) is the number of calories required to keep your body functioning at rest. BMR is also known as your body's metabolism; therefore, any increase to your metabolic weight, such as exercise, will increase your BMR.</p>
                         <br>
-                        <p><b>KCAL CALC SUMMARY</b></p>
-                        <ul>
-                            <li>Determinate BMR</li>
-                            <li>Reduce BMR by 2% per decade of life</li>
-                            <li>Multyply the result аccording to physical activity coefficient</li>
-                        </ul>
-                        <br>
-                        <p><b>We provide several different equations for calculating BMR, witch you can choose from dropdown menu when create new record:</b></p>
-                        <ul>
-                            <li>1 - H-B, Mifflin St Jeor Equation rev. in 1990</li>
-                            <li>2 - Katch-McArdle Formula</li>
-                            <li>3 - H-B, Roza and Shizgal Equation rev. in 1984</li>
-                            <li>4 - H-B, original equation published in 1918</li>
-                        </ul>
-                        <pre>
+                        <div>
+                            <h4><b>Daily kcal or Basal metabolic rate with physical activity</b></h4>
+                            <p>Basal Metabolic Rate (BMR) is the number of calories required to keep your body functioning at rest. BMR is also known as your body's metabolism; therefore, any increase to your metabolic weight, such as exercise, will increase your BMR.</p>
+                            <br>
+                            <p><b>KCAL CALC SUMMARY</b></p>
+                            <ul>
+                                <li>Determinate BMR</li>
+                                <li>Reduce BMR by 2% per decade of life</li>
+                                <li>Multyply the result аccording to physical activity coefficient</li>
+                            </ul>
+                            <br>
+                            <p><b>We provide several different equations for calculating BMR, witch you can choose from dropdown menu when create new record:</b></p>
+                            <ul>
+                                <li>1 - H-B, Mifflin St Jeor Equation rev. in 1990</li>
+                                <li>2 - Katch-McArdle Formula</li>
+                                <li>3 - H-B, Roza and Shizgal Equation rev. in 1984</li>
+                                <li>4 - H-B, original equation published in 1918</li>
+                            </ul>
+                            <pre>
 <b>1. The Mifflin St Jeor Equation (The Harris–Benedict equations revised by Mifflin and St Jeor in 1990)</b>
       Men:   BMR = (10 × weight in kg) + (6.25 × height in cm) - (5 × age in years) + 5
       Women: BMR = (10 × weight in kg) + (6.25 × height in cm) - (5 × age in years) - 161
@@ -714,32 +735,35 @@
       Men:   BMR = 66.5 + ( 13.75 × weight in kg ) + ( 5.003 × height in cm ) – ( 6.755 × age in years )
       Women: BMR = 655.1 + ( 9.563 × weight in kg ) + ( 1.850 × height in cm ) – ( 4.676 × age in years )
                         </pre>
-                        <br>
-                        <p><b>It is assumed that the energy demand is reduced by about 2% per decade of life. This amount should be deducted from daily minimum calories.</b></p>
-                        <p>Example: If you are 20 years old and calculated BMR = 2000, you should reduce calculated BMR by 4%, so now your BMR = 1920 kcal</p>
-                        <br>
-                        <p><b>Determining the recommended intake depends on physical activity</b></p>
-                        <p>The following list enables calculation of an individual's recommended daily kilocalorie intake to maintain current weight</p>
-                        <ul>
-                            <li>Little to no exercise (1.2)</li>
-                            <li>Light exercise, 1–3 days per week (1.375)</li>
-                            <li>Moderate exercise, 3–5 days per week (1.55)</li>
-                            <li>Heavy exercise, 6–7 days per week (1.725)</li>
-                            <li>Very heavy, twice per day extra heavy workouts (1.9)</li>
-                        </ul>
-                        <p>BMA (BMR with physical activity) = BMR * physical activity</p>
+                            <br>
+                            <p><b>It is assumed that the energy demand is reduced by about 2% per decade of life. This amount should be deducted from daily minimum calories.</b></p>
+                            <p>Example: If you are 20 years old and calculated BMR = 2000, you should reduce calculated BMR by 4%, so now your BMR = 1920 kcal</p>
+                            <br>
+                            <p><b>Determining the recommended intake depends on physical activity</b></p>
+                            <p>The following list enables calculation of an individual's recommended daily kilocalorie intake to maintain current weight</p>
+                            <ul>
+                                <li>Little to no exercise (1.2)</li>
+                                <li>Light exercise, 1–3 days per week (1.375)</li>
+                                <li>Moderate exercise, 3–5 days per week (1.55)</li>
+                                <li>Heavy exercise, 6–7 days per week (1.725)</li>
+                                <li>Very heavy, twice per day extra heavy workouts (1.9)</li>
+                            </ul>
+                            <p>BMA (BMR with physical activity) = BMR * physical activity</p>
 
-                    </div>
-                    <br>
+                        </div>
+                        <br>
+                    </fieldset>
                 </div>
             </div>
 
             <div class="row">
                 <div class="well transperant">
-                    <legend>Tips</legend>
-                    <ul>
-                    <li>If you want to lose weight, you should reduce the recommended daily kcal by about -15% or respectively +15% to raise weight</li>
-                </ul>
+                    <fieldset>
+                        <legend>Tips</legend>
+                        <ul>
+                            <li>If you want to lose weight, you should reduce the recommended daily kcal by about -15% or respectively +15% to raise weight</li>
+                        </ul>
+                    </fieldset>
                 </div>
             </div>
 
@@ -748,6 +772,7 @@
 
         <!--     FOOTER     -->
         <hr>
+
         <footer class="">
             <p class="">&copy; 2017, All Rights Reserved</p>
         </footer>

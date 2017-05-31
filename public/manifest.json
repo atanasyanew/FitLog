@@ -8,7 +8,7 @@
     "theme_color": "#DCDCDC",
     "description": "A professional fit tracker to Note your progress and achieve your goals",
     "icons": [{
-        "src": "images/logo_manifest.png",
+        "src": "images/logo_title.png",
         "sizes": "any",
         "type": "image/png"
   }]
