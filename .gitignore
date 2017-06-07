@@ -3,7 +3,7 @@
 # Ignore everything at root:
 # /*
 
-
+_misc/*
 /public/firebase-debug.log
 
 database.rules.json
