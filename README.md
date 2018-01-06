@@ -1,11 +1,12 @@
-Fit Log <a href="https://fitlog-app.firebaseapp.com"><img src="https://cdn.rawgit.com/atanasyanew/FitLog/master/_Resources/logo_black.svg" title="Logo" align="right" height="100" /></a>
+Fit Log <a href="https://fitlog-app.firebaseapp.com"><img src="https://cdn.rawgit.com/atanasyanew/FitLog/master/docs/logos/logo_black.svg" title="Logo" align="right" height="100" /></a>
 ======
-[![Demo](https://img.shields.io/badge/Demo-Online-green.svg)](https://fitlog-app.firebaseapp.com//)
 
-## Description
+[![Demo](https://img.shields.io/badge/Demo-Online-green.svg?style=for-the-badge)](https://fitlog-app.firebaseapp.com//)
+
+### Description
 Simple fitness application which purpose is to note and visualise body progress
 
-## Used Technologies
+### Dependences
 * Firebase
 * Chart.js
 * w3.js
@@ -13,10 +14,13 @@ Simple fitness application which purpose is to note and visualise body progress
 * jQuery-loadingModal
 * Bootstrap
 
-<!--
-## App Screenshots
-<img src="https://rawgit.com/atanasyanew/FitLog/master/_Resources/screenshots/1.png" width="425"/> <img src="https://rawgit.com/atanasyanew/FitLog/master/_Resources/screenshots/2.png" width="425"/> 
-<img src="https://rawgit.com/atanasyanew/FitLog/master/_Resources/screenshots/3.png" width="425"/> <img src="https://rawgit.com/atanasyanew/FitLog/master/_Resources/screenshots/4.png" width="425"/> 
-<img src="https://rawgit.com/atanasyanew/FitLog/master/_Resources/screenshots/5.png" width="425"/> <img src="https://rawgit.com/atanasyanew/FitLog/master/_Resources/screenshots/6.png" width="425"/> 
-<img src="https://rawgit.com/atanasyanew/FitLog/master/_Resources/screenshots/7.png" width="425"/> 
--->
+### Screenshots
+![FitLog](docs/screenshots/fitlog-01.png "Sign in page")
+![FitLog](docs/screenshots/fitlog-02.png "Home page")
+![FitLog](docs/screenshots/fitlog-03.png "Data page, table with all records")
+![FitLog](docs/screenshots/fitlog-04.png "Graphical represent of your progress")
+![FitLog](docs/screenshots/fitlog-05.png "Weight overview, fats and activity")
+![FitLog](docs/screenshots/fitlog-06.png "Write your target")
+![FitLog](docs/screenshots/fitlog-07.png "Add new record")
+
+
