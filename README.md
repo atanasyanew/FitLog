@@ -6,14 +6,6 @@ Fit Log <a href="https://fitlog-app.firebaseapp.com"><img src="https://cdn.rawgi
 ### Description
 Simple fitness application which purpose is to note and visualise body progress
 
-### Dependences
-* Firebase
-* Chart.js
-* w3.js
-* jQuery
-* jQuery-loadingModal
-* Bootstrap
-
 ### Screenshots
 ![FitLog](docs/screenshots/fitlog-01.png "Sign in page")
 ![FitLog](docs/screenshots/fitlog-02.png "Home page")
