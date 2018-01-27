@@ -1,4 +1,4 @@
-Fit Log <a href="https://fitlog-app.firebaseapp.com"><img src="https://cdn.rawgit.com/atanasyanew/FitLog/master/docs/logos/logo_black.svg" title="Logo" align="right" height="100" /></a>
+Fit Log <a href="https://fitlog-app.firebaseapp.com"><img src="docs/logos/logo_black.svg" title="FitLog Logo" align="right" height="100" /></a>
 ======
 
 [![Demo](https://img.shields.io/badge/Demo-Online-green.svg?style=for-the-badge)](https://fitlog-app.firebaseapp.com//)
@@ -14,5 +14,3 @@ Simple fitness application which purpose is to note and visualise body progress
 ![FitLog](docs/screenshots/fitlog-05.png "Weight overview, fats and activity")
 ![FitLog](docs/screenshots/fitlog-06.png "Write your target")
 ![FitLog](docs/screenshots/fitlog-07.png "Add new record")
-
-
